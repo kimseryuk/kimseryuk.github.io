@@ -170,18 +170,18 @@ body .parents main {
 }
 body .parents main .wrap {
   position: relative;
-}
-body .parents main .wrap .content {
   display: flex;
   flex-direction: column;
 }
-body .parents main .wrap .content section {
+body .parents main .wrap .list {
   width: 100%;
   max-width: 800px;
   padding: 80px 0;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
-body .parents main .wrap .content section .section--title {
+body .parents main .wrap .section--title {
   text-align: center;
   font-weight: bold;
   color: var(--primary-300);
@@ -189,10 +189,10 @@ body .parents main .wrap .content section .section--title {
 }
 body .parents main .autumn {
   background: var(--black);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #05141F 20%, #05141F 80%, rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #05141F 10%, #05141F 80%, rgba(255, 255, 255, 0) 100%);
   position: relative;
-  padding: 360px 0;
-  margin: -360px 0;
+  padding: 180px 0;
+  z-index: -2;
 }
 body .parents main .autumn .box-text .d_title {
   color: var(--white);
@@ -223,7 +223,7 @@ body .parents main .autumn .inner .group--wrap .d_body {
   display: inline-flex;
   padding: 64px 64px;
   flex-direction: column;
-  align-items: flex-start;
+  flex-direction: column;
   background: var(--black);
   min-height: 100vh;
 }
@@ -471,9 +471,52 @@ body .parents main .autumn .inner .group--wrap .d_body {
 .inner iframe {
   min-width: 100% !important;
 }
+.inner iframe .Caption,
+.inner iframe .HoverCard,
+.inner iframe .Footer {
+  display: none !important;
+}
+
+iframe {
+  min-width: 100% !important;
+}
+iframe .Caption,
+iframe .HoverCard,
+iframe .Footer {
+  display: none !important;
+}
+
+.fixed {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  font-size: 200px;
+  font-weight: 700;
+  opacity: 0.2;
+  z-index: -1;
+  width: 500px;
+  text-align: right;
+  word-break: keep-all;
+  color: gray;
+}
+.fixed.winter-class {
+  color: red;
+  font-size: 80px;
+}
+.fixed.autumn-class {
+  color: white;
+}
+
+body .navbar {
+  position: fixed;
+  z-index: 999;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
 
 @media screen and (max-width: 768px) {
-  body .parents main .wrap .content section {
+  body .parents main .wrap {
     max-width: 500px;
   }
   .inner .group--wrap {
@@ -492,9 +535,6 @@ body .parents main .autumn .inner .group--wrap .d_body {
   .hero {
     height: 100vh;
     overflow: hidden;
-  }
-  .hero .background {
-    align-items: center;
   }
   .hero .background h2 {
     width: max-content;

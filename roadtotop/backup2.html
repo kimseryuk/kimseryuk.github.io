@@ -9,12 +9,12 @@
   <link rel='stylesheet' href='css/reset.css'>
   <link rel='stylesheet' href='font/pretendard.css'>
   <link rel='stylesheet' href='font/pretendard-subset.css'>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link rel='stylesheet' href='css/style.css'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 
-  <link rel='stylesheet' href='css/style.css'>
 
 
   <!-- 부트스트랩 설정 -->
@@ -30,7 +30,7 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-
+  
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
         <li class="nav-item active">
@@ -40,14 +40,7 @@
           <a class="nav-link" href="#">test</a>
         </li>
       </ul>
-    </div>
-    <div>
-      <nav id="top">
-        <div class="progressBarWrap">
-          <span class="progressBar"></span>
-        </div>
-      </nav>
-
+      
     </div>
   </nav>
   <div class="parents">
@@ -62,30 +55,92 @@
     </div>
     <main>
       <div class="wrap">
-        <h2 class="section--title">2021</h2>
-        <div id="list2021" class="list" data-sheetName="2021"></div>
-        <div class="wrap">
-          <h2 class="section--title">2022</h2>
-          <div id="list2021" class="list" data-sheetName="2022"></div>
+        <div class="content">
+          <section class="2022">
+            <h2 class="section--title">2022</h2>
+            <div class="history">
+              <div class="history--list">
+                <div id="list2022" class="list list2022" data-sheetName="test">
+                </div>
+              </div>
+          </section>
         </div>
-        <div class="wrap autumn">
-          <div id="list2022A" class="list" data-sheetName="2022A"></div>
+      </div>
+      <div class="wrap autumn">
+        <div class="content">
+          <section class="2022">
+            <h2 class="section--title">autumn</h2>
+            <div class="history">
+              <div class="history--list">
+                <div id="list2022" class="list list2022" data-sheetName="test">
+                </div>
+              </div>
+          </section>
         </div>
-        <div class="wrap">
-          <div id="list2022W" class="list" data-sheetName="2022W"></div>
+      </div>
+      <div class="wrap">
+        <div class="content">
+          <section class="2022">
+            <h2 class="section--title">2021</h2>
+            <div class="history">
+              <div class="history--list">
+                <div id="list2021" class="list list2023" data-sheetName="2021">
+                </div>
+              </div>
+          </section>
+          <section class="2022">
+            <h2 class="section--title">2022</h2>
+            <div class="history">
+              <div class="history--list">
+                <div id="list2022" class="list list2022" data-sheetName="2022">
+                </div>
+              </div>
+          </section>
         </div>
-        <div class="wrap">
-          <h2 class="section--title">2023</h2>
-          <div id="list2023" class="list" data-sheetName="2023"></div>
+      </div>
+      <div class="wrap autumn">
+        <div class="content">
+          <section class="2022">
+            <div class="history">
+              <div class="history--list">
+                <div id="list2022A" class="list list2023" data-sheetName="2022A">
+                </div>
+              </div>
+          </section>
         </div>
-        <div class="wrap">
-          <h2 class="section--title">2024</h2>
-          <div id="list2024" class="list" data-sheetName="2024"></div>
+      </div>
+      <div class="wrap">
+        <div class="content">
+          <section class="2022">
+            <div class="history">
+              <div class="history--list">
+                <div id="list2023" class="list list2023" data-sheetName="2022W">
+                </div>
+              </div>
+          </section>
+          <section class="2023">
+            <h2 class="section--title">2023</h2>
+            <div class="history">
+              <div class="history--list">
+                <div id="list2023" class="list list2023" data-sheetName="2023">
+                </div>
+              </div>
+          </section>
         </div>
+      </div>
+      <div class="wrap autumn">
+        <div class="content">
+          <section class="2022">
+            <div class="history">
+              <div class="history--list">
+                <div id="list2024" class="list list2023" data-sheetName="2024">
+                </div>
+              </div>
+          </section>
+          
+        </div>
+      </div>
     </main>
-    <div id="fixed_number" class="fixed">
-      -
-    </div>
   </div>
 </body>
 
@@ -162,11 +217,9 @@
   // setView(users)
   function setView(users, index) {
     //let colSort = ($("#colSort").val()).split("	")
-    let colSort = ("Important	no	Lank	Date	News	Writer	Title	Body	Image	Link	Instagram	Kim").split("	")
-    const filteredUsers = users.filter(user => user.Important === 1); // "Important"이 1인 사용자만 필터링
-
-    for (let ii = 0; ii < filteredUsers.length; ii++) {
-      const e = filteredUsers[ii];
+    let colSort = ("no	Date	News	Title	Body	Image	Link	Youtube	DiaryInstagram	DiaryGallery").split("	")
+    for (let ii = 0; ii < users.length; ii++) {
+      const e = users[ii];
       let str = "";
       for (let iii = 1; iii < colSort.length; iii++) {
         const element = colSort[iii];
@@ -178,7 +231,7 @@
       var itemTemp = function(e) {
         counter++; // Increment counter for each item
 
-        return `<div class="inner inner-${e.no}" id="inner" data="${e.Lank}" >
+        return `<div class="inner" id="inner-${counter}">
             <div class="group--now">
               <div class="circle">circle</div>
             </div>
@@ -187,20 +240,20 @@
               <div class="group group--main" data-aos="fade-up" data-aos-duration="1000">
                 <div class="box box-text">
                   <p class="d_date">
-                    ${e.Date}
+                    ${e[colSort[1]]}
                   </p>
                   <div class="title">
                     <h3 class="title--main d_title">
-                      ${e.Title}
+                      ${e[colSort[3]]}
                     </h3>
-                    <a href="${e.Link}" class="title--desc d_news" target="_blank">${e.News}</a>
+                    <a href="${e[colSort[6]]}" class="title--desc d_news" target="_blank">${e[colSort[2]]}</a>
                     </div>
-                    <p class="d_body">${e.Body}</p>
-                    <img src="${e.Image}" alt="" class="d_image">
+                    <p class="d_body">${e[colSort[4]]}</p>
                 </div>
                 <div class="box box-media" data-aos="fade-up" data-aos-delay="500" data-aos-duration="1000">
+                  <img src="${e[colSort[5]]}" alt="" class="d_image">
                   <div class="group--instagram d_instagram">
-                    ${e.Instagram}
+                      ${e[colSort[8]]}
                    </div>
                 </div>
               </div>
@@ -208,41 +261,17 @@
           </div>`;
       };
 
-      $($('.list')[index]).append($(itemTemp(e))); // Pass data (e) to the function
+      const filteredUsers = users.filter(user => user.no === 1); // "no"이 1인 사용자만 필터링
 
+      for (let ii = 0; ii < filteredUsers.length; ii++) {
+        const e = filteredUsers[ii];
+        $($('.list')[index]).append($(itemTemp(e))); // Pass data (e) to the function
+      }
     }
   }
 
   AOS.init();
 
-
-  AOS.init({
-    // AOS options (duration, easing, etc.)
-  });
-
-  $(window).scroll(function() {
-    const scrollPosition = $(window).scrollTop();
-
-    if (scrollPosition % 50 === 0) {
-      const lastAnimatedElement = $(".aos-animate").last();
-      const parentClass = lastAnimatedElement.closest(".inner").attr("data")
-      console.log("Parent class of last animated element:", parentClass);
-      $("#fixed_number").text(parentClass);
-
-      // switch (true) {
-      //   case parentClass.includes("STOVE"):
-      //     $("#fixed_number").addClass("winter-class").removeClass("autumn-class");
-      //     break;
-      //   case parentClass.includes("autumn"):
-      //     $("#fixed_number").addClass("autumn-class").removeClass("winter-class");
-      //     break;
-      //   default:
-      //     $("#fixed_number").removeClass("winter-class").removeClass("autumn-class");
-      // }
-
-    }
-  });
 </script>
-
 
 </html>
