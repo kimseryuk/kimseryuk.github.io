@@ -13,10 +13,10 @@
   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
   <link rel='stylesheet' href='css/style.css'>
 
-    <!-- 캐시사삭제 관련 -->
-    <meta http-equiv="Expires" content="-1" />
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <!-- 스크롤 이벤트 관련 -->
+  <!-- 캐시사삭제 관련 -->
+  <meta http-equiv="Expires" content="-1" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <!-- 스크롤 이벤트 관련 -->
   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 
 
@@ -29,10 +29,12 @@
 
 <body>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <div class="navbar-inner">
+      <a class="navbar-brand" href="#">Navbar</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
 
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
@@ -80,6 +82,9 @@
         <div class="wrap">
           <h2 class="section--title">2023</h2>
           <div id="list2023" class="list" data-sheetName="2023"></div>
+        </div>
+        <div class="wrap autumn">
+          <div id="list2023A" class="list" data-sheetName="2023A"></div>
         </div>
         <div class="wrap">
           <h2 class="section--title">2024</h2>
@@ -181,7 +186,7 @@
       var itemTemp = function(e) {
         counter++; // Increment counter for each item
 
-        return `<div class="inner inner-${e.no}" id="inner" data="${e.Lank}" >
+        return `<div class="inner inner-${e.Lank}" id="inner" data="${e.Lank}" >
             <div class="group--now">
               <div class="circle">circle</div>
             </div>
@@ -189,15 +194,15 @@
             <div class="group--wrap">
               <div class="group group--main" data-aos="fade-up" data-aos-duration="1000">
                 <div class="box box-text">
+                  <div class="title">
                   <p class="d_date">
                     ${e.Date}
                   </p>
-                  <div class="title">
+                    <a href="${e.Link}" class="title--desc d_news" target="_blank">${e.News}</a>
+                    </div>
                     <h3 class="title--main d_title">
                       ${e.Title}
                     </h3>
-                    <a href="${e.Link}" class="title--desc d_news" target="_blank">${e.News}</a>
-                    </div>
                     <p class="d_body">${e.Body}</p>
                     <img src="${e.Image}" alt="" class="d_image">
                 </div>
@@ -226,11 +231,25 @@
   $(window).scroll(function() {
     const scrollPosition = $(window).scrollTop();
 
-    if (scrollPosition % 50 === 0) {
-      const lastAnimatedElement = $(".aos-animate").last();
-      const parentClass = lastAnimatedElement.closest(".inner").attr("data")
+    if (scrollPosition % 10 === 0) {
+      const lastAnimatedElement = $(".group.aos-animate").last(); //js에서 넣어주는 class 명 마지막 친구 가져오기
+      const parentClass = lastAnimatedElement.closest(".inner").attr("data") //제일 가까이에 있는 Inner의 데이터값 가져오기
+      
       console.log("Parent class of last animated element:", parentClass);
-      $("#fixed_number").text(parentClass);
+      $("#fixed_number").text(parentClass); //하단에 집어넣기
+
+      if (parentClass == 0) {
+        $("#fixed_number").text("stoveleague");
+        $("#fixed_number").addClass("winter-class");
+        $("#fixed_number").removeClass("autumn-class");
+      } else if (parentClass == 11){
+        $("#fixed_number").text("WC");
+        $("#fixed_number").removeClass("winter-class");
+        $("#fixed_number").addClass("autumn-class");
+      } else {
+        $("#fixed_number").removeClass("winter-class");
+        $("#fixed_number").removeClass("autumn-class");
+      }
     }
   });
 </script>

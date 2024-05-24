@@ -223,9 +223,9 @@ body .parents main .autumn .inner .group--wrap .d_body {
   display: inline-flex;
   padding: 64px 64px;
   flex-direction: column;
-  flex-direction: column;
   background: var(--black);
   min-height: 100vh;
+  align-items: center;
 }
 .hero .background h2 {
   color: #FFF;
@@ -323,7 +323,7 @@ body .parents main .autumn .inner .group--wrap .d_body {
   color: var(--text-title);
   font-size: 1rem;
   font-weight: 800;
-  max-width: 80%;
+  max-width: 100%;
 }
 .box-text .d_date {
   color: var(--primary-300);
@@ -341,12 +341,12 @@ body .parents main .autumn .inner .group--wrap .d_body {
   margin-bottom: 12px;
 }
 .box-text .d_news {
-  color: var(--text-detail);
-  font-size: 14px;
-  text-decoration: unset;
   display: flex;
   align-items: center;
   gap: 4px;
+  color: var(--text-detail);
+  text-decoration: unset;
+  font-size: 14px;
   font-weight: 300;
 }
 .box-text .d_news::after {
@@ -408,6 +408,7 @@ body .parents main .autumn .inner .group--wrap .d_body {
 }
 .inner .group--wrap .d_image {
   max-width: 300px;
+  margin-top: 32px;
 }
 .inner .group--sub {
   transition: 0.2s;
@@ -514,10 +515,23 @@ body .navbar {
   display: flex;
   justify-content: center;
 }
+body .navbar .navbar-inner {
+  max-width: 1200px;
+}
 
 @media screen and (max-width: 768px) {
+  body .navbar .navbar-inner {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    max-width: 500px;
+    padding: 0 16px;
+  }
   body .parents main .wrap {
     max-width: 500px;
+  }
+  body .parents main .wrap .list {
+    padding: 80px 16px;
   }
   .inner .group--wrap {
     padding-bottom: 108px;
