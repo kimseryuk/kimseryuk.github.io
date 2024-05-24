@@ -495,28 +495,44 @@ iframe .Footer {
   font-weight: 700;
   opacity: 0.2;
   z-index: -1;
-  width: 500px;
+  width: 300px;
   text-align: right;
   word-break: keep-all;
   color: gray;
+  line-height: 0.8;
+  text-transform: uppercase;
 }
 .fixed.winter-class {
   color: red;
   font-size: 80px;
+  word-break: keep-all;
 }
 .fixed.autumn-class {
   color: white;
+  font-size: 80px;
 }
 
-body .navbar {
+nav.navbar {
   position: fixed;
+  top: 0;
   z-index: 999;
   width: 100%;
-  display: flex;
-  justify-content: center;
 }
-body .navbar .navbar-inner {
-  max-width: 1200px;
+nav.navbar.up {
+  top: -40px;
+}
+nav.navbar .progress-container {
+  width: 100%;
+  height: 8px;
+  background: #c6c6c6;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+nav.navbar .progress-container .progress-bar {
+  height: 8px;
+  background: #ff9800;
+  width: 50%;
 }
 
 @media screen and (max-width: 768px) {
