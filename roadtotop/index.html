@@ -11,10 +11,13 @@
   <link rel='stylesheet' href='font/pretendard-subset.css'>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-
-  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-
   <link rel='stylesheet' href='css/style.css'>
+
+    <!-- 캐시사삭제 관련 -->
+    <meta http-equiv="Expires" content="-1" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <!-- 스크롤 이벤트 관련 -->
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 
 
   <!-- 부트스트랩 설정 -->
@@ -228,18 +231,6 @@
       const parentClass = lastAnimatedElement.closest(".inner").attr("data")
       console.log("Parent class of last animated element:", parentClass);
       $("#fixed_number").text(parentClass);
-
-      // switch (true) {
-      //   case parentClass.includes("STOVE"):
-      //     $("#fixed_number").addClass("winter-class").removeClass("autumn-class");
-      //     break;
-      //   case parentClass.includes("autumn"):
-      //     $("#fixed_number").addClass("autumn-class").removeClass("winter-class");
-      //     break;
-      //   default:
-      //     $("#fixed_number").removeClass("winter-class").removeClass("autumn-class");
-      // }
-
     }
   });
 </script>
