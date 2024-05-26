@@ -31,7 +31,7 @@
 
 <body>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <a class="navbar-brand" href="#">road to top</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -50,6 +50,12 @@
           <a class="nav-link" href="#scrollspyHeading4">2024</a>
         </li>
       </ul>
+      <a href="../">blog</a>
+    </div>
+    <div class="level">
+      <div id="fixed_number" class="fixed">
+        -
+      </div>
     </div>
     <div class="progress-container">
       <div class="progress-bar"></div>
@@ -89,14 +95,25 @@
         <div id="list2023A" class="list" data-sheetName="2023A"></div>
       </div>
       <div class="wrap">
+        <div id="list2023W" class="list" data-sheetName="2023W"></div>
+      </div>
+      <div class="wrap">
         <h2 id="scrollspyHeading4" class="section--title">2024</h2>
         <div id="list2024" class="list" data-sheetName="2024"></div>
       </div>
     </main>
-    <div id="fixed_number" class="fixed">
-      -
+    <!-- 뒷배경 -->
+    <div class="mypic">
+      <div id="fixed_img" class="fixed">
+        -
+      </div>
     </div>
   </div>
+
+  <!-- 인스타 제거
+     <div class="box--instagram d_instagram">
+       ${e.Instagram}
+     </div> -->
 </body>
 
 </div>
@@ -105,6 +122,7 @@
     //실행할 내용
     getSheetData()
   }
+
 
 
   const getSheetData = async () => {
@@ -188,34 +206,38 @@
       var itemTemp = function(e) {
         counter++; // Increment counter for each item
 
-        return `<div class="inner inner-${e.Lank}" id="inner" data="${e.Lank}" >
-            <div class="group--now">
-              <div class="circle">circle</div>
-            </div>
+        const imageHtml = e.Image ? `<div class="box--img"><img src="${e.Image}" alt="야구이미지" class="d_image" sizes="(max-width: 500px) 200px,(max-width: 800px) 200px,300px"></div>` : ''; //이미지
 
-            <div class="group--wrap">
-              <div class="group group--main" data-aos="fade-up" data-aos-duration="1000">
-                <div class="box box-text">
-                  <div class="title">
-                  <p class="d_date">
-                    ${e.Date}
-                  </p>
-                    <a href="${e.Link}" class="title--desc d_news" target="_blank">${e.News}</a>
-                    </div>
-                    <h3 class="title--main d_title">
-                      ${e.Title}
-                    </h3>
-                    <p class="d_body">${e.Body}</p>
-                    <img src="${e.Image}" alt="야구이미지" class="d_image" sizes="(max-width: 500px) 444px,(max-width: 800px) 777px,1222px">
-                </div>
-                <div class="box box-media" data-aos="fade-up" data-aos-delay="500" data-aos-duration="1000">
-                  <div class="group--instagram d_instagram">
-                    ${e.Instagram}
-                   </div>
-                </div>
-              </div>
-            </div>
-          </div>`;
+        const linkNews = e.Link ? `<a href="${e.Link}" class="title--desc d_news" target="_blank">${e.News}</a>` : ''; //기사
+
+        const badgeNo = e.no ? `<div class="memopill badge-pill badge-primary">${e.no}</div>` : ''; //메모
+
+
+        return `<div class="inner inner-${e.Lank}" id="inner" data="${e.Lank}">
+  <div class="group--now">
+    <div class="circle">circle</div>
+    ${badgeNo}
+  </div>
+
+  <div class="group--wrap">
+    <div class="group group--main" data-aos="fade-up" data-aos-duration="1000">
+      <div class="title box">
+        <p class="d_date">
+          ${e.Date}
+        </p>
+        ${linkNews}
+      </div>
+      <h3 class="title--main d_title">
+        ${e.Title}
+      </h3>
+      <p class="d_body">${e.Body}</p>
+    </div>
+    <div class="group group--media" data-aos="fade-up" data-aos-delay="500" data-aos-duration="1000">
+      ${imageHtml}
+
+    </div>
+  </div>
+</div>`;
       };
 
       $($('.list')[index]).append($(itemTemp(e))); // Pass data (e) to the function
@@ -223,12 +245,31 @@
     }
   }
 
+
+
+  $(document).ready(function() {
+    const progressBar = $('.progress-bar');
+    const progressContainer = $('.progress-container');
+
+    $(window).scroll(function() {
+      const scrollTop = $(window).scrollTop();
+      const documentHeight = $(document).height();
+      const windowHeight = $(window).height();
+
+      const scrollPercentage = (scrollTop / (documentHeight - windowHeight)) * 100;
+
+      progressBar.css('width', `${scrollPercentage}%`);
+
+      if (scrollPercentage === 100) {
+        progressContainer.addClass('progress-complete');
+      } else {
+        progressContainer.removeClass('progress-complete');
+      }
+    });
+  });
+
   AOS.init();
 
-
-  AOS.init({
-    // AOS options (duration, easing, etc.)
-  });
 
   $(window).scroll(function() {
     //네비 숨기기
@@ -239,20 +280,21 @@
       const lastAnimatedElement = $(".group.aos-animate").last(); //js에서 넣어주는 class 명 마지막 친구 가져오기
       const parentClass = lastAnimatedElement.closest(".inner").attr("data") //제일 가까이에 있는 Inner의 데이터값 가져오기
 
-      console.log("Parent class of last animated element:", parentClass);
-      $("#fixed_number").text(parentClass); //하단에 집어넣기
+      // console.log("Parent class of last animated element:", parentClass);
+
+      $(".fixed").text(parentClass); //하단에 집어넣기
 
       if (parentClass == 0) {
-        $("#fixed_number").text("stove league");
-        $("#fixed_number").addClass("winter-class");
-        $("#fixed_number").removeClass("autumn-class");
+        $(".fixed").text("stove league");
+        $(".fixed").addClass("winter-class");
+        $(".fixed").removeClass("autumn-class");
       } else if (parentClass == 11) {
-        $("#fixed_number").text("WC");
-        $("#fixed_number").removeClass("winter-class");
-        $("#fixed_number").addClass("autumn-class");
+        $(".fixed").text("WC");
+        $(".fixed").removeClass("winter-class");
+        $(".fixed").addClass("autumn-class");
       } else {
-        $("#fixed_number").removeClass("winter-class");
-        $("#fixed_number").removeClass("autumn-class");
+        $(".fixed").removeClass("winter-class");
+        $(".fixed").removeClass("autumn-class");
       }
     }
   });

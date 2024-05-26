@@ -1,4 +1,8 @@
 @charset "UTF-8";
+@font-face {
+  font-family: "Pretendard-Regular";
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff") format("woff");
+}
 :root {
   --main-font: "Pretendard-Regular";
   /* -----------------------------------------------------------
@@ -104,6 +108,10 @@
   word-break: keep-all;
 }
 
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+  font-family: var(--main-font);
+}
+
 a {
   color: var(--gray-700);
   text-decoration: unset;
@@ -149,7 +157,7 @@ body .parents header.show {
 }
 body .parents header .header--wrap {
   width: 100%;
-  max-width: 800px;
+  max-width: 1200px;
   height: 86px;
   margin: 0 auto;
   display: flex;
@@ -175,7 +183,7 @@ body .parents main .wrap {
 }
 body .parents main .wrap .list {
   width: 100%;
-  max-width: 800px;
+  max-width: 1200px;
   padding: 80px 0;
   margin: 0 auto;
   position: relative;
@@ -194,7 +202,7 @@ body .parents main .autumn {
   padding: 180px 0;
   z-index: -2;
 }
-body .parents main .autumn .box-text .d_title {
+body .parents main .autumn .d_title {
   color: var(--white);
 }
 body .parents main .autumn .inner .group--wrap .d_body {
@@ -314,33 +322,32 @@ body .parents main .autumn .inner .group--wrap .d_body {
   filter: blur(123px);
 }
 
-.box-text {
-  width: 100%;
-  max-width: 420px;
-  word-break: break-all;
-}
-.box-text .d_title {
+.group--main .d_title {
   color: var(--text-title);
   font-size: 1rem;
   font-weight: 800;
   max-width: 100%;
+  padding-bottom: 12px;
 }
-.box-text .d_date {
+.group--main .box-media {
+  display: flex;
+  flex-direction: row;
+}
+.group--main .d_date {
   color: var(--primary-300);
   font-weight: 600;
   font-size: 14px;
   padding-bottom: 8px;
 }
-.box-text .title {
+.group--main .title {
   display: flex;
   align-items: center;
   font-weight: bold;
   justify-content: space-between;
   gap: 1rem;
   width: 100%;
-  margin-bottom: 12px;
 }
-.box-text .d_news {
+.group--main .d_news {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -349,7 +356,7 @@ body .parents main .autumn .inner .group--wrap .d_body {
   font-size: 14px;
   font-weight: 300;
 }
-.box-text .d_news::after {
+.group--main .d_news::after {
   content: url("icon-right.svg");
   display: inline-block;
   height: 16px;
@@ -361,11 +368,15 @@ body .parents main .autumn .inner .group--wrap .d_body {
   transition: 0.2s;
 }
 .inner .group--main {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.inner .group--media {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
-  gap: 48px;
-  flex: 1 1;
+  gap: 24px;
 }
 .inner .group--now {
   position: relative;
@@ -381,22 +392,30 @@ body .parents main .autumn .inner .group--wrap .d_body {
   z-index: 1;
   background-color: var(--gray-300);
 }
+.inner .group--now .memopill {
+  position: absolute;
+  left: 4px;
+  width: max-content;
+  top: 0;
+  z-index: 11;
+  border-radius: 0 8px 8px 0px;
+}
 .inner .group--now .circle {
-  width: 1rem;
-  height: 1rem;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   border: 1px solid var(--gray-700);
   background-color: var(--white);
   font-size: 0;
   position: relative;
   z-index: 2;
+  top: 38px;
 }
 .inner .group--wrap {
-  padding: 1rem 0;
   display: flex;
   gap: 64px;
   flex: 1;
-  padding-bottom: 64px;
+  padding: 32px 0 64px;
 }
 .inner .group--wrap .d_body {
   color: var(--text-body-3);
@@ -404,11 +423,14 @@ body .parents main .autumn .inner .group--wrap .d_body {
   font-weight: 300;
   font-size: 0.9rem;
   max-width: 100%;
-  word-break: break-all;
 }
-.inner .group--wrap .d_image {
-  max-width: 300px;
-  margin-top: 32px;
+.inner .group .box--img {
+  width: 400px;
+  max-height: 400px;
+  overflow: hidden;
+}
+.inner .group .box--img .d_image {
+  width: 100%;
 }
 .inner .group--sub {
   transition: 0.2s;
@@ -430,12 +452,6 @@ body .parents main .autumn .inner .group--wrap .d_body {
   display: flex;
   flex-direction: column;
   gap: 12px;
-}
-.inner .group--sub .d_instagram {
-  width: 400px;
-  max-height: 560px;
-  overflow-y: scroll;
-  margin-top: 16px;
 }
 .inner .group--sub .accordion .accordion-item {
   border: unset;
@@ -487,31 +503,6 @@ iframe .Footer {
   display: none !important;
 }
 
-.fixed {
-  position: fixed;
-  right: 30px;
-  bottom: 30px;
-  font-size: 200px;
-  font-weight: 700;
-  opacity: 0.2;
-  z-index: -1;
-  width: 300px;
-  text-align: right;
-  word-break: keep-all;
-  color: gray;
-  line-height: 0.8;
-  text-transform: uppercase;
-}
-.fixed.winter-class {
-  color: red;
-  font-size: 80px;
-  word-break: keep-all;
-}
-.fixed.autumn-class {
-  color: white;
-  font-size: 80px;
-}
-
 nav.navbar {
   position: fixed;
   top: 0;
@@ -521,18 +512,40 @@ nav.navbar {
 nav.navbar.up {
   top: -40px;
 }
+nav.navbar .level {
+  width: 300px;
+  text-align: right;
+}
 nav.navbar .progress-container {
   width: 100%;
   height: 8px;
-  background: #c6c6c6;
+  background: var(--secondary-100);
   position: absolute;
   bottom: 0;
   left: 0;
 }
 nav.navbar .progress-container .progress-bar {
   height: 8px;
-  background: #ff9800;
-  width: 50%;
+  background: var(--primary-300);
+}
+
+.mypic {
+  position: fixed;
+  z-index: -1;
+  right: 20px;
+  bottom: 20px;
+  width: 1000px;
+  word-break: break-word;
+  text-align: right;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+.mypic .fixed {
+  font-size: 200px;
+  color: gray;
+  opacity: 0.3;
+  letter-spacing: -12px;
+  font-weight: 900;
 }
 
 @media screen and (max-width: 768px) {
@@ -543,6 +556,15 @@ nav.navbar .progress-container .progress-bar {
     max-width: 500px;
     padding: 0 16px;
   }
+  body .navbar .level {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background: white;
+    border-top: 1px solid gray;
+    width: 100%;
+    padding: 16px;
+  }
   body .parents main .wrap {
     max-width: 500px;
   }
@@ -551,13 +573,6 @@ nav.navbar .progress-container .progress-bar {
   }
   .inner .group--wrap {
     padding-bottom: 108px;
-  }
-  .inner .group--main {
-    flex-direction: column;
-  }
-  .inner .group--main .d_image {
-    max-width: 100%;
-    max-height: 400px;
   }
   .history--list {
     padding: 20px;
