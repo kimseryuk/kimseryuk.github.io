@@ -337,7 +337,6 @@ body .parents main .autumn .inner .group--wrap .d_body {
   color: var(--primary-300);
   font-weight: 600;
   font-size: 14px;
-  padding-bottom: 8px;
 }
 .group--main .title {
   display: flex;
@@ -353,13 +352,15 @@ body .parents main .autumn .inner .group--wrap .d_body {
   gap: 4px;
   color: var(--text-detail);
   text-decoration: unset;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 300;
 }
 .group--main .d_news::after {
-  content: url("icon-right.svg");
+  content: "";
   display: inline-block;
-  height: 16px;
+  height: 8px;
+  background: url(icon-right.svg) center center;
+  width: 8px;
 }
 
 .inner {
@@ -388,7 +389,7 @@ body .parents main .autumn .inner .group--wrap .d_body {
   position: absolute;
   left: calc(50% - 1px);
   display: inline-block;
-  top: 1rem;
+  top: 0;
   z-index: 1;
   background-color: var(--gray-300);
 }
@@ -399,6 +400,28 @@ body .parents main .autumn .inner .group--wrap .d_body {
   top: 0;
   z-index: 11;
   border-radius: 0 8px 8px 0px;
+  background: var(--gray-200);
+  font-size: 14px;
+}
+.inner .group--now .memopill.red {
+  background-color: var(--red-200);
+  color: white;
+}
+.inner .group--now .memopill.orange {
+  background-color: var(--orange-200);
+  color: white;
+}
+.inner .group--now .memopill.blue {
+  background-color: var(--blue-300);
+  color: white;
+}
+.inner .group--now .memopill.green {
+  background-color: var(--green-300);
+  color: white;
+}
+.inner .group--now .memopill.purple {
+  background-color: var(--purple-300);
+  color: white;
 }
 .inner .group--now .circle {
   width: 8px;
@@ -413,7 +436,7 @@ body .parents main .autumn .inner .group--wrap .d_body {
 }
 .inner .group--wrap {
   display: flex;
-  gap: 64px;
+  gap: 32px;
   flex: 1;
   padding: 32px 0 64px;
 }
@@ -425,8 +448,8 @@ body .parents main .autumn .inner .group--wrap .d_body {
   max-width: 100%;
 }
 .inner .group .box--img {
-  width: 400px;
-  max-height: 400px;
+  width: 600px;
+  max-height: 600px;
   overflow: hidden;
 }
 .inner .group .box--img .d_image {

@@ -406,7 +406,6 @@ body {
     color: var(--primary-300);
     font-weight: 600;
     font-size: 14px;
-    padding-bottom: 8px;
   }
 
   .title {
@@ -424,12 +423,14 @@ body {
     gap: 4px;
     color: var(--text-detail);
     text-decoration: unset;
-    font-size: 14px;
+    font-size: 10px;
     font-weight: 300;
     &::after {
-      content: url('icon-right.svg');
+      content: "";
       display: inline-block;
-      height: 16px;
+      height: 8px;
+      background: url(icon-right.svg) center center;
+      width: 8px;
     }
   }
 }
@@ -465,7 +466,7 @@ body {
         position: absolute;
         left: calc(50% - 1px);
         display: inline-block;
-        top: 1rem;
+        top: 0;
         z-index: 1;
         background-color: var(--gray-300);
       }
@@ -476,7 +477,29 @@ body {
         width: max-content;
         top: 0;
         z-index: 11;
-        border-radius: 0 8px 8px 0px
+        border-radius: 0 8px 8px 0px;
+        background: var(--gray-200);
+        font-size: 14px;
+        &.red {
+          background-color: var(--red-200);
+          color: white;
+        }
+        &.orange {
+          background-color: var(--orange-200);
+          color: white;
+        }
+        &.blue {
+          background-color: var(--blue-300);
+          color: white;
+        }
+        &.green {
+          background-color: var(--green-300);
+          color: white;
+        }
+        &.purple {
+          background-color: var(--purple-300);
+          color: white;
+        }
       }
 
       .circle {
@@ -494,7 +517,7 @@ body {
 
     &--wrap {
       display: flex;
-      gap: 64px;
+      gap: 32px;
       flex: 1;
       padding: 32px 0 64px;
 
@@ -509,8 +532,8 @@ body {
      
     }
     .box--img {
-      width: 400px;
-      max-height: 400px;
+      width: 600px;
+      max-height: 600px;
       overflow: hidden;
       .d_image {
         width: 100%;

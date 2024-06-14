@@ -190,7 +190,7 @@
   // setView(users)
   function setView(users, index) {
     //let colSort = ($("#colSort").val()).split("	")
-    let colSort = ("Important	no	Lank	Date	News	Writer	Title	Body	Image	Link	Instagram	Kim").split("	")
+    let colSort = ("Important	no	Lank	Date	News	Writer	Title	Body	MainImage	SubImage	Link	Instagram	Kim").split("	")
     const filteredUsers = users.filter(user => user.Important === 1); // "Important"이 1인 사용자만 필터링
 
     for (let ii = 0; ii < filteredUsers.length; ii++) {
@@ -206,42 +206,59 @@
       var itemTemp = function(e) {
         counter++; // Increment counter for each item
 
-        const imageHtml = e.Image ? `<div class="box--img"><img src="${e.Image}" alt="야구이미지" class="d_image" sizes="(max-width: 500px) 200px,(max-width: 800px) 200px,300px"></div>` : ''; //이미지
+        const imageHtml = e.MainImage ? `<div class="box--img"><img src="${e.MainImage}" alt="야구이미지" class="d_image" sizes="(max-width: 500px) 500px,(max-width: 800px) 600px,800px" style="display:none;"></div>` : ''; //이미지
 
-        const linkNews = e.Link ? `<a href="${e.Link}" class="title--desc d_news" target="_blank">${e.News}</a>` : ''; //기사
+        const imageHtml2 = e.SubImage ? `<div class="box--img"><img src="${e.SubImage}" alt="야구이미지" class="d_image" sizes="(max-width: 300px) 300px,(max-width: 300px) 300px,300px" style="display:none;"></div>` : ''; //이미지
 
-        const badgeNo = e.no ? `<div class="memopill badge-pill badge-primary">${e.no}</div>` : ''; //메모
+        const NewsWriter = e.Writer ? `-${e.Writer}` : ''; //기사
+        const linkNews = e.Link ? `<a href="${e.Link}" class="title--desc d_news" target="_blank">${e.News}${NewsWriter}</a>` : ''; //기사
+
+        const badgeNo = e.no ? `<div class="memopill badge">${e.no}</div>` : ''; //메모
 
 
         return `<div class="inner inner-${e.Lank}" id="inner" data="${e.Lank}">
-  <div class="group--now">
-    <div class="circle">circle</div>
-    ${badgeNo}
-  </div>
+        <div class="group--now">
+          <div class="circle">circle</div>
+          ${badgeNo}
+        </div>
 
-  <div class="group--wrap">
-    <div class="group group--main" data-aos="fade-up" data-aos-duration="1000">
-      <div class="title box">
-        <p class="d_date">
-          ${e.Date}
-        </p>
-        ${linkNews}
-      </div>
-      <h3 class="title--main d_title">
-        ${e.Title}
-      </h3>
-      <p class="d_body">${e.Body}</p>
-    </div>
-    <div class="group group--media" data-aos="fade-up" data-aos-delay="500" data-aos-duration="1000">
-      ${imageHtml}
-
-    </div>
-  </div>
-</div>`;
+        <div class="group--wrap">
+          <div class="group group--main" data-aos="fade-up" data-aos-duration="1000">
+            <div class="title box">
+              <p class="d_date">
+                ${e.Date}
+              </p>
+              ${linkNews}
+            </div>
+            <h3 class="title--main d_title">
+              ${e.Title}
+            </h3>
+            <p class="d_body">${e.Body}</p>
+            ${imageHtml2}
+          </div>
+          <div class="group group--media" data-aos="fade-up" data-aos-delay="500" data-aos-duration="1000">
+            ${imageHtml}
+          </div>
+        </div>
+      </div>`;
       };
 
       $($('.list')[index]).append($(itemTemp(e))); // Pass data (e) to the function
-
+      $('.memopill').each(function() {
+      const text = $(this).text();
+      // console.log(text)
+      if (text === "UP" || text === "IN" ||text === "FA" ||text === "경기 시작") {
+        $(this).addClass('red');
+      } else if (text === "DOWN" ||text === "OUT" ||text === "매직넘버 소멸" ||text === "가을야구 끝") {
+        $(this).addClass('blue');
+      } else if (text === "TRADE") {
+        $(this).addClass('green');
+      } else if (text === "개막" ||text === "후반기" ||text === "전반기 종료" ||text === "후반기 시작") {
+        $(this).addClass('orange');
+      } else if (text === "NEWS") {
+        $(this).addClass('purple');
+      }
+    });
     }
   }
 
@@ -266,7 +283,11 @@
         progressContainer.removeClass('progress-complete');
       }
     });
+
+
   });
+  
+
 
   AOS.init();
 
@@ -297,7 +318,17 @@
         $(".fixed").removeClass("autumn-class");
       }
     }
+    const list2024Top = $('#list2024').offset().top;
+    const scrollTop = $(window).scrollTop();
+    console.log("scrollTop",scrollTop,"list2024Top",list2024Top)
+  
+    if (scrollTop >= list2024Top) {
+      $('#fixed_img').hide(200);
+    } else if (scrollTop < list2024Top) {
+      $('#fixed_img').show(200);
+    }
   });
+
 </script>
 
 
