@@ -198,7 +198,7 @@ body {
       .header {
         &--wrap {
           width: 100%;
-          max-width: 1200px;
+          // max-width: 1280px;
           height: 86px;
           margin: 0 auto;
           display: flex;
@@ -220,6 +220,7 @@ body {
 
     main {
       margin-top: 86px;
+      // width: 1280px;
 
       .wrap {
         position: relative;
@@ -227,7 +228,7 @@ body {
         flex-direction: column;
         .list {
           width: 100%;
-          max-width: 1200px;
+          max-width: 830px;
           padding: 80px 0;
           margin: 0 auto;
           position: relative;
@@ -442,7 +443,7 @@ body {
   
   .group {
     &--main {
-      width: 400px;
+      // width: 440px;
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -532,7 +533,7 @@ body {
      
     }
     .box--img {
-      width: 600px;
+      width: 400px;
       max-height: 600px;
       overflow: hidden;
       .d_image {

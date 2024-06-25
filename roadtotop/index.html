@@ -206,9 +206,9 @@
       var itemTemp = function(e) {
         counter++; // Increment counter for each item
 
-        const imageHtml = e.MainImage ? `<div class="box--img"><img src="${e.MainImage}" alt="야구이미지" class="d_image" sizes="(max-width: 500px) 500px,(max-width: 800px) 600px,800px" style="display:none;"></div>` : ''; //이미지
+        const imageHtml = e.MainImage ? `<div class="box--img"><img src="${e.MainImage}" alt="야구이미지" class="d_image" sizes="(max-width: 500px) 500px,(max-width: 800px) 600px,800px" style=""></div>` : ''; //이미지
 
-        const imageHtml2 = e.SubImage ? `<div class="box--img"><img src="${e.SubImage}" alt="야구이미지" class="d_image" sizes="(max-width: 300px) 300px,(max-width: 300px) 300px,300px" style="display:none;"></div>` : ''; //이미지
+        const imageHtml2 = e.SubImage ? `<div class="box--img"><img src="${e.SubImage}" alt="야구이미지" class="d_image" sizes="(max-width: 300px) 300px,(max-width: 300px) 300px,300px" style=""></div>` : ''; //이미지
 
         const NewsWriter = e.Writer ? `-${e.Writer}` : ''; //기사
         const linkNews = e.Link ? `<a href="${e.Link}" class="title--desc d_news" target="_blank">${e.News}${NewsWriter}</a>` : ''; //기사
@@ -216,7 +216,7 @@
         const badgeNo = e.no ? `<div class="memopill badge">${e.no}</div>` : ''; //메모
 
 
-        return `<div class="inner inner-${e.Lank}" id="inner" data="${e.Lank}">
+        return `<div class="inner" data="${e.Lank}">
         <div class="group--now">
           <div class="circle">circle</div>
           ${badgeNo}
