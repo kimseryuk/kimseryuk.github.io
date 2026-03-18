@@ -1,0 +1,217 @@
+
+//레이아웃 설정
+
+body {
+  margin: 0 auto;
+  main {
+    background: var(--secondary-500);
+    padding: 16px;
+    }
+  #list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    .inner {
+      flex: 1 1 30%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content:flex-start;
+      // gap: 4px;
+      position: relative;
+      border-radius: 4px;
+      overflow: hidden;
+      min-height: 120px;
+      &:hover,&:active {
+        .imgwrap {
+          filter: brightness(0.5);
+        }
+      }
+      &.important {
+        border: 2px solid yellow;
+      }
+      &.regend {
+        border: 2px solid red;
+      }
+      .imgwrap {
+        transition: filter 0.2s ease-in;
+        width: 100%;
+        height: 80px;
+        top: 0;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;        
+        .number-win {
+          font-size: 16px;
+          padding: 8px;
+          color: rgba(255, 255, 255, 0.8);
+          z-index: 3;
+        }
+      }
+      .item.text {
+        background-color: white;
+        position: relative;
+        flex: 1;
+        z-index: 4;
+        width: 100%;
+        padding: 8px 16px;
+      }
+      .date {
+        font-size: 12px;
+        color: var(--text-label);
+      }
+      .memo {
+        color: var(--gray-900);
+        line-height: 1.2;
+        position: relative;
+      }
+    }
+  }
+  .parents {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    display: flex;
+  }
+  .bottom {
+    position: fixed;
+    bottom: -80%;
+    left: 0;
+    width: 100%;
+    height: 90%;
+    background-color: #f9f9f9;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    transition: bottom 0.3s ease;
+    z-index: 9999;
+    background: white;
+
+    .contents {
+      .content {
+        padding: 16px;
+        &.full {
+          padding: 0;
+        }
+      }
+      &.fixed {
+        height: 10%;
+        border: 1px solid orange;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-body-1);
+        flex-direction: column;
+      }
+      &.scroll {
+        height: 90%;
+        border: 1px solid red;
+      }
+    }
+
+    &.half {
+      bottom: 0;
+      height: 50vh;
+      max-height: unset;
+    }
+    &.full {
+      bottom: 0;
+      height: 90vh;
+      max-height: unset;
+    }
+    .handle {
+      width: 40px;
+      height: 5px;
+      background-color: #ccc;
+      border-radius: 10px;
+      margin: 10px auto;
+      cursor: pointer;
+    }
+
+    .img {
+      width: 100%;
+      height: 240px;
+      display: block;
+      background: #ccc;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    .maxcontent {
+      dt {
+        display: block;
+        background-color: var(--primary-100);
+        padding: 8px 4px;
+
+      }
+    }
+
+    #d_memo {
+      &::before {
+        content: "";
+        width: 4px;
+        height: 16px;
+        display: inline-block;
+        background-color: var(--primary-200);
+        margin-right: 16px;
+      }
+      font-weight: bold;
+    }
+
+    #info-list {
+      overflow-y: auto;
+      height: calc(100% - 45px); /* Adjust based on handle and padding */
+      li {
+        // border-bottom: 1px solid gray;
+        padding: 8px 0;
+        dl {
+          margin: unset;
+          display: flex;
+          dd,dt {
+            margin: unset;
+          }
+          dt {
+            width: 92px;
+            color: var(--text-body-1);
+            font-weight: 400;
+            padding-right: 16px;
+          }
+          dd {
+            color: var(--text-body-2);
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+}
+
+//pc 설정
+@media screen and (min-width: 500px) {
+  body {
+    .parents {
+      max-width: unset;
+      width: 1200px;
+    }
+    #list {
+      width: 800px;
+      .inner {
+        flex: 1 1 16%;
+      }
+    }
+    .bottom {
+      position: sticky;
+      top: 64px;
+      width: 400px;
+      margin-left: 32px;
+      height: fit-content;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+    }
+  }
+  
+}
+

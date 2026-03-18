@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baseball Card Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+
+    <header class="app-header">
+      <div class="header-inner">
+        <h1 class="header-title">Baseball Card Generator</h1>
+        <span class="header-sub">1080 × 1920 · Q&amp;A 3~5쌍/페이지</span>
+      </div>
+    </header>
+
+    <main class="app-main">
+
+      <!-- 좌: 편집 패널 -->
+      <aside class="editor-panel">
+        <div class="editor-header">
+          <h2>카드 편집</h2>
+          <div class="editor-header-right">
+            <span id="saveBadge" class="save-badge"></span>
+            <button class="btn btn-io" id="exportBtn" title="JSON 파일로 내보내기">↑ 내보내기</button>
+            <label class="btn btn-io" id="importLabel" title="JSON 파일 불러오기">
+              ↓ 불러오기
+              <input type="file" id="importInput" accept=".json" style="display:none">
+            </label>
+            <button class="btn btn-reset" id="resetBtn" title="전체 초기화">↺ 초기화</button>
+            <button class="btn btn-add-card" id="addCardBtn">＋ 카드 추가</button>
+          </div>
+        </div>
+        <div id="cardForms" class="card-forms"></div>
+      </aside>
+
+      <!-- 우: 미리보기 패널 -->
+      <section class="preview-panel">
+        <div class="preview-header">
+          <h2>미리보기</h2>
+          <span class="preview-hint">1080 × 1920 · 0.25배 축소</span>
+        </div>
+        <div id="previewGrid" class="preview-grid">
+          <div class="empty-state">
+            <span class="empty-icon">⚾</span>
+            <p>"카드 추가" 버튼으로 카드를 만들어보세요</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

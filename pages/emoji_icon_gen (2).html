@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이모지 하이라이트 아이콘 생성기</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+:root {
+  --win-dark:#808080; --win-darker:#404040; --win-light:#ffffff;
+  --win-face:#d4d0c8; --blue:#000080; --blue2:#1084d0;
+  --accent:#C80000; --gold:#FFD700; --canvas-bg:#2a2a3e;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:#3a6ea5;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 1px,rgba(0,0,32,.08) 1px,rgba(0,0,32,.08) 2px);
+  min-height:100vh; padding:12px;
+  font-family:'Press Start 2P','Courier New',monospace; font-size:9px;
+  display:flex; justify-content:center; align-items:flex-start;
+}
+.window{
+  width:100%; max-width:980px; background:var(--win-face);
+  border:2px solid; border-color:var(--win-light) var(--win-dark) var(--win-dark) var(--win-light);
+  box-shadow:2px 2px 0 var(--win-darker),inset 1px 1px 0 rgba(255,255,255,.5);
+}
+.titlebar{
+  background:linear-gradient(90deg,var(--blue),var(--blue2));
+  padding:5px 8px; display:flex; align-items:center; gap:6px; user-select:none;
+}
+.titlebar-text{color:#fff; font-size:9px; text-shadow:1px 1px 0 #000; flex:1;}
+.titlebar-btns{display:flex; gap:2px;}
+.titlebar-btns span{
+  display:flex; align-items:center; justify-content:center;
+  width:16px; height:14px; background:var(--win-face);
+  border:1px solid; border-color:var(--win-light) var(--win-dark) var(--win-dark) var(--win-light);
+  font-family:Arial,sans-serif; font-size:9px; cursor:pointer; color:#000; font-weight:bold;
+}
+.win-body{padding:10px;}
+.menubar{
+  background:var(--win-face); border-bottom:1px solid var(--win-dark);
+  padding:2px 4px; display:flex; gap:1px; margin-bottom:8px;
+}
+.menubar span{padding:2px 8px; font-size:8px; cursor:pointer; color:#000;}
+.menubar span:hover{background:var(--blue); color:#fff;}
+
+/* 툴바 — 두 줄 */
+.toolbar{
+  background:var(--win-face);
+  border:1px solid; border-color:var(--win-dark) var(--win-light) var(--win-light) var(--win-dark);
+  padding:8px 10px; display:flex; flex-direction:column; gap:8px; margin-bottom:8px;
+}
+.tb-row-main{display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;}
+.tb-row-grad{display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; padding-top:6px; border-top:1px solid var(--win-dark);}
+.tb-group{display:flex; flex-direction:column; gap:4px;}
+.tb-group label{font-size:7px; color:#444;}
+.tb-row{display:flex; gap:4px; align-items:center;}
+.vsep{width:1px; height:32px; background:var(--win-dark); margin:0 2px; box-shadow:1px 0 0 var(--win-light);}
+
+.btn{
+  font-family:'Press Start 2P',monospace; font-size:8px; padding:5px 10px;
+  background:var(--win-face); border:2px solid;
+  border-color:var(--win-light) var(--win-dark) var(--win-dark) var(--win-light);
+  cursor:pointer; color:#000; white-space:nowrap;
+}
+.btn:active{border-color:var(--win-dark) var(--win-light) var(--win-light) var(--win-dark); padding:6px 9px 4px 11px;}
+.btn.active{background:var(--blue); color:#fff; border-color:var(--win-dark) var(--win-light) var(--win-light) var(--win-dark);}
+.btn-accent{background:var(--accent); color:var(--gold); border-color:#ff8888 #880000 #880000 #ff8888; font-size:9px;}
+.btn-sm{font-size:7px; padding:3px 7px;}
+
+input[type="color"]{
+  width:44px; height:26px; border:2px solid;
+  border-color:var(--win-dark) var(--win-light) var(--win-light) var(--win-dark);
+  padding:2px; cursor:pointer; background:#fff;
+}
+input[type="range"]{width:80px; height:18px; cursor:pointer; accent-color:var(--blue);}
+.sz-val{font-size:8px; color:#000; min-width:36px;}
+.hex-tag{font-size:8px; color:#000; min-width:62px; font-family:monospace;}
+
+/* 배경 프리셋 스와치 */
+.swatch-row{display:flex; gap:4px; flex-wrap:wrap; align-items:center;}
+.swatch{
+  width:22px; height:22px; border:2px solid;
+  border-color:var(--win-dark) var(--win-light) var(--win-light) var(--win-dark);
+  cursor:pointer; flex-shrink:0;
+}
+.swatch:hover{border-color:var(--gold) var(--gold) var(--gold) var(--gold);}
+.swatch.active{border-color:var(--gold) var(--gold) var(--gold) var(--gold); box-shadow:0 0 0 1px #000;}
+
+.canvas-area{
+  background:var(--canvas-bg);
+  border:2px solid; border-color:var(--win-dark) var(--win-light) var(--win-light) var(--win-dark);
+  padding:10px; margin-bottom:8px;
+}
+.icon-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:8px;}
+@media(max-width:650px){.icon-grid{grid-template-columns:repeat(2,1fr);}}
+.icon-card{
+  background:#1a1a2e; border:2px solid #333; padding:6px;
+  display:flex; flex-direction:column; align-items:center; gap:5px;
+  cursor:pointer; position:relative;
+}
+.icon-card:hover{border-color:var(--gold);}
+.icon-card:hover .dl-overlay{opacity:1;}
+.card-top{width:100%; display:flex; justify-content:space-between; align-items:center;}
+.card-num{font-size:7px; color:var(--gold);}
+.card-dl{font-size:7px; color:#555;}
+.icon-card canvas{
+  width:100%; max-width:130px; height:auto; aspect-ratio:1;
+  image-rendering:auto; display:block;
+}
+.dl-overlay{
+  position:absolute; inset:0; background:rgba(200,0,0,.7);
+  display:flex; align-items:center; justify-content:center;
+  font-size:8px; color:#fff; opacity:0; transition:opacity .15s;
+  pointer-events:none; text-align:center; line-height:2;
+}
+.card-label{font-size:11px; color:#ccc; text-align:center; line-height:1.8; white-space:pre-line; font-family:sans-serif;}
+.card-emoji-edit{
+  font-size:22px; background:#111; border:1px solid #444;
+  color:#fff; cursor:text; text-align:center;
+  font-family:sans-serif; width:100%;
+  padding:4px 0; border-radius:2px; margin-top:2px;
+}
+.card-emoji-edit:focus{outline:2px solid var(--gold); background:#222;}
+.batchbar{
+  background:var(--win-face);
+  border:1px solid; border-color:var(--win-dark) var(--win-light) var(--win-light) var(--win-dark);
+  padding:8px; display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:6px;
+}
+.statusbar{
+  background:var(--win-face); border-top:2px solid;
+  border-color:var(--win-dark) transparent transparent var(--win-dark);
+  padding:4px 8px; display:flex; gap:10px; font-size:7px; color:#000;
+}
+.status-cell{
+  padding:2px 6px; border:1px solid;
+  border-color:var(--win-dark) var(--win-light) var(--win-light) var(--win-dark);
+}
+</style>
+</head>
+<body>
+<div class="window">
+  <div class="titlebar">
+    <span style="font-size:13px">🎨</span>
+    <span class="titlebar-text">이모지 하이라이트 아이콘 생성기 v2.0 — Baseball Edition</span>
+    <div class="titlebar-btns"><span>_</span><span>□</span><span style="color:#c00">✕</span></div>
+  </div>
+  <div class="win-body">
+    <div class="menubar">
+      <span>파일(F)</span><span>편집(E)</span><span>보기(V)</span><span>도움말(H)</span>
+    </div>
+
+    <div class="toolbar">
+      <!-- 1행: 배경 타입 + 이모지 크기 + Y오프셋 -->
+      <div class="tb-row-main">
+
+        <div class="tb-group">
+          <label>배경 타입</label>
+          <div class="tb-row">
+            <button class="btn btn-sm active" id="bgFlat"  onclick="setBgType('flat')">단색</button>
+            <button class="btn btn-sm"        id="bgLinear" onclick="setBgType('linear')">선형</button>
+            <button class="btn btn-sm"        id="bgRadial" onclick="setBgType('radial')">원형</button>
+          </div>
+        </div>
+
+        <div class="vsep"></div>
+
+        <div class="tb-group">
+          <label>색상 1</label>
+          <div class="tb-row">
+            <input type="color" id="c1Picker" value="#C80000">
+            <span class="hex-tag" id="c1Hex">#C80000</span>
+          </div>
+        </div>
+
+        <div class="tb-group" id="c2Group">
+          <label>색상 2</label>
+          <div class="tb-row">
+            <input type="color" id="c2Picker" value="#FFD700">
+            <span class="hex-tag" id="c2Hex">#FFD700</span>
+          </div>
+        </div>
+
+        <div class="tb-group" id="angleGroup">
+          <label>각도 <span id="angleVal">135°</span></label>
+          <input type="range" id="angleRange" min="0" max="360" step="5" value="135" oninput="onAngleChange()">
+        </div>
+
+        <div class="vsep"></div>
+
+        <div class="tb-group">
+          <label>이모지 크기 <span id="szVal">180</span>px</label>
+          <input type="range" id="szRange" min="80" max="420" step="10" value="180" oninput="onSzChange()">
+        </div>
+
+        <div class="tb-group">
+          <label>세로 위치 <span id="yVal">+10</span></label>
+          <input type="range" id="yRange" min="-120" max="120" step="4" value="10" oninput="onYChange()">
+        </div>
+
+      </div>
+
+      <!-- 2행: 프리셋 스와치 -->
+      <div class="tb-row-grad">
+        <div class="tb-group">
+          <label>프리셋</label>
+          <div class="swatch-row" id="swatchRow"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="canvas-area">
+      <div class="icon-grid" id="iconGrid"></div>
+    </div>
+
+    <div class="batchbar">
+      <button class="btn btn-accent" onclick="downloadAll()">⬇ 전체 ZIP 다운로드</button>
+    </div>
+
+    <div class="statusbar">
+      <div class="status-cell" id="statusMsg">● 준비</div>
+      <div class="status-cell">출력: 480×480 px PNG</div>
+      <div class="status-cell">카드 하단 필드에서 이모지 교체 가능</div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+// ================================================================
+// 아이콘 정의
+// ================================================================
+const ICONS = [
+  { id:'baseball',  label:'야구공',      num:1,  emoji:'⚾' },
+  { id:'bat',       label:'배트',        num:2,  emoji:'🏏' },
+  { id:'glove',     label:'글러브',      num:3,  emoji:'🥎' },
+  { id:'trophy',    label:'우승/트로피', num:4,  emoji:'🏆' },
+  { id:'medal',     label:'메달',        num:5,  emoji:'🥇' },
+  { id:'stadium',   label:'경기장',      num:6,  emoji:'🏟️' },
+  { id:'ticket',    label:'직관/티켓',   num:7,  emoji:'🎟️' },
+  { id:'cap',       label:'야구 모자',   num:8,  emoji:'🧢' },
+  { id:'fire',      label:'불펜/화력',   num:9,  emoji:'🔥' },
+  { id:'clap',      label:'응원',        num:10, emoji:'👏' },
+  { id:'camera',    label:'직관 사진',   num:11, emoji:'📸' },
+  { id:'megaphone', label:'응원가',      num:12, emoji:'📣' },
+  { id:'star',      label:'MVP/선수',    num:13, emoji:'⭐' },
+];
+
+// ================================================================
+// 프리셋
+// ================================================================
+const PRESETS = [
+  // 단색
+  { type:'flat', c1:'#C80000', label:'KIA 레드' },
+  { type:'flat', c1:'#0044CC', label:'블루' },
+  { type:'flat', c1:'#111111', label:'블랙' },
+  { type:'flat', c1:'#1A1A2E', label:'다크 네이비' },
+  { type:'flat', c1:'#2E4A1E', label:'그린' },
+  // 선형 그라데이션
+  { type:'linear', c1:'#C80000', c2:'#FFD700', angle:135, label:'레드→골드' },
+  { type:'linear', c1:'#0044CC', c2:'#00CCDD', angle:135, label:'블루→시안' },
+  { type:'linear', c1:'#111111', c2:'#444444', angle:160, label:'블랙 페이드' },
+  { type:'linear', c1:'#C80000', c2:'#880000', angle:180, label:'레드 딥' },
+  { type:'linear', c1:'#1A1A2E', c2:'#4A1A6E', angle:135, label:'다크 퍼플' },
+  { type:'linear', c1:'#0A0A0A', c2:'#C80000', angle:45,  label:'블랙→레드' },
+  // 원형 그라데이션
+  { type:'radial', c1:'#FFD700', c2:'#C80000', label:'골드→레드' },
+  { type:'radial', c1:'#FFFFFF', c2:'#0044CC', label:'화이트→블루' },
+  { type:'radial', c1:'#C80000', c2:'#111111', label:'레드→블랙' },
+];
+
+// ================================================================
+// STATE
+// ================================================================
+let BG_TYPE = 'flat';
+let C1      = '#C80000';
+let C2      = '#FFD700';
+let ANGLE   = 135;
+let EMSZ    = 180;
+let YOFF    = 10;
+const CS    = 480;
+
+// ================================================================
+// 배경 렌더 헬퍼
+// ================================================================
+function makeBg(ctx) {
+  if (BG_TYPE === 'flat') {
+    ctx.fillStyle = C1;
+    ctx.fillRect(0, 0, CS, CS);
+  } else if (BG_TYPE === 'linear') {
+    const rad = ANGLE * Math.PI / 180;
+    const cx = CS / 2, cy = CS / 2;
+    const len = CS / 2;
+    const grd = ctx.createLinearGradient(
+      cx - Math.cos(rad) * len, cy - Math.sin(rad) * len,
+      cx + Math.cos(rad) * len, cy + Math.sin(rad) * len
+    );
+    grd.addColorStop(0, C1);
+    grd.addColorStop(1, C2);
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, CS, CS);
+  } else { // radial
+    const grd = ctx.createRadialGradient(CS/2, CS/2, 0, CS/2, CS/2, CS * 0.72);
+    grd.addColorStop(0, C1);
+    grd.addColorStop(1, C2);
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, CS, CS);
+  }
+}
+
+// ================================================================
+// RENDER
+// ================================================================
+function renderIcon(canvas, icon) {
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, CS, CS);
+  makeBg(ctx);
+
+  ctx.font = `${EMSZ}px "Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif`;
+  ctx.textAlign    = 'center';
+  ctx.textBaseline = 'middle';
+
+  // 흰 글로우
+  ctx.shadowColor = 'rgba(255,255,255,0.9)';
+  ctx.shadowBlur  = 28; ctx.fillText(icon.emoji, CS/2, CS/2 + YOFF);
+  ctx.shadowBlur  = 16; ctx.fillText(icon.emoji, CS/2, CS/2 + YOFF);
+  ctx.shadowBlur  = 6;  ctx.fillText(icon.emoji, CS/2, CS/2 + YOFF);
+  ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0;
+}
+
+function renderAll() {
+  document.getElementById('statusMsg').textContent = '● 렌더링 중...';
+  requestAnimationFrame(() => {
+    ICONS.forEach(icon => {
+      const c = document.getElementById('cv-' + icon.id);
+      if (c) renderIcon(c, icon);
+    });
+    document.getElementById('statusMsg').textContent =
+      `● 완료 — ${ICONS.length}개 | ${BG_TYPE.toUpperCase()} | 이모지 ${EMSZ}px`;
+  });
+}
+
+// ================================================================
+// 프리셋 스와치 빌드
+// ================================================================
+function buildSwatches() {
+  const row = document.getElementById('swatchRow');
+  row.innerHTML = '';
+  PRESETS.forEach((p, i) => {
+    const s = document.createElement('div');
+    s.className = 'swatch';
+    s.title = p.label;
+    // 프리셋 미리보기 색
+    if (p.type === 'flat') {
+      s.style.background = p.c1;
+    } else if (p.type === 'linear') {
+      const deg = p.angle || 135;
+      s.style.background = `linear-gradient(${deg}deg, ${p.c1}, ${p.c2})`;
+    } else {
+      s.style.background = `radial-gradient(circle, ${p.c1}, ${p.c2})`;
+    }
+    s.onclick = () => applyPreset(p, s);
+    row.appendChild(s);
+  });
+}
+
+function applyPreset(p, el) {
+  // 스와치 active 표시
+  document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+  el.classList.add('active');
+
+  BG_TYPE = p.type;
+  C1 = p.c1;
+  C2 = p.c2 || C2;
+  ANGLE = p.angle || ANGLE;
+
+  // 컨트롤 동기화
+  document.getElementById('c1Picker').value = C1;
+  document.getElementById('c1Hex').textContent = C1.toUpperCase();
+  document.getElementById('c2Picker').value = C2;
+  document.getElementById('c2Hex').textContent = C2.toUpperCase();
+  document.getElementById('angleRange').value = ANGLE;
+  document.getElementById('angleVal').textContent = ANGLE + '°';
+
+  ['bgFlat','bgLinear','bgRadial'].forEach(id => document.getElementById(id).classList.remove('active'));
+  document.getElementById(BG_TYPE === 'flat' ? 'bgFlat' : BG_TYPE === 'linear' ? 'bgLinear' : 'bgRadial').classList.add('active');
+
+  updateGradControls();
+  renderAll();
+}
+
+// ================================================================
+// UI 빌드
+// ================================================================
+function setupGrid() {
+  const grid = document.getElementById('iconGrid');
+  grid.innerHTML = '';
+  ICONS.forEach(icon => {
+    const card = document.createElement('div');
+    card.className = 'icon-card';
+
+    const top = document.createElement('div');
+    top.className = 'card-top';
+    top.innerHTML = `<span class="card-num">#${icon.num}</span><span class="card-dl">⬇</span>`;
+
+    const cv = document.createElement('canvas');
+    cv.id = 'cv-' + icon.id; cv.width = CS; cv.height = CS;
+    cv.style.cursor = 'pointer';
+    cv.title = `${icon.label} — 클릭하여 저장`;
+    cv.onclick = () => dlOne(icon);
+
+    const lbl = document.createElement('div');
+    lbl.className = 'card-label'; lbl.textContent = icon.label;
+
+    const inp = document.createElement('input');
+    inp.type = 'text'; inp.className = 'card-emoji-edit';
+    inp.value = icon.emoji; inp.title = '이모지 변경'; inp.maxLength = 8;
+    inp.addEventListener('input', e => {
+      const v = e.target.value.trim();
+      if (v) { icon.emoji = v; renderIcon(cv, icon); }
+    });
+    inp.addEventListener('click', e => e.stopPropagation());
+
+    const ov = document.createElement('div');
+    ov.className = 'dl-overlay'; ov.textContent = '클릭\n저장';
+    cv.addEventListener('mouseenter', () => ov.style.opacity = '1');
+    cv.addEventListener('mouseleave', () => ov.style.opacity = '0');
+
+    card.append(top, cv, ov, lbl, inp);
+    grid.appendChild(card);
+  });
+}
+
+// ================================================================
+// CONTROLS
+// ================================================================
+function setBgType(type) {
+  BG_TYPE = type;
+  ['bgFlat','bgLinear','bgRadial'].forEach(id => document.getElementById(id).classList.remove('active'));
+  document.getElementById(type === 'flat' ? 'bgFlat' : type === 'linear' ? 'bgLinear' : 'bgRadial').classList.add('active');
+  updateGradControls();
+  renderAll();
+}
+
+function updateGradControls() {
+  const show = BG_TYPE !== 'flat';
+  document.getElementById('c2Group').style.opacity    = show ? '1' : '0.3';
+  document.getElementById('c2Group').style.pointerEvents = show ? '' : 'none';
+  const showAngle = BG_TYPE === 'linear';
+  document.getElementById('angleGroup').style.opacity    = showAngle ? '1' : '0.3';
+  document.getElementById('angleGroup').style.pointerEvents = showAngle ? '' : 'none';
+}
+
+function onSzChange() {
+  EMSZ = +document.getElementById('szRange').value;
+  document.getElementById('szVal').textContent = EMSZ;
+  renderAll();
+}
+function onYChange() {
+  YOFF = +document.getElementById('yRange').value;
+  document.getElementById('yVal').textContent = (YOFF >= 0 ? '+' : '') + YOFF;
+  renderAll();
+}
+function onAngleChange() {
+  ANGLE = +document.getElementById('angleRange').value;
+  document.getElementById('angleVal').textContent = ANGLE + '°';
+  renderAll();
+}
+
+document.getElementById('c1Picker').addEventListener('input', e => {
+  C1 = e.target.value;
+  document.getElementById('c1Hex').textContent = C1.toUpperCase();
+  renderAll();
+});
+document.getElementById('c2Picker').addEventListener('input', e => {
+  C2 = e.target.value;
+  document.getElementById('c2Hex').textContent = C2.toUpperCase();
+  renderAll();
+});
+
+// ================================================================
+// DOWNLOAD
+// ================================================================
+function dlOne(icon) {
+  const c = document.getElementById('cv-' + icon.id);
+  const a = document.createElement('a');
+  a.href = c.toDataURL('image/png');
+  a.download = `highlight_${String(icon.num).padStart(2,'0')}_${icon.id}.png`;
+  a.click();
+}
+
+async function downloadAll() {
+  if (typeof JSZip === 'undefined') { alert('JSZip 로딩 중. 잠시 후 재시도.'); return; }
+  document.getElementById('statusMsg').textContent = '● ZIP 압축 중...';
+  const zip = new JSZip();
+  const folder = zip.folder('highlight_icons');
+  ICONS.forEach(icon => {
+    const c = document.getElementById('cv-' + icon.id);
+    const b64 = c.toDataURL('image/png').split(',')[1];
+    folder.file(`highlight_${String(icon.num).padStart(2,'0')}_${icon.id}.png`, b64, {base64:true});
+  });
+  const blob = await zip.generateAsync({type:'blob'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'highlight_icons.zip';
+  a.click();
+  document.getElementById('statusMsg').textContent = '● ZIP 다운로드 완료';
+}
+
+// ================================================================
+// INIT
+// ================================================================
+buildSwatches();
+setupGrid();
+updateGradControls();
+renderAll();
+</script>
+</body>
+</html>

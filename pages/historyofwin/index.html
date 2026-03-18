@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>history</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no' />
+  <link rel='stylesheet' href='/css/reset.css'>
+  <link rel='stylesheet' href='/font/pretendard.css'>
+  <link rel='stylesheet' href='/font/pretendard-subset.css'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <link rel='stylesheet' href='/css/common.css'>
+  <link rel='stylesheet' href='/css/winpage.css'>
+
+  <!-- 캐시사삭제 관련 -->
+  <meta http-equiv="Expires" content="-1" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <!-- 스크롤 이벤트 관련 -->
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+
+  <!-- 부트스트랩 설정 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</head>
+
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">history of win</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        <li class="nav-item active">
+          <a class="nav-link" href="#scrollspyHeading1">2021</a>
+        </li>
+      </ul>
+      <a href="../">blog</a>
+    </div>
+  </nav>
+
+  <div class="parents">
+    <main data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-offset="0" class="scrollspy-example" tabindex="0">
+      <div id="list" class="list" data-sheetName="win"></div>
+    </main>
+  </div>
+  
+  <aside>
+    <div class="bottom">
+      <div class="contents fixed">
+        <div class="handle"></div>
+        <div>
+          <button id="btn_prev" class="prev">이전</button>
+          <span id="d_date">00-00</span> vs<span id="d_vs"></span>
+          <button id="btn_next" class="next">다음</button>
+        </div>
+      </div>
+      <div class="contents scroll">
+        <div id="d_img" class="content full img">
+        </div>
+        <div class="content">
+          <h4 id="d_memo">경기 한마디</h4>
+          <ul id="info-list">
+            <li>
+              <dl>
+                <dt>스코어</dt>
+                <dd id="d_score"></dd>
+              </dl>
+            </li>
+            <li>
+              <dl>
+                <dt>장소</dt>
+                <dd id="d_park"></dd>
+              </dl>
+            </li>
+            <li>
+              <dl>
+                <dt>결승타</dt>
+                <dd id="d_final"></dd>
+              </dl>
+            </li>
+            <li>
+              <dl>
+                <dt>홈런</dt>
+                <dd id="d_homerun"></dd>
+              </dl>
+            </li>
+            <li>
+              <dl>
+                <dt>승리투수</dt>
+                <dd id="d_victory"></dd>
+              </dl>
+            </li>
+            <li>
+              <dl>
+                <dt>홀드투수</dt>
+                <dd id="d_hold"></dd>
+              </dl>
+            </li>
+            <li>
+              <dl>
+                <dt>세이브투수</dt>
+                <dd id="d_save"></dd>
+              </dl>
+            </li>
+            <li>
+              <dl>
+                <dt>mvp</dt>
+                <dd id="d_mvp"></dd>
+              </dl>
+            </li>
+          </ul>
+        </div>
+        <div class="content maxcontent">
+          <dl>
+            <dt>하이라이트</dt>
+            <dd></dd>
+          </dl>
+          <dl>
+            <dt>만화</dt>
+            <dd id="d_comic"></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </aside>
+</body>
+
+</div>
+<script>
+  window.onload = function() {
+    //실행할 내용
+    getSheetData()
+    // console.log("온로드!")
+  }
+
+
+  const sheetId = "1du3WYKMQ9UODROfwEdrWjWSOUrjq798QTC38mmVfSCk"
+  const base = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?`;
+  const sheetName = $($('.list')).attr('data-sheetName') //'리스트별 시트';
+  const query = encodeURIComponent('Select *')
+  const url = `${base}&sheet=${sheetName}&tq=${query}`
+
+  const getSheetData = async () => {
+    //깨끗하게 첨부터 시작해용
+    $("dd").empty();
+
+    const response = await fetch(url);
+    let data = await response.text();
+
+    let parsed = JSON.parse(data.substring(47).slice(0, -2))
+    let cols = (parsed.table.cols).reduce((acc, cur) => {
+      if (cur.label !== "") {
+        acc.push(cur)
+      }
+      return acc
+    }, [])
+
+    let items = parsed.table.rows
+      .map(({
+        c
+      }) => cleanRow(c))
+      .map(function(t) {
+        // console.log(t, parsed.table.cols);
+        let returnObj = {}
+        for (let i = 0; i < cols.length; i++) {
+          returnObj[parsed.table.cols[i].label] = t[i]
+        }
+        // console.log("returnObj", returnObj);
+        return returnObj
+      })
+    setView(items)
+    console.log("items", items);
+
+    // 모든 .item 요소를 선택
+    var inners = document.querySelectorAll('#list .inner');
+
+    var isDragging = false;
+    var startY, startX, dragThreshold = 50;
+    var slideThreshold = 50; // 좌우 슬라이드 감지용
+    var currentInfoIndex = 0; // 현재 선택된 아이템의 인덱스
+
+    // 가능한 bottom 값들 (-80%, -40%, 0)
+    var bottomStates = ['-80%', '0'];
+    var currentStateIndex = 0; // bottom 상태를 관리하는 인덱스
+
+
+    // 각 .item 요소에 클릭 이벤트 리스너 추가
+    inners.forEach(function(item) {
+
+
+
+      item.addEventListener('click', function() {
+
+        $("dd").empty();
+        $("#d_memo").empty()
+
+
+        // 클릭된 item의 정보를 가져옴
+        var info = this.getAttribute('data-info') - 1;
+
+        // console.log("info",info,items[info])
+        console.log("info", items[info], items[info].park.v)
+
+
+        const infoData = items[info];
+        const fields = ['vs', 'score', 'final', 'park', 'homerun', 'victory', 'hold', 'save', 'mvp', 'memo', 'comic'];
+
+        fields.forEach(field => {
+          if (infoData[field] && infoData[field].v !== undefined) {
+            $(`#d_${field}`).text(infoData[field].v);
+          }
+        });
+        if (infoData && infoData.img && infoData.img.v) {
+          $('#d_img').css('background-image', 'url(' + infoData.img.v + ')');
+        } else {
+          $('#d_img').css('background-image', 'url(https://placehold.co/600x400)');
+        }
+
+        if (infoData.date && infoData.date.f !== undefined) {
+          $('#d_date').text(infoData.date.f);
+        }
+
+        // $('.bottom').css('bottom', 0);
+
+      });
+
+
+      // 드래그 시작 시
+      $('.bottom').on('mousedown touchstart', function(e) {
+        isDragging = true;
+        startY = e.originalEvent.touches ? e.originalEvent.touches[0].pageY : e.pageY;
+        startX = e.originalEvent.touches ? e.originalEvent.touches[0].pageX : e.pageX; // 좌우 슬라이드 감지용
+      });
+
+      // 드래그 중일 때
+      $(document).on('mousemove touchmove', function(e) {
+        if (isDragging) {
+          var moveY = e.originalEvent.touches ? e.originalEvent.touches[0].pageY : e.pageY;
+          var moveX = e.originalEvent.touches ? e.originalEvent.touches[0].pageX : e.pageX; // 좌우 슬라이드 감지용
+          var dragDistanceY = startY - moveY; // 상하 드래그 거리
+          var dragDistanceX = startX - moveX; // 좌우 슬라이드 거리
+
+          // 상하 드래그 감지
+          if (dragDistanceY > dragThreshold && currentStateIndex < bottomStates.length - 1) {
+            currentStateIndex++; // 위로 드래그 시 다음 상태
+            updateBottom();
+            isDragging = false; // 드래그 완료 후 다시 드래그하도록 상태 초기화
+          } else if (dragDistanceY < -dragThreshold && currentStateIndex > 0) {
+            currentStateIndex--; // 아래로 드래그 시 이전 상태
+            updateBottom();
+            isDragging = false;
+          }
+
+          // 좌우 슬라이드 감지
+          if (Math.abs(dragDistanceX) > slideThreshold) {
+            if (dragDistanceX > 0 && currentInfoIndex < items.length - 1) {
+              // 오른쪽으로 슬라이드 시 (다음 아이템)
+              currentInfoIndex++;
+              updateInfo(currentInfoIndex);
+            } else if (dragDistanceX < 0 && currentInfoIndex > 0) {
+              // 왼쪽으로 슬라이드 시 (이전 아이템)
+              currentInfoIndex--;
+              updateInfo(currentInfoIndex);
+            }
+            isDragging = false; // 슬라이드 완료 후 다시 슬라이드 가능하도록 초기화
+          }
+        }
+      });
+
+      // 드래그 종료 시
+      $(document).on('mouseup touchend', function() {
+        isDragging = false;
+      });
+
+      // 상태에 맞는 bottom 값 적용
+      function updateBottom() {
+        var newBottom = bottomStates[currentStateIndex];
+        $('.bottom').css('bottom', newBottom);
+      }
+
+      // 아이템 정보를 업데이트하는 함수
+      function updateInfo(index) {
+        var infoData = items[index];
+        var fields = ['vs', 'final', 'score', 'park', 'homerun', 'victory', 'hold', 'save', 'mvp', 'memo', 'comic'];
+
+        // 각 필드 업데이트
+        fields.forEach(field => {
+          if (infoData[field] && infoData[field].v !== undefined) {
+            $(`#d_${field}`).text(infoData[field].v);
+          } else {
+            $(`#d_${field}`).text(''); // 필드가 없는 경우 빈 값 처리
+          }
+        });
+
+        // 이미지 업데이트
+        if (infoData.img && infoData.img.v) {
+          $('#d_img').css('background-image', 'url(' + infoData.img.v + ')');
+        } else {
+          $('#d_img').css('background-image', 'url(https://placehold.co/600x400)');
+        }
+
+        // 날짜 업데이트
+        if (infoData.date && infoData.date.f !== undefined) {
+          $('#d_date').text(infoData.date.f);
+        } else {
+          $('#d_date').text(''); // 날짜가 없는 경우 빈 값 처리
+        }
+      }
+
+
+    });
+
+
+  }
+
+
+  function cleanRow(row) {
+    // console.log("cleanRow",row)
+    // row = [null,{v:'123'},null,{v:'hello'}]
+    function replaceNull(item) {
+      // console.log("replaceNullitem",item)
+      if (item == null) {
+        return {
+          v: ''
+        }
+      }
+      //  console.log("returnitem",item)
+      return item
+    }
+    data = row
+    return data
+  }
+
+  // users = getSheetData()
+  // getSheetData.then(item => setView(item))
+  // setView(users)
+  function setView(users, index) {
+    //let colSort = ($("#colSort").val()).split("	")
+    let colSort = ("no	date	vs	score	park	final	homerun	victory	hold	save	mvp	memo	comic	important img").split("	")
+
+    // console.log("colSort",colSort)
+
+
+    for (let ii = 0; ii < users.length; ii++) {
+      const user = users[ii];
+      let str = "";
+
+      //  console.log("str",str)
+
+      for (let iii = 1; iii < colSort.length; iii++) {
+        const element = colSort[iii];
+        str += `<p>${colSort[iii]} : ${user[colSort[iii]]}</p>`
+      }
+
+      var counter = 0; // Initialize a counter for unique IDs
+
+      // console.log("itemTemp", itemTemp)
+
+      var itemTemp = function(e) {
+        counter++; // Increment counter for each item
+
+        // Check for important and assign class
+        var importantclass = e.important && e.important.v ? e.important.v : '';
+
+        // Check for memo text
+        var memotext = e.memo && e.memo.v ? e.memo.v : '';
+
+        // Check for image and fallback to default
+        var imgwrapContent = e.img && e.img.v ?
+          `<div class="imgwrap" style="background-image:url(${e.img.v})">
+            <p class="number-win">${e.no.v}</p>
+        </div>` :
+          '<div class="imgwrap" style="background-image:url(https://placehold.co/600x400)"></div>';
+
+        // Check if date exists
+        var dateContent = e.date && e.date.f ? `<span class="date">${e.date.f}</span>` : '';
+
+        // Return the final template
+        return `<div class="inner ${importantclass}" data-info="${e.no.v}">
+        ${imgwrapContent}
+        <div class="item text">
+          ${dateContent}
+        </div>
+    </div>`;
+      };
+
+      $($('#list')).append($(itemTemp(user))); // Pass data (e) to the function      
+
+
+    }
+
+  }
+</script>
+
+
+</html>

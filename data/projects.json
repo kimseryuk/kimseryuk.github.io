@@ -1,0 +1,25 @@
+[
+  {
+    "title": "Road To Top",
+    "desc": "2021~2024 KIA 타이거즈 시즌 타임라인",
+    "thumb": "thumbs/kia-timeline.png",
+    "url": "pages/kia-timeline.html",
+    "tags": ["타임라인", "KIA"]
+  },
+  {
+    "title": "KBO 일정 배경화면",
+    "desc": "2026 KBO 정규시즌 일정이 담긴 폰 배경화면 생성기",
+    "thumb": "thumbs/kbo-wallpaper.png",
+    "url": "pages/kbo-wallpaper.html",
+    "tags": ["배경화면", "일정", "2026"],
+    "updated": "2026.03"
+  },
+  {
+    "title": "Carousel Editor",
+    "desc": "인스타그램 캐러셀 이미지를 편집하고 슬라이드별로 내보내는 편집기",
+    "thumb": "thumbs/carousel-editor.png",
+    "url": "carousel/",
+    "tags": ["편집기", "인스타그램", "캐러셀"],
+    "updated": "2026.03"
+  }
+]

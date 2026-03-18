@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>history</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no' />
+  <link rel='stylesheet' href='/css/reset.css'>
+  <link rel='stylesheet' href='/font/pretendard.css'>
+  <link rel='stylesheet' href='/font/pretendard-subset.css'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <link rel='stylesheet' href='/css/common.css'>
+  <link rel='stylesheet' href='/css/base.css'>
+  <link rel='stylesheet' href='/css/winpage.css'>
+
+  <!-- 캐시사삭제 관련 -->
+  <meta http-equiv="Expires" content="-1" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <!-- 스크롤 이벤트 관련 -->
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+
+  <!-- 부트스트랩 설정 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</head>
+
+
+<body>
+  <header class="page-nav">
+    <a class="back-link" href="../index.html">
+      <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+      dugout.
+    </a>
+    <span class="page-nav__title">History of Win</span>
+  </header>
+  <nav class="page-snb">
+    <a class="snb-link" href="#scrollspyHeading1">2021</a>
+  </nav>
+
+  <div class="parents">
+    <main data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-offset="0" class="scrollspy-example" tabindex="0">
+      <div id="list" class="list" data-sheetName="win"></div>
+    </main>
+  </div>
+  
+  <aside>
+    <div class="bottom">
+      <div class="contents fixed">
+        <div class="handle"></div>
+        <div>
+          <button id="btn_prev" class="prev">이전</button>
+          <span id="d_date">00-00</span> vs<span id="d_vs"></span>
+          <button id="btn_next" class="next">다음</button>
+        </div>
+      </div>
+      <div class="contents scroll">
+        <div id="d_img" class="content full img">
+        </div>
+        <div class="content">
+          <h4 id="d_memo">경기 한마디</h4>
+          <ul id="info-list">
+            <li>
+              <dl>
+                <dt>스코어</dt>
+                <dd id="d_score"></dd>
+              </dl>
+            </li>
+            <li>
+              <dl>
+                <dt>장소</dt>
+                <dd id="d_park"></dd>
+              </dl>
+            </li>
+            <li>
+              <dl>
+                <dt>결승타</dt>
+                <dd id="d_final"></dd>
+              </dl>
+            </li>
+            <li>
+              <dl>
+                <dt>홈런</dt>
+                <dd id="d_homerun"></dd>
+              </dl>
+            </li>
+            <li>
+              <dl>
+                <dt>승리투수</dt>
+                <dd id="d_victory"></dd>
+              </dl>
+            </li>
+            <li>
+              <dl>
+                <dt>홀드투수</dt>
+                <dd id="d_hold"></dd>
+              </dl>
+            </li>
+            <li>
+              <dl>
+                <dt>세이브투수</dt>
+                <dd id="d_save"></dd>
+              </dl>
+            </li>
+            <li>
+              <dl>
+                <dt>mvp</dt>
+                <dd id="d_mvp"></dd>
+              </dl>
+            </li>
+          </ul>
+        </div>
+        <div class="content maxcontent">
+          <dl>
+            <dt>하이라이트</dt>
+            <dd></dd>
+          </dl>
+          <dl>
+            <dt>만화</dt>
+            <dd id="d_comic"></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </aside>
+</body>
+
+</div>
+<script>
+  window.onload = function() {
+    //실행할 내용
+    getSheetData()
+    // console.log("온로드!")
+  }
+
+
+  const sheetId = "1du3WYKMQ9UODROfwEdrWjWSOUrjq798QTC38mmVfSCk"
+  const base = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?`;
+  const sheetName = $($('.list')).attr('data-sheetName') //'리스트별 시트';
+  const query = encodeURIComponent('Select *')
+  const url = `${base}&sheet=${sheetName}&tq=${query}`
+
+  const getSheetData = async () => {
+    //깨끗하게 첨부터 시작해용
+    $("dd").empty();
+
+    const response = await fetch(url);
+    let data = await response.text();
+
+    let parsed = JSON.parse(data.substring(47).slice(0, -2))
+    let cols = (parsed.table.cols).reduce((acc, cur) => {
+      if (cur.label !== "") {
+        acc.push(cur)
+      }
+      return acc
+    }, [])
+
+    let items = parsed.table.rows
+      .map(({
+        c
+      }) => cleanRow(c))
+      .map(function(t) {
+        // console.log(t, parsed.table.cols);
+        let returnObj = {}
+        for (let i = 0; i < cols.length; i++) {
+          returnObj[parsed.table.cols[i].label] = t[i]
+        }
+        // console.log("returnObj", returnObj);
+        return returnObj
+      })
+    setView(items)
+
+    var isDragging = false;
+    var startY, startX;
+    var dragThreshold = 50;
+    var slideThreshold = 50;
+    var currentInfoIndex = 0;
+    var bottomStates = ['-80%', '0'];
+    var currentStateIndex = 0;
+
+    function updateBottom() {
+      $('.bottom').css('bottom', bottomStates[currentStateIndex]);
+    }
+
+    function updateInfo(index) {
+      var infoData = items[index];
+      var fields = ['vs', 'final', 'score', 'park', 'homerun', 'victory', 'hold', 'save', 'mvp', 'memo', 'comic'];
+
+      $("dd").empty();
+      $("#d_memo").empty();
+
+      fields.forEach(function(field) {
+        if (infoData[field] && infoData[field].v !== undefined) {
+          $('#d_' + field).text(infoData[field].v);
+        }
+      });
+
+      if (infoData.img && infoData.img.v) {
+        $('#d_img').css('background-image', 'url(' + infoData.img.v + ')');
+      } else {
+        $('#d_img').css('background-image', 'url(https://placehold.co/600x400)');
+      }
+
+      if (infoData.date && infoData.date.f !== undefined) {
+        $('#d_date').text(infoData.date.f);
+      }
+    }
+
+    // 카드 클릭 → 바텀시트 열기
+    $('#list').on('click', '.inner', function() {
+      var info = parseInt($(this).attr('data-info')) - 1;
+      currentInfoIndex = info;
+      updateInfo(currentInfoIndex);
+      currentStateIndex = 1;
+      updateBottom();
+    });
+
+    // 이전 버튼
+    $('#btn_prev').on('click', function() {
+      if (currentInfoIndex > 0) {
+        currentInfoIndex--;
+        updateInfo(currentInfoIndex);
+      }
+    });
+
+    // 다음 버튼
+    $('#btn_next').on('click', function() {
+      if (currentInfoIndex < items.length - 1) {
+        currentInfoIndex++;
+        updateInfo(currentInfoIndex);
+      }
+    });
+
+    // 바텀시트 드래그 (상하)
+    $('.bottom').on('mousedown touchstart', function(e) {
+      isDragging = true;
+      startY = e.originalEvent.touches ? e.originalEvent.touches[0].pageY : e.pageY;
+      startX = e.originalEvent.touches ? e.originalEvent.touches[0].pageX : e.pageX;
+    });
+
+    $(document).on('mousemove touchmove', function(e) {
+      if (!isDragging) return;
+      var moveY = e.originalEvent.touches ? e.originalEvent.touches[0].pageY : e.pageY;
+      var moveX = e.originalEvent.touches ? e.originalEvent.touches[0].pageX : e.pageX;
+      var dragDistanceY = startY - moveY;
+      var dragDistanceX = startX - moveX;
+
+      if (dragDistanceY > dragThreshold && currentStateIndex < bottomStates.length - 1) {
+        currentStateIndex++;
+        updateBottom();
+        isDragging = false;
+      } else if (dragDistanceY < -dragThreshold && currentStateIndex > 0) {
+        currentStateIndex--;
+        updateBottom();
+        isDragging = false;
+      }
+
+      if (Math.abs(dragDistanceX) > slideThreshold) {
+        if (dragDistanceX > 0 && currentInfoIndex < items.length - 1) {
+          currentInfoIndex++;
+          updateInfo(currentInfoIndex);
+        } else if (dragDistanceX < 0 && currentInfoIndex > 0) {
+          currentInfoIndex--;
+          updateInfo(currentInfoIndex);
+        }
+        isDragging = false;
+      }
+    });
+
+    $(document).on('mouseup touchend', function() {
+      isDragging = false;
+    });
+
+
+  }
+
+
+  function cleanRow(row) {
+    // console.log("cleanRow",row)
+    // row = [null,{v:'123'},null,{v:'hello'}]
+    function replaceNull(item) {
+      // console.log("replaceNullitem",item)
+      if (item == null) {
+        return {
+          v: ''
+        }
+      }
+      //  console.log("returnitem",item)
+      return item
+    }
+    data = row
+    return data
+  }
+
+  // users = getSheetData()
+  // getSheetData.then(item => setView(item))
+  // setView(users)
+  function setView(users, index) {
+    //let colSort = ($("#colSort").val()).split("	")
+    let colSort = ("no	date	vs	score	park	final	homerun	victory	hold	save	mvp	memo	comic	important img").split("	")
+
+    // console.log("colSort",colSort)
+
+
+    for (let ii = 0; ii < users.length; ii++) {
+      const user = users[ii];
+      let str = "";
+
+      //  console.log("str",str)
+
+      for (let iii = 1; iii < colSort.length; iii++) {
+        const element = colSort[iii];
+        str += `<p>${colSort[iii]} : ${user[colSort[iii]]}</p>`
+      }
+
+      var counter = 0; // Initialize a counter for unique IDs
+
+      // console.log("itemTemp", itemTemp)
+
+      var itemTemp = function(e) {
+        counter++; // Increment counter for each item
+
+        // Check for important and assign class
+        var importantclass = e.important && e.important.v ? e.important.v : '';
+
+        // Check for memo text
+        var memotext = e.memo && e.memo.v ? e.memo.v : '';
+
+        // Check for image and fallback to default
+        var imgwrapContent = e.img && e.img.v ?
+          `<div class="imgwrap" style="background-image:url(${e.img.v})">
+            <p class="number-win">${e.no.v}</p>
+        </div>` :
+          '<div class="imgwrap" style="background-image:url(https://placehold.co/600x400)"></div>';
+
+        // Check if date exists
+        var dateContent = e.date && e.date.f ? `<span class="date">${e.date.f}</span>` : '';
+
+        // Return the final template
+        return `<div class="inner ${importantclass}" data-info="${e.no.v}">
+        ${imgwrapContent}
+        <div class="item text">
+          ${dateContent}
+        </div>
+    </div>`;
+      };
+
+      $($('#list')).append($(itemTemp(user))); // Pass data (e) to the function      
+
+
+    }
+
+  }
+</script>
+
+
+</html>

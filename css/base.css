@@ -1,0 +1,156 @@
+/* ─────────────────────────────────────────────────────────
+   base.css — 모든 내부 페이지 공통
+   ───────────────────────────────────────────────────────── */
+
+/* ── 디자인 토큰 ─────────────────────────────────────────── */
+:root {
+  --font-sans: 'Pretendard', sans-serif;
+
+  --color-bg:           #0d1117;
+  --color-surface:      #161b22;
+  --color-surface-2:    #1c2129;
+  --color-overlay:      #21262d;
+
+  --color-border:       #30363d;
+  --color-border-hover: #8b949e;
+
+  --color-accent:       #e05555;
+  --color-accent-hover: #c94444;
+  --color-accent-dim:   rgba(224, 85, 85, 0.15);
+
+  --color-text-primary:   #e6edf3;
+  --color-text-secondary: #8b949e;
+  --color-text-muted:     #444d56;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  --transition: 0.2s ease;
+
+  --page-nav-h:  46px;
+  --page-snb-h:  40px;
+}
+
+/* ── 페이지 헤더 내비게이션 ──────────────────────────────── */
+.page-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--page-nav-h);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  transition: top var(--transition);
+}
+
+/* 스크롤 다운 시 숨기기 (kia-timeline 기존 .up 동작 유지) */
+.page-nav.up { top: calc(var(--page-nav-h) * -1); }
+
+/* ← dugout. 링크 */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  font-family: var(--font-sans);
+  transition: color var(--transition);
+  flex-shrink: 0;
+}
+.back-link svg { width: 14px; height: 14px; fill: currentColor; }
+.back-link:hover { color: var(--color-text-primary); }
+.back-link a { color: inherit; text-decoration: none; }
+
+/* 페이지 타이틀 (우측) */
+.page-nav__title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-family: var(--font-sans);
+}
+
+/* kia-timeline 시즌 표시 (.level) */
+.page-nav .level {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  font-family: var(--font-sans);
+  text-align: right;
+}
+
+/* 스크롤 프로그레스바 (kia-timeline) */
+.page-nav .progress-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--color-border);
+}
+.page-nav .progress-container .progress-bar {
+  height: 2px;
+  background: var(--color-accent);
+  width: 0%;
+}
+
+/* ── 서브 내비게이션 (SNB) ───────────────────────────────── */
+.page-snb {
+  position: fixed;
+  top: var(--page-nav-h);
+  left: 0;
+  right: 0;
+  height: var(--page-snb-h);
+  z-index: 998;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 12px;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.snb-link {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  font-family: var(--font-sans);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--transition), border-color var(--transition);
+  text-decoration: none;
+}
+.snb-link:hover { color: var(--color-text-primary); }
+.snb-link.active {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+}
+
+/* ── 모바일 ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .page-nav { padding: 0 16px; }
+  .page-nav .level {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: left;
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    padding: 12px 16px;
+    font-size: 13px;
+    z-index: 997;
+  }
+}

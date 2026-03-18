@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>hello World</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no' />
+  <link rel='stylesheet' href='reset.css'>
+  <link rel='stylesheet' href='font/pretendard.css'>
+  <link rel='stylesheet' href='font/pretendard-subset.css'>
+  <link rel='stylesheet' href='style.css'>
+
+  <!-- 부트스트랩 설정 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+</head>
+
+
+<body>
+  <div class="parents">
+    <header class="show">
+      <div class="header--wrap">
+        <h1>
+          logo
+        </h1>
+        <ul class="header--link">
+          <li>
+            <a href="#">
+              share
+            </a>
+          </li>
+        </ul>
+      </div>
+    </header>
+    <div class="content hero">
+      <div class="text">
+        <h2 class="page-title">뭔가멘트</h2>
+        <span class="page-desc">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero ullam molestias error rem. Expedita, deserunt. Fuga nemo exercitationem enim dolor quos, iusto cupiditate, voluptas dolores, illo quaerat id recusandae delectus.
+        </span>
+      </div>
+      <div class="background">
+        <div class="bg1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="2000" height="806" viewBox="0 0 2000 806" fill="none">
+            <path d="M-155 0H1835V527L-155 806V0Z" fill="#474747" />
+          </svg>
+        </div>
+        <div class="bg2">
+        </div>
+        <div class="blur">
+          <div class="glow">
+            <div class="rec1">
+              <svg xmlns="http://www.w3.org/2000/svg" width="1087" height="597" viewBox="0 0 1087 597" fill="none">
+                <g filter="url(#filter0_f_2561_4896)">
+                  <path d="M550.863 608.368C1007.39 433.786 858.094 757.889 1136.46 789.039C1414.83 820.189 1628.03 483.768 1009.85 229.721C391.662 -24.3262 -229.317 906.717 550.863 608.368Z" fill="#DC3545" />
+                </g>
+                <defs>
+                  <filter id="filter0_f_2561_4896" x="0.734375" y="0.273438" width="1594.4" height="975.781" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                    <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                    <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+                    <feGaussianBlur stdDeviation="92.5" result="effect1_foregroundBlur_2561_4896" />
+                  </filter>
+                </defs>
+              </svg>
+            </div>
+            <div class="rec2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="630" height="523" viewBox="0 0 630 523" fill="none">
+                <g filter="url(#filter0_f_2561_4897)">
+                  <path d="M185.919 172.495C327.319 334.396 483.019 27.7301 775.353 309.58C1067.69 591.429 1329.04 27.7302 806.333 -157.216C283.626 -342.162 17.8096 -19.9866 185.919 172.495Z" fill="#757575" />
+                </g>
+                <defs>
+                  <filter id="filter0_f_2561_4897" x="0.703125" y="-347.539" width="1240.12" height="869.625" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                    <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                    <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+                    <feGaussianBlur stdDeviation="67.5" result="effect1_foregroundBlur_2561_4897" />
+                  </filter>
+                </defs>
+              </svg>
+            </div>
+            <div class="rec3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <main>
+      <div class="wrap">
+        <div class="container">
+
+          <div class="content">
+            <section class="2022">
+              <h2 class="section--title">2022</h2>
+              <div class="history">
+                <div class="history--list">
+                  <div id="list2022" class="list list2022" data-sheetName="2022">
+                  </div>
+                </div>
+            </section>
+            <section class="2023">
+              <h2 class="section--title">2023</h2>
+              <div class="history">
+                <div class="history--list">
+                  <div id="list2023" class="list list2023" data-sheetName="2023">
+                  </div>
+                </div>
+            </section>
+            <section class="2024">
+              <h2 class="section--title">2024</h2>
+              <div class="history">
+                <div class="history--list">
+                  <div id="list2024" class="list list2024" data-sheetName="2024">
+                  </div>
+                </div>
+            </section>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</body>
+
+</div>
+<script>
+  window.onload = function() {
+    //실행할 내용
+    getSheetData()
+  }
+
+
+  const getSheetData = async () => {
+    //깨끗하게 첨부터 시작해용
+    $(".list").empty();
+    //반복문 돌면서 연도별로 시트에 있는 값을 가져올것임
+    for (let i = 0; i < $(".list").length; i++) {
+      // const sheetId = '1yYM8BMK_WYqZwmSRCZ-K7WX776d9UcGpzZIOAVioGWk';
+      const sheetId = "1du3WYKMQ9UODROfwEdrWjWSOUrjq798QTC38mmVfSCk"
+      const base = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?`;
+      const sheetName = $($('.list')[i]).attr('data-sheetName') //'리스트별 시트';
+      const query = encodeURIComponent('Select *')
+      const url = `${base}&sheet=${sheetName}&tq=${query}`
+
+      const response = await fetch(url);
+      let data = await response.text();
+      let parsed = JSON.parse(data.substring(47).slice(0, -2))
+      let cols = (parsed.table.cols).reduce((acc, cur) => {
+        if (cur.label !== "") {
+          acc.push(cur)
+        }
+        return acc
+      }, [])
+
+      let items = parsed.table.rows
+        .map(({
+          c
+        }) => cleanRow(c))
+        .map(function(t) {
+          // console.log(t, parsed.table.cols);
+          let returnObj = {}
+          for (let i = 0; i < cols.length; i++) {
+            returnObj[parsed.table.cols[i].label] = t[i]
+          }
+          return returnObj
+        })
+      console.log(cols, items);
+      setView(items, i)
+
+      var innerHeight = $(".inner")
+      console.log(innerHeight)
+    };
+
+  }
+
+
+  function cleanRow(row) {
+    // row = [null,{v:'123'},null,{v:'hello'}]
+    function replaceNull(item) {
+      if (item == null) {
+        return {
+          v: ''
+        }
+      }
+      return item
+    }
+    data = row
+      .map((item) => replaceNull(item))
+      .map((item) => item.v)
+    return data
+  }
+
+  // users = getSheetData()
+  // getSheetData.then(item => setView(item))
+  // setView(users)
+  function setView(users, index) {
+    //let colSort = ($("#colSort").val()).split("	")
+    let colSort = ("no	Date	News	Title	Body	Image	Link	Youtube	DiaryInstagram	DiaryGallery").split("	")
+    for (let ii = 0; ii < users.length; ii++) {
+      const e = users[ii];
+      let str = "";
+      for (let iii = 1; iii < colSort.length; iii++) {
+        const element = colSort[iii];
+        str += `<p>${colSort[iii]} : ${e[colSort[iii]]}</p>`
+      }
+
+      var counter = 0; // Initialize a counter for unique IDs
+
+      var itemTemp = function(e) {
+        counter++; // Increment counter for each item
+
+        return `<div class="inner" id="inner-${counter}">
+            <div class="group--now">
+              <div class="circle">circle</div>
+            </div>
+
+            <div class="group--wrap">
+              <div class="group group--main">
+                <div class="title-wrap">
+                  <p class="d_date">
+                    ${e[colSort[1]]}
+                  </p>
+                  <div class="title">
+                    <h3 class="title--main d_title">
+                      ${e[colSort[3]]}
+                    </h3>
+                    <span class="title--desc d_news">
+                      ${e[colSort[2]]}
+                    </span>
+                    </div>
+                </div>
+                <div class="body--wrap">
+                  <p class="d_body">"${e[colSort[4]]}"</p>
+                  <img src="${e[colSort[5]]}" alt="" class="d_image">
+                </div>
+              </div>
+              <div class="group--sub">
+                <div class="accordion" id="accordion-${counter}">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading-${counter}">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${counter}" aria-expanded="true" aria-controls="collapse-${counter}">
+                        자세히보기
+                      </button>
+                    </h2>
+                    <div id="collapse-${counter}" class="accordion-collapse collapse show" aria-labelledby="heading-${counter}" data-bs-parent="#accordion-${counter}">
+                      <div class="accordion-body">
+                        <div class="group--sub--link">
+                          <div class="group--sub--link--box">
+                              <label for="">instagram</label>
+                              <a href="${e[colSort[6]]}" class="d_link">바로가기</a>
+                            </div>
+                            <div class="group--sub--link--box">
+                              <label for="">youtube</label>
+                              <a href="${e[colSort[7]]}" class="d_youtube">바로가기</a>
+                            </div>
+                          <div class="link diary group--sub--link--box">
+                            <div class="group--instagram d_instagram">
+                              ${e[colSort[8]]}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>`;
+      };
+      $($('.list')[index]).append($(itemTemp(e))); // Pass data (e) to the function
+
+    }
+  }
+
+
+  //네비 스크롤 인식 
+
+  //Javascript
+  var lastScrollTop = 0;
+  var delta = 5;
+  var fixBox = document.querySelector('header');
+  var fixBoxHeight = fixBox.offsetHeight;
+  var didScroll;
+  //스크롤 이벤트 
+  window.onscroll = function(e) {
+    didScroll = true;
+  };
+
+  //0.25초마다 스크롤 여부 체크하여 스크롤 중이면 hasScrolled() 호출
+  setInterval(function() {
+    if (didScroll) {
+      hasScrolled();
+      didScroll = false;
+    }
+  }, 250);
+
+  function hasScrolled() {
+    var nowScrollTop = window.scrollY;
+    if (Math.abs(lastScrollTop - nowScrollTop) <= delta) {
+      return;
+    }
+    if (nowScrollTop > lastScrollTop && nowScrollTop > fixBoxHeight) {
+      //Scroll down (하단 고정메뉴 숨김)
+      fixBox.classList.remove('show');
+    } else {
+      if (nowScrollTop + window.innerHeight < document.body.offsetHeight) {
+        //Scroll up (하단 고정메뉴 보임)
+        fixBox.classList.add('show');
+      }
+    }
+    lastScrollTop = nowScrollTop;
+
+
+    //.inner 요소 focus
+    const innerHeights = {};
+
+    $('.inner').each(function() {
+      const innerHeight = $(this).outerHeight();
+      innerHeights[$(this).index()] = innerHeight;
+      console.log(innerHeight)
+    });
+
+    $(window).scroll(function() {
+      const scrollTop = $(window).scrollTop(); // 스크롤 상단 거리
+      const currentInner = $('.inner.focus'); // 현재 "focus" 클래스를 가진 요소
+
+      console.log("스크롤", scrollTop)
+
+      // 화면 높이가 ".inner" 요소에 다달 때
+      $('.inner').each(function() {
+        const innerIndex = $(this).index();
+        const innerTop = $(this).offset().top; // ".inner" 요소의 상단 위치
+        const innerHeight = innerHeights[innerIndex]; // 해당 ".inner" 요소의 높이
+
+        if (scrollTop + innerHeight >= innerTop + 50) {
+          $(this).addClass('focus'); // "focus" 클래스 추가
+          console.log("on추가됨")
+
+          // 이전 "focus" 클래스 제거 (필요한 경우)
+          if (currentInner.length > 0 && currentInner !== $(this)) {
+            currentInner.removeClass('focus');
+          }
+        }
+      });
+    });
+
+
+
+  }
+</script>
+
+
+
+</html>
