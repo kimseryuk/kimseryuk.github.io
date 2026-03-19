@@ -6,16 +6,16 @@ const TEAM_SHORT = {
 };
 
 const TEAM_COLORS = {
-  KIA:     '#EA0029',
-  LG:      '#C30452',
-  Samsung: '#1428A0',
-  Doosan:  '#1B3964',
-  KT:      '#E31837',
-  SSG:     '#CE0E2D',
-  Lotte:   '#002955',
-  NC:      '#1B4D9B',
-  Hanwha:  '#FF6600',
-  Kiwoom:  '#820024',
+  KIA:     '#ea0029',
+  LG:      '#c30452',
+  Samsung: '#074ca1',
+  Doosan:  '#131230',
+  KT:      '#000000',
+  SSG:     '#ce0e2d',
+  Lotte:   '#041e42',
+  NC:      '#315288',
+  Hanwha:  '#FC4E00',
+  Kiwoom:  '#570514',
 };
 
 const TEAM_ICON_PATH = {
