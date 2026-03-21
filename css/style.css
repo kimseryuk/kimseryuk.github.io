@@ -332,7 +332,55 @@ ol, ul { list-style: none; }
 .about-section {
   padding: 56px 0 80px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.about-section__block {
+  width: 100%;
+  max-width: 480px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+}
+.about-block__title {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.about-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.about-list__item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.about-list__label {
+  font-size: 12px;
+  color: var(--color-accent);
+  font-weight: 500;
+}
+.about-list__label--link {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  transition: opacity 0.15s;
+}
+.about-list__label--link:hover { opacity: 0.75; }
+.about-list__desc {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
 }
 
 .profile-card {
@@ -342,11 +390,17 @@ ol, ul { list-style: none; }
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 24px;
 }
 
 .profile-avatar {
-  width: 100%;
-  aspect-ratio: 1 / 1;
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+  border-radius: 50%;
   background: var(--color-overlay);
   overflow: hidden;
 }
@@ -358,10 +412,12 @@ ol, ul { list-style: none; }
 }
 
 .profile-body {
-  padding: 28px 24px 32px;
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
+  padding: 0;
 }
 
 .profile-role {
@@ -372,7 +428,7 @@ ol, ul { list-style: none; }
 }
 
 .profile-name {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
   color: var(--color-text-primary);
   line-height: 1.2;
@@ -452,7 +508,7 @@ ol, ul { list-style: none; }
 }
 
 .player-card__avatar {
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 1 / 1;
   background: var(--color-overlay);
   overflow: hidden;
   position: relative;
@@ -596,8 +652,77 @@ ol, ul { list-style: none; }
   color: var(--color-text-muted);
   margin-bottom: 6px;
 }
+.player-modal__info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-bottom: 10px;
+}
+.player-modal__info-row {
+  display: flex;
+  gap: 6px;
+  font-size: 12px;
+}
+.player-modal__info-row dt {
+  color: var(--color-text-muted);
+}
+.player-modal__info-row dd {
+  color: var(--color-text-primary);
+}
 .player-modal__comment {
   font-size: 13px;
   color: var(--color-text-secondary);
   line-height: 1.6;
+}
+
+/* ─── 포지션 탭 ──────────────────────────────────────────── */
+.player-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.player-tab {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-family: 'Pretendard', sans-serif;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.player-tab:hover { border-color: var(--color-accent); color: var(--color-text-primary); }
+.player-tab.is-active { border-color: var(--color-accent); background: var(--color-accent); color: #fff; }
+
+/* ─── 카드 사진 수 ───────────────────────────────────────── */
+.player-card__gallery-count {
+  font-size: 11px;
+  color: var(--color-accent);
+  margin-top: 2px;
+}
+
+/* ─── 모달 갤러리 ────────────────────────────────────────── */
+.player-modal__gallery {
+  border-top: 1px solid var(--color-border);
+  padding: 16px 24px 24px;
+}
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+}
+.gallery-item img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+}
+
+/* ─── 모달 레이아웃 조정 (갤러리 추가로 세로 확장) ────────── */
+.player-modal__inner {
+  max-height: 90vh;
+  overflow-y: auto;
 }

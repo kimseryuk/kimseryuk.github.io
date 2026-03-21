@@ -1,22 +1,74 @@
 [
   {
-    "name": "샘플 01",
-    "path": "../wallpapers/KakaoTalk_Photo_2026-03-15-21-58-27 001.jpeg",
-    "team": "KIA"
+    "name": "어린이날",
+    "path": "../img/wallpapers/KIA_2026-03_opening_mo.jpg",
+    "team": "KIA",
+    "platform": "mo"
   },
   {
-    "name": "샘플 02",
-    "path": "../wallpapers/KakaoTalk_Photo_2026-03-15-21-58-27 002.jpeg",
-    "team": "KIA"
+    "name": "봄꽃",
+    "path": "../img/wallpapers/KIA_2026-04_tulip_mo.jpg",
+    "team": "KIA",
+    "platform": "mo"
   },
   {
-    "name": "샘플 03",
-    "path": "../wallpapers/KakaoTalk_Photo_2026-03-15-21-58-27 003.jpeg",
-    "team": "KIA"
+    "name": "소풍",
+    "path": "../img/wallpapers/KIA_2026-05_picnic_mo.jpg",
+    "team": "KIA",
+    "platform": "mo"
   },
   {
-    "name": "샘플 04",
-    "path": "../wallpapers/KakaoTalk_Photo_2026-03-15-21-58-28 005.jpeg",
-    "team": "KIA"
+    "name": "장마",
+    "path": "../img/wallpapers/KIA_2026-06_rainy_mo.jpg",
+    "team": "KIA",
+    "platform": "mo"
+  },
+  {
+    "name": "수박",
+    "path": "../img/wallpapers/KIA_2022-08_watermelon_mo.jpg",
+    "team": "KIA",
+    "platform": "mo"
+  },
+  {
+    "name": "단풍",
+    "path": "../img/wallpapers/KIA_2022-09_autumn_mo.jpg",
+    "team": "KIA",
+    "platform": "mo"
+  },
+  {
+    "name": "눈사람",
+    "path": "../img/wallpapers/KIA_2022-12_ipad.jpg",
+    "team": "KIA",
+    "platform": "mo"
+  },
+  {
+    "name": "WBC 다크",
+    "path": "../img/wallpapers/common_2026-03_wbc-dark_mo.jpg",
+    "team": "KBO",
+    "platform": "mo"
+  },
+  {
+    "name": "WBC 라이트",
+    "path": "../img/wallpapers/common_2026-03_wbc-light_mo.jpg",
+    "team": "KBO",
+    "platform": "mo"
+  },
+  {
+    "name": "단풍",
+    "path": "../img/wallpapers/KIA_2022-09_autumn_pc.jpg",
+    "team": "KIA",
+    "platform": "pc"
+  },
+  {
+    "name": "눈사람",
+    "path": "../img/wallpapers/KIA_2022-12_pc-uw.jpg",
+    "team": "KIA",
+    "platform": "pc"
+  },
+  {
+    "name": "WBC",
+    "path": "../img/wallpapers/common_2026-03_wbc_pc-uw.jpg",
+    "team": "KBO",
+    "platform": "pc"
   }
 ]
