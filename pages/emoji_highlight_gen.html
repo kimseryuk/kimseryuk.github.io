@@ -798,13 +798,13 @@ function buildImgModal() {
   ICON_IMAGES.forEach(imgName => {
     const thumb = document.createElement('div'); thumb.className='img-thumb';
     const img = document.createElement('img');
-    img.src = `/wallpapers/thumb_icon/${imgName}`;
+    img.src = `/img/thumb_icon/${imgName}`;
     img.alt = imgName;
     thumb.appendChild(img);
     thumb.onclick = () => {
       const iconId = document.getElementById('imgModal').dataset.currentIcon;
       const icon = ICONS.find(i => i.id === iconId);
-      if (icon) loadFromUrl(icon, `/wallpapers/thumb_icon/${imgName}`);
+      if (icon) loadFromUrl(icon, `/img/thumb_icon/${imgName}`);
     };
     grid.appendChild(thumb);
   });

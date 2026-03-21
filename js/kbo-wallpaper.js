@@ -18,49 +18,83 @@ const TEAM_COLORS = {
   Kiwoom:  '#570514',
 };
 
-const TEAM_ICON_PATH = {
-  KIA:     '../wallpapers/icon/icon_kia.png',
-  LG:      '../wallpapers/icon/icon_lg.png',
-  Samsung: '../wallpapers/icon/icon_samsung.png',
-  Doosan:  '../wallpapers/icon/icon_doosan.png',
-  KT:      '../wallpapers/icon/icon_kt.png',
-  SSG:     '../wallpapers/icon/icon_ssg.png',
-  Lotte:   '../wallpapers/icon/icon_lotte.png',
-  NC:      '../wallpapers/icon/icon_nc.png',
-  Hanwha:  '../wallpapers/icon/icon_hanhwa.png',
-  Kiwoom:  '../wallpapers/icon/icon_kiwoom.png',
+const TEAM_ICON_PATHS = {
+  custom: {
+    KIA:     '../img/icon/icon_kia.png',
+    LG:      '../img/icon/icon_lg.png',
+    Samsung: '../img/icon/icon_samsung.png',
+    Doosan:  '../img/icon/icon_doosan.png',
+    KT:      '../img/icon/icon_kt.png',
+    SSG:     '../img/icon/icon_ssg.png',
+    Lotte:   '../img/icon/icon_lotte.png',
+    NC:      '../img/icon/icon_nc.png',
+    Hanwha:  '../img/icon/icon_hanhwa.png',
+    Kiwoom:  '../img/icon/icon_kiwoom.png',
+  },
+  initial: {
+    KIA:     '../img/icon/initial/initial_kia.png',
+    LG:      '../img/icon/initial/initial_lg.png',
+    Samsung: '../img/icon/initial/initial_samsung.png',
+    Doosan:  '../img/icon/initial/initial_doosan.png',
+    KT:      '../img/icon/initial/initial_kt.png',
+    SSG:     '../img/icon/initial/initial_ssg.png',
+    Lotte:   '../img/icon/initial/initial_lotte.png',
+    NC:      '../img/icon/initial/initial_nc.png',
+    Hanwha:  '../img/icon/initial/initial_hanwha.png',
+    Kiwoom:  '../img/icon/initial/initial_kiwoom.png',
+  },
+  emblem: {
+    KIA:     '../img/icon/emblem/emblem_kia.png',
+    LG:      '../img/icon/emblem/emblem_lg.png',
+    Samsung: '../img/icon/emblem/emblem_samsung.png',
+    Doosan:  '../img/icon/emblem/emblem_doosan.png',
+    KT:      '../img/icon/emblem/emblem_kt.png',
+    SSG:     '../img/icon/emblem/emblem_ssg.png',
+    Lotte:   '../img/icon/emblem/emblem_lotte.png',
+    NC:      '../img/icon/emblem/emblem_nc.png',
+    Hanwha:  '../img/icon/emblem/emblem_hanwha.png',
+    Kiwoom:  '../img/icon/emblem/emblem_kiwoom.png',
+  },
 };
 
-const iconCache = {};
+const iconCacheAll = { custom: {}, initial: {}, emblem: {} };
 
 /* ═══════════════════════════════════════════════════════
    이번 달 기본값 — 매달 이 블록만 수정하세요
    ═══════════════════════════════════════════════════════ */
 const MONTHLY_DEFAULTS = {
-  month:  3,                                       // 이번 달 숫자 (3 = 3월)
-  bgPath: '../wallpapers/KakaoTalk_Photo_2026-03-15-21-58-27 001.jpeg', // 이번 달 기본 배경 경로
+  year:   2026,
+  month:  3,
+  bgPath: '../img/wallpapers/KIA_2026-03_opening_mo.jpg',
 };
 /* ═══════════════════════════════════════════════════════ */
 
 /* ─── 캔버스 비율 ─────────────────────────────────────── */
 const CANVAS_RATIOS = {
-  r169:  { w: 1080, h: 1920, label: '9:16' },
-  r195:  { w: 1080, h: 2340, label: '9:19.5' },
-  r209:  { w: 1080, h: 2400, label: '9:20' },
+  r169:   { w: 1080, h: 1920, label: '9:16' },
+  r195:   { w: 1080, h: 2340, label: '9:19.5' },
+  r209:   { w: 1080, h: 2400, label: '9:20' },
+  pc169:  { w: 1920, h: 1080, label: '16:9 PC' },
+  pc1610: { w: 2560, h: 1600, label: '16:10' },
 };
 
 /* 세이프 존: 상단(상태바) / 하단(홈 인디케이터) */
 const SAFE_ZONE = { top: 0.08, bottom: 0.10 };
 
 const CAL_SIZE_SCALE = {
-  small:  { cellScale: 0.082, widthRatio: 0.68 },
-  medium: { cellScale: 0.112, widthRatio: 0.84 },
-  large:  { cellScale: 0.148, widthRatio: 0.90 },
+  small:  { cellScale: 0.082, lsCellScale: 0.060 },
+  medium: { cellScale: 0.112, lsCellScale: 0.075 },
+  large:  { cellScale: 0.148, lsCellScale: 0.095 },
 };
-const CAL_MIN_MARGIN = 0.05; // 캔버스 너비의 최소 5% 여백 (양쪽)
+// 5주 기준 1:1 정사각형 비율 상수
+// calH = cellH × (헤더 0.612 + 라벨 0.38 + 5행) = cellH × 5.992
+const CAL_SQUARE = 0.36 * 1.7 + 0.19 * 2.0 + 5;
 
 /* 아이콘 크기 배율 (기본 크기 기준) */
 const ICON_SIZE_SCALE = { small: 0.78, medium: 1.0, large: 1.28 };
+
+/* 일 간격: 아이콘 baseSize 비율 (작을수록 아이콘 작아지고 여백 증가) */
+const DAY_SPACING = { small: 0.44, medium: 0.34, large: 0.25 };
 
 const DAY_LABELS = {
   sun: ['일', '월', '화', '수', '목', '금', '토'],
@@ -76,7 +110,6 @@ const THEMES = {
     dateSat:    '#5599e0',
     awayCircle: 'rgba(140,140,140,0.20)',
     awayText:   'rgba(200,200,200,0.85)',
-    credit:     'rgba(255,255,255,0.22)',
   },
   light: {
     title:      '#1a1a1a',
@@ -86,7 +119,6 @@ const THEMES = {
     dateSat:    '#1a55bb',
     awayCircle: 'rgba(100,100,100,0.14)',
     awayText:   'rgba(70,70,70,0.8)',
-    credit:     'rgba(0,0,0,0.22)',
   },
 };
 
@@ -98,11 +130,11 @@ const state = {
   iconSize:    'large',
   weekStart:   'sun',
   textMode:    'light',
-  useIcon:     true,
+  logoStyle:   'custom',  // 'custom' | 'initial' | 'emblem'
   iconStyle:   'badge',   // 'none' | 'bg' | 'badge'
+  cellGap:     'small',   // 'small' | 'medium' | 'large'
   calPos:      'center',  // 'top' | 'center'
   calBgPanel:  'off',     // 'on' | 'off'
-  textShadow:  'off',     // 'off' | 'soft' | 'strong'
   ratio:       'r209',    // 'r169' | 'r195' | 'r209'
   bgFilter:    'all',
   bgImage:     null,
@@ -123,16 +155,18 @@ function hexToRgba(hex, alpha) {
   return `rgba(${r},${g},${b},${alpha})`;
 }
 
-/* ─── 아이콘 프리로드 ────────────────────────────────── */
+/* ─── 아이콘 프리로드 (전 스타일) ───────────────────── */
 function preloadIcons() {
   return Promise.all(
-    Object.entries(TEAM_ICON_PATH).map(([key, src]) =>
-      new Promise(resolve => {
-        const img = new Image();
-        img.onload  = () => { iconCache[key] = img; resolve(); };
-        img.onerror = () => resolve();
-        img.src = src;
-      })
+    Object.entries(TEAM_ICON_PATHS).flatMap(([style, paths]) =>
+      Object.entries(paths).map(([key, src]) =>
+        new Promise(resolve => {
+          const img = new Image();
+          img.onload  = () => { iconCacheAll[style][key] = img; resolve(); };
+          img.onerror = () => resolve();
+          img.src = src;
+        })
+      )
     )
   );
 }
@@ -152,9 +186,12 @@ async function loadWallpapers() {
 
 /* ─── 배경 필터 ──────────────────────────────────────── */
 function getFilteredWallpapers() {
-  if (state.bgFilter === 'all')    return wallpaperList;
-  if (state.bgFilter === 'common') return wallpaperList.filter(w => !w.team);
-  return wallpaperList.filter(w => w.team === state.bgFilter);
+  const isLandscape = CANVAS_RATIOS[state.ratio].w > CANVAS_RATIOS[state.ratio].h;
+  const platform = isLandscape ? 'pc' : 'mo';
+  let list = wallpaperList.filter(w => !w.platform || w.platform === platform);
+  if (state.bgFilter === 'all')    return list;
+  if (state.bgFilter === 'common') return list.filter(w => !w.team);
+  return list.filter(w => w.team === state.bgFilter);
 }
 
 function buildBgFilterTabs() {
@@ -175,13 +212,8 @@ function buildBgFilterTabs() {
       btn.className = 'bg-filter-btn' + (key === state.bgFilter ? ' active' : '');
       btn.textContent = label;
       btn.addEventListener('click', () => {
-        // update all filter tabs
-        document.querySelectorAll('.bg-filter-btn').forEach(b =>
-          b.classList.toggle('active', b.textContent === label && b.parentElement.id === id || false)
-        );
         document.querySelectorAll(`#${id} .bg-filter-btn`).forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        // sync sibling container
         const otherId = id === 'bg-filter-tabs' ? 'm-bg-filter-tabs' : 'bg-filter-tabs';
         document.querySelectorAll(`#${otherId} .bg-filter-btn`).forEach(b =>
           b.classList.toggle('active', b.dataset.key === key)
@@ -273,7 +305,7 @@ function render() {
 
 /* ─── 달력 그리기 ────────────────────────────────────── */
 function drawCalendar(W, H) {
-  const year  = 2026;
+  const year  = MONTHLY_DEFAULTS.year;
   const month = state.month;
   const games = getMonthGames(state.team, month);
   const C     = THEMES[state.textMode];
@@ -289,19 +321,22 @@ function drawCalendar(W, H) {
     : rawFirst;
   const rows = Math.ceil((firstCell + daysInMonth) / 7);
 
-  const pad = W * 0.03;
-  const { cellScale, widthRatio } = CAL_SIZE_SCALE[state.calSize];
-  const cellH  = W * cellScale;
-  const minPad = W * CAL_MIN_MARGIN;
-  const calW   = Math.min(W * widthRatio, W - minPad * 2);
-  const calX   = (W - calW) / 2;
-  const cellW  = calW / 7;
+  const isLandscape = W > H;
+  const BASE = isLandscape ? H : W;  // 폰트·셀 기준 치수
+
+  const { cellScale, lsCellScale } = CAL_SIZE_SCALE[state.calSize];
+  const cellH = BASE * (isLandscape ? lsCellScale : cellScale);
+  const calW  = cellH * CAL_SQUARE;  // 5주 기준 1:1 정사각형
+  // 모바일: 항상 가로 중앙 / PC: 좌측 or 중앙 (일러스트는 오른쪽)
+  const calX = isLandscape
+    ? (state.calPos === 'center' ? (W - calW) / 2 : W * 0.05)
+    : (W - calW) / 2;
+  const cellW = calW / 7;
 
   const fs = {
     monthTitle: cellH * 0.36,
     dayLabel:   cellH * 0.19,
     dateNum:    cellH * 0.20,
-    credit:     W * 0.013,
   };
 
   const headerH = fs.monthTitle * 1.7;
@@ -309,12 +344,16 @@ function drawCalendar(W, H) {
   const calH    = headerH + labelH + rows * cellH;
 
   // ── 달력 수직 위치 (세이프존 반영)
-  const safeTop    = H * SAFE_ZONE.top;
-  const safeBottom = H * SAFE_ZONE.bottom;
+  // PC 가로형은 상태바/홈 인디케이터 없으므로 여백 최소화
+  const safeTop    = isLandscape ? H * 0.05 : H * SAFE_ZONE.top;
+  const safeBottom = isLandscape ? H * 0.05 : H * SAFE_ZONE.bottom;
   const safeAreaH  = H - safeTop - safeBottom;
-  const calY = state.calPos === 'top'
-    ? safeTop + cellH * 0.3
-    : safeTop + (safeAreaH - calH) / 2;
+  // PC: 세로는 항상 중앙 / 모바일: top=상단, center=중앙
+  const calY = isLandscape
+    ? safeTop + (safeAreaH - calH) / 2
+    : (state.calPos === 'top'
+        ? safeTop + cellH * 0.3
+        : safeTop + (safeAreaH - calH) / 2);
 
   // 라이트 모드(어두운 글씨) ↔ 다크 모드(밝은 글씨)
   const isLightText = state.textMode === 'light';
@@ -328,37 +367,21 @@ function drawCalendar(W, H) {
     ctx.fill();
   }
 
-  // ── 텍스트 그림자 헬퍼
-  const shadowSoft   = isLightText ? 'rgba(255,255,255,0.75)' : 'rgba(0,0,0,0.55)';
-  const shadowStrong = isLightText ? 'rgba(255,255,255,0.95)' : 'rgba(0,0,0,0.88)';
-  function setShadow() {
-    if (state.textShadow === 'soft') {
-      ctx.shadowBlur = 8;  ctx.shadowColor = shadowSoft;
-    } else if (state.textShadow === 'strong') {
-      ctx.shadowBlur = 16; ctx.shadowColor = shadowStrong;
-    }
-  }
-  function clearShadow() { ctx.shadowBlur = 0; ctx.shadowColor = 'transparent'; }
-
   // ── 월 제목
-  setShadow();
   ctx.textAlign    = 'left';
   ctx.textBaseline = 'alphabetic';
   ctx.font         = `700 ${fs.monthTitle}px 'Pretendard', sans-serif`;
   ctx.fillStyle    = C.title;
   ctx.fillText(`${year}.${String(month).padStart(2, '0')}`, calX, calY + headerH * 0.75);
-  clearShadow();
 
   // ── 요일 헤더
   DAY_LABELS[state.weekStart].forEach((name, i) => {
     const isSunCol = (state.weekStart === 'sun' && i === 0) || (state.weekStart === 'mon' && i === 6);
     const isSatCol = (state.weekStart === 'sun' && i === 6) || (state.weekStart === 'mon' && i === 5);
-    setShadow();
     ctx.font      = `400 ${fs.dayLabel}px 'Pretendard', sans-serif`;
     ctx.textAlign = 'center';
     ctx.fillStyle = isSunCol ? C.dateSun : isSatCol ? C.dateSat : C.dayLabel;
     ctx.fillText(name, calX + i * cellW + cellW / 2, calY + headerH + labelH * 0.78);
-    clearShadow();
   });
 
   // ── 날짜 셀
@@ -375,43 +398,52 @@ function drawCalendar(W, H) {
     const isSatCol  = (state.weekStart === 'sun' && col === 6) || (state.weekStart === 'mon' && col === 5);
     const dateColor = isSunCol ? C.dateSun : isSatCol ? C.dateSat : C.dateNormal;
 
-    setShadow();
     ctx.font         = `500 ${fs.dateNum}px 'Pretendard', sans-serif`;
     ctx.textAlign    = 'left';
     ctx.textBaseline = 'alphabetic';
     ctx.fillStyle    = dateColor;
     const dateBaseY  = cy + fs.dateNum * 1.1;
     ctx.fillText(String(day), cx + cellW * 0.1, dateBaseY);
-    clearShadow();
 
     const game = games[day];
     if (!game) continue;
 
-    const baseSize = cellH * 0.42;
+    const baseSize = cellH * DAY_SPACING[state.cellGap];
     const iconSize = baseSize * ICON_SIZE_SCALE[state.iconSize];
     const circleR  = iconSize * 0.60;
     const circleX  = cx + cellW / 2;
     const circleY  = dateBaseY + circleR + cellH * 0.05;
 
-    // 원형 배경 (iconStyle !== 'none')
-    if (state.iconStyle !== 'none') {
+    const isInitial = state.logoStyle === 'initial';
+
+    // 원형 배경
+    // · 심볼(initial): 항상 표시 — 홈=팀 색 진하게, 어웨이=검정
+    // · 그 외: iconStyle !== 'none' 일 때만
+    if (isInitial || state.iconStyle !== 'none') {
       ctx.beginPath();
       ctx.arc(circleX, circleY, circleR, 0, Math.PI * 2);
       ctx.fillStyle = game.isHome ? homeCircle : C.awayCircle;
       ctx.fill();
     }
 
-    const iconDrawX = circleX - iconSize / 2;
-    const iconDrawY = circleY - iconSize / 2;
+    const iconCache = iconCacheAll[state.logoStyle] || {};
 
-    if (state.useIcon && iconCache[game.opponent]) {
-      ctx.drawImage(iconCache[game.opponent], iconDrawX, iconDrawY, iconSize, iconSize);
+    if (iconCache[game.opponent]) {
+      // 비율 유지하며 circleR 기준 fit
+      const cachedImg = iconCache[game.opponent];
+      const aspect    = cachedImg.naturalWidth / cachedImg.naturalHeight;
+      const fitScale  = isInitial ? 0.88 : (state.logoStyle === 'emblem' ? 1.15 : 1.0);
+      const fitSize   = iconSize * fitScale;
+      let drawW, drawH;
+      if (aspect >= 1) { drawW = fitSize; drawH = fitSize / aspect; }
+      else             { drawH = fitSize; drawW = fitSize * aspect; }
+      ctx.drawImage(cachedImg, circleX - drawW / 2, circleY - drawH / 2, drawW, drawH);
 
       // 뱃지 (iconStyle === 'badge')
       if (state.iconStyle === 'badge') {
         const badgeR = iconSize * 0.25;
-        const badgeX = iconDrawX + iconSize - badgeR * 0.5;
-        const badgeY = iconDrawY + badgeR * 0.5;
+        const badgeX = circleX + iconSize / 2 - badgeR * 0.5;
+        const badgeY = circleY - iconSize / 2 + badgeR * 0.5;
         ctx.beginPath();
         ctx.arc(badgeX, badgeY, badgeR, 0, Math.PI * 2);
         ctx.fillStyle = game.isHome ? teamColor : 'rgba(110,110,110,0.92)';
@@ -424,7 +456,7 @@ function drawCalendar(W, H) {
         ctx.textBaseline = 'alphabetic';
       }
     } else {
-      // 텍스트 모드
+      // 이미지 없을 때 텍스트 fallback
       ctx.font         = `600 ${circleR * 0.68}px 'Pretendard', sans-serif`;
       ctx.textAlign    = 'center';
       ctx.textBaseline = 'middle';
@@ -434,11 +466,6 @@ function drawCalendar(W, H) {
     }
   }
 
-  // ── 출처
-  ctx.font      = `400 ${fs.credit}px 'Pretendard', sans-serif`;
-  ctx.textAlign = 'right';
-  ctx.fillStyle = C.credit;
-  ctx.fillText('data: koreabaseball.com', W - pad, H - pad * 0.4);
 }
 
 /* ─── 캔버스 미리보기 스케일 ─────────────────────────── */
@@ -484,6 +511,18 @@ function setMonth(month) {
   render();
 }
 
+/* ─── calPos 라벨 & 슬라이더 레이아웃 갱신 ─────────── */
+function updateCalPosLabels() {
+  const isLandscape = CANVAS_RATIOS[state.ratio].w > CANVAS_RATIOS[state.ratio].h;
+  document.querySelectorAll('[data-calpos="top"]').forEach(btn => {
+    btn.textContent = isLandscape ? '좌측' : '상단';
+  });
+  // 배경 슬라이더 썸네일 비율 전환
+  document.querySelectorAll('.bg-slider').forEach(el => {
+    el.classList.toggle('bg-slider--landscape', isLandscape);
+  });
+}
+
 /* ─── 공통 토글 이벤트 헬퍼 ─────────────────────────── */
 function bindToggle(selector, handler) {
   document.querySelectorAll(selector).forEach(btn => {
@@ -515,8 +554,33 @@ function doDownload() {
   link.href = canvas.toDataURL('image/png');
   link.click();
 }
+
+function doDownloadBg() {
+  const { w, h } = CANVAS_RATIOS[state.ratio];
+  const offCanvas = document.createElement('canvas');
+  offCanvas.width = w; offCanvas.height = h;
+  const offCtx = offCanvas.getContext('2d');
+  if (state.bgImage) {
+    const scale = Math.max(w / state.bgImage.width, h / state.bgImage.height);
+    const sw = state.bgImage.width  * scale;
+    const sh = state.bgImage.height * scale;
+    offCtx.drawImage(state.bgImage, (w - sw) / 2, (h - sh) / 2, sw, sh);
+  } else {
+    offCtx.fillStyle = '#0d1117';
+    offCtx.fillRect(0, 0, w, h);
+  }
+  const team  = TEAM_SHORT[state.team] || state.team;
+  const month = String(state.month).padStart(2, '0');
+  const link  = document.createElement('a');
+  link.download = `kbo-2026-${month}-${team}-bg.png`;
+  link.href = offCanvas.toDataURL('image/png');
+  link.click();
+}
+
 document.getElementById('download-btn')?.addEventListener('click', doDownload);
 document.getElementById('mobile-download-btn')?.addEventListener('click', doDownload);
+document.getElementById('download-bg-btn')?.addEventListener('click', doDownloadBg);
+document.getElementById('mobile-download-bg-btn')?.addEventListener('click', doDownloadBg);
 
 /* ─── 컨트롤 이벤트 ──────────────────────────────────── */
 
@@ -554,11 +618,19 @@ bindToggle('[data-week]', btn => {
   render();
 });
 
-// 아이콘/텍스트
-bindToggle('[data-useicon]', btn => {
-  document.querySelectorAll('[data-useicon]').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll(`[data-useicon="${btn.dataset.useicon}"]`).forEach(b => b.classList.add('active'));
-  state.useIcon = btn.dataset.useicon === 'true';
+// 일 간격
+bindToggle('[data-cellgap]', btn => {
+  document.querySelectorAll('[data-cellgap]').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll(`[data-cellgap="${btn.dataset.cellgap}"]`).forEach(b => b.classList.add('active'));
+  state.cellGap = btn.dataset.cellgap;
+  render();
+});
+
+// 로고 스타일
+bindToggle('[data-logostyle]', btn => {
+  document.querySelectorAll('[data-logostyle]').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll(`[data-logostyle="${btn.dataset.logostyle}"]`).forEach(b => b.classList.add('active'));
+  state.logoStyle = btn.dataset.logostyle;
   render();
 });
 
@@ -586,19 +658,14 @@ bindToggle('[data-calbgpanel]', btn => {
   render();
 });
 
-// 텍스트 그림자
-bindToggle('[data-textshadow]', btn => {
-  document.querySelectorAll('[data-textshadow]').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll(`[data-textshadow="${btn.dataset.textshadow}"]`).forEach(b => b.classList.add('active'));
-  state.textShadow = btn.dataset.textshadow;
-  render();
-});
 
 // 캔버스 비율
 bindToggle('[data-ratio]', btn => {
   document.querySelectorAll('[data-ratio]').forEach(b => b.classList.remove('active'));
   document.querySelectorAll(`[data-ratio="${btn.dataset.ratio}"]`).forEach(b => b.classList.add('active'));
   state.ratio = btn.dataset.ratio;
+  updateCalPosLabels();
+  renderBgSlider(getFilteredWallpapers());
   render();
 });
 
@@ -644,14 +711,64 @@ document.querySelectorAll('.m-tab').forEach(tab => {
   });
 });
 
+/* ─── 배경 슬라이더 드래그 스크롤 ───────────────────── */
+function enableDragScroll(el) {
+  let isDown = false, startX, scrollLeft, moved = false;
+  let velX = 0, lastX = 0, rafId = null;
+
+  function momentum() {
+    if (Math.abs(velX) < 0.5) return;
+    el.scrollLeft -= velX;
+    velX *= 0.92;
+    rafId = requestAnimationFrame(momentum);
+  }
+
+  el.addEventListener('mousedown', e => {
+    cancelAnimationFrame(rafId);
+    isDown = true; moved = false; velX = 0;
+    el.style.cursor = 'grabbing';
+    startX = e.pageX - el.offsetLeft;
+    scrollLeft = el.scrollLeft;
+    lastX = e.pageX;
+  });
+
+  const end = () => {
+    if (!isDown) return;
+    isDown = false;
+    el.style.cursor = 'grab';
+    el.classList.remove('dragging');
+    rafId = requestAnimationFrame(momentum);
+  };
+  el.addEventListener('mouseleave', end);
+  el.addEventListener('mouseup', end);
+
+  el.addEventListener('mousemove', e => {
+    if (!isDown) return;
+    const dx = e.pageX - el.offsetLeft - startX;
+    if (!moved && Math.abs(dx) > 4) { moved = true; el.classList.add('dragging'); }
+    if (!moved) return;
+    e.preventDefault();
+    velX = lastX - e.pageX;
+    lastX = e.pageX;
+    el.scrollLeft = scrollLeft - dx;
+  });
+
+  el.style.cursor = 'grab';
+}
+
 /* ─── 초기화 ─────────────────────────────────────────── */
 async function init() {
   await document.fonts.ready;
   await Promise.all([loadSchedule(), loadWallpapers(), preloadIcons()]);
 
-  // 이번 달 기본값 적용
+  // 이번 달 기본값 적용 (배경은 renderBgSlider 첫 항목 자동선택으로 처리)
   setMonth(MONTHLY_DEFAULTS.month);
-  if (MONTHLY_DEFAULTS.bgPath) loadBgImage(MONTHLY_DEFAULTS.bgPath);
+
+  // 드래그 스크롤 활성화
+  ['bg-slider', 'm-bg-slider'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) enableDragScroll(el);
+  });
 
   window.addEventListener('resize', scaleCanvas);
 }

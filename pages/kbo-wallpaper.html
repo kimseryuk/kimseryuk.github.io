@@ -91,13 +91,20 @@
             <button class="toggle-btn" data-ratio="r195">9:19.5</button>
             <button class="toggle-btn active" data-ratio="r209">9:20</button>
           </div>
+          <div class="toggle-row" style="margin-top:4px;">
+            <button class="toggle-btn" data-ratio="pc169">PC 16:9</button>
+            <button class="toggle-btn" data-ratio="pc1610">PC 16:10</button>
+          </div>
         </div>
 
         <!-- 배경 -->
         <div class="ctrl-block">
           <p class="section-label">배경</p>
           <div class="bg-filter-tabs" id="bg-filter-tabs"></div>
-          <div class="bg-slider" id="bg-slider"></div>
+          <div class="bg-slider-wrap">
+            <div class="bg-slider" id="bg-slider"></div>
+            <p class="bg-scroll-hint" id="bg-scroll-hint">← 스크롤하여 더 보기 →</p>
+          </div>
           <label class="upload-btn" for="bg-upload">+ 내 이미지 불러오기</label>
           <input type="file" id="bg-upload" accept="image/*">
         </div>
@@ -113,31 +120,16 @@
 
       <div class="advanced-panel" id="advanced-panel">
         <div class="adv-tabs">
-          <button class="adv-tab active" data-adv-tab="cal">달력</button>
-          <button class="adv-tab" data-adv-tab="display">표시</button>
+          <button class="adv-tab active" data-adv-tab="style">스타일</button>
+          <button class="adv-tab" data-adv-tab="setting">설정</button>
         </div>
-        <div class="adv-pane active" id="adv-pane-cal">
+        <div class="adv-pane active" id="adv-pane-style">
           <div class="ctrl-block">
             <p class="section-label">달력 크기</p>
             <div class="toggle-row">
               <button class="toggle-btn" data-calsize="small">작게</button>
               <button class="toggle-btn active" data-calsize="medium">중간</button>
               <button class="toggle-btn" data-calsize="large">크게</button>
-            </div>
-          </div>
-          <div class="ctrl-block">
-            <p class="section-label">아이콘 크기</p>
-            <div class="toggle-row">
-              <button class="toggle-btn" data-iconsize="small">작게</button>
-              <button class="toggle-btn" data-iconsize="medium">중간</button>
-              <button class="toggle-btn active" data-iconsize="large">크게</button>
-            </div>
-          </div>
-          <div class="ctrl-block">
-            <p class="section-label">주 시작</p>
-            <div class="toggle-row">
-              <button class="toggle-btn active" data-week="sun">일요일 우선</button>
-              <button class="toggle-btn" data-week="mon">월요일 우선</button>
             </div>
           </div>
           <div class="ctrl-block">
@@ -148,19 +140,11 @@
             </div>
           </div>
           <div class="ctrl-block">
-            <p class="section-label">달력 배경</p>
+            <p class="section-label">로고 스타일</p>
             <div class="toggle-row">
-              <button class="toggle-btn" data-calbgpanel="on">ON</button>
-              <button class="toggle-btn active" data-calbgpanel="off">OFF</button>
-            </div>
-          </div>
-        </div>
-        <div class="adv-pane" id="adv-pane-display">
-          <div class="ctrl-block">
-            <p class="section-label">상대팀 표시</p>
-            <div class="toggle-row">
-              <button class="toggle-btn active" data-useicon="true">아이콘</button>
-              <button class="toggle-btn" data-useicon="false">텍스트</button>
+              <button class="toggle-btn active" data-logostyle="custom">커스텀</button>
+              <button class="toggle-btn" data-logostyle="initial">심볼</button>
+              <button class="toggle-btn" data-logostyle="emblem">엠블럼</button>
             </div>
           </div>
           <div class="ctrl-block">
@@ -172,11 +156,11 @@
             </div>
           </div>
           <div class="ctrl-block">
-            <p class="section-label">텍스트 그림자</p>
+            <p class="section-label">아이콘 크기</p>
             <div class="toggle-row">
-              <button class="toggle-btn active" data-textshadow="off">없음</button>
-              <button class="toggle-btn" data-textshadow="soft">부드럽게</button>
-              <button class="toggle-btn" data-textshadow="strong">강하게</button>
+              <button class="toggle-btn" data-iconsize="small">작게</button>
+              <button class="toggle-btn" data-iconsize="medium">중간</button>
+              <button class="toggle-btn active" data-iconsize="large">크게</button>
             </div>
           </div>
           <div class="ctrl-block">
@@ -187,10 +171,35 @@
             </div>
           </div>
         </div>
+        <div class="adv-pane" id="adv-pane-setting">
+          <div class="ctrl-block">
+            <p class="section-label">일 간격</p>
+            <div class="toggle-row">
+              <button class="toggle-btn active" data-cellgap="small">소</button>
+              <button class="toggle-btn" data-cellgap="medium">중</button>
+              <button class="toggle-btn" data-cellgap="large">대</button>
+            </div>
+          </div>
+          <div class="ctrl-block">
+            <p class="section-label">주 시작</p>
+            <div class="toggle-row">
+              <button class="toggle-btn active" data-week="sun">일요일 우선</button>
+              <button class="toggle-btn" data-week="mon">월요일 우선</button>
+            </div>
+          </div>
+          <div class="ctrl-block">
+            <p class="section-label">달력 배경</p>
+            <div class="toggle-row">
+              <button class="toggle-btn" data-calbgpanel="on">ON</button>
+              <button class="toggle-btn active" data-calbgpanel="off">OFF</button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="ctrl-divider"></div>
-      <button class="download-btn" id="download-btn">↓ PNG 다운로드</button>
+      <button class="download-btn" id="download-btn">↓ 달력 포함 저장</button>
+      <button class="download-btn download-btn--secondary" id="download-bg-btn">↓ 배경만 저장</button>
 
     </aside>
 
@@ -210,8 +219,11 @@
         <button class="m-tab" data-m-panel="bg">
           <span class="m-tab-label">배경</span>
         </button>
-        <button class="m-tab" data-m-panel="detail">
-          <span class="m-tab-label">상세</span>
+        <button class="m-tab" data-m-panel="style">
+          <span class="m-tab-label">스타일</span>
+        </button>
+        <button class="m-tab" data-m-panel="setting">
+          <span class="m-tab-label">설정</span>
         </button>
       </nav>
 
@@ -250,89 +262,99 @@
 
         <!-- 배경 패널 -->
         <div class="m-panel" id="m-panel-bg">
+          <div class="ctrl-block">
+            <p class="section-label">화면 비율</p>
+            <div class="toggle-row">
+              <button class="toggle-btn" data-ratio="r169">9:16</button>
+              <button class="toggle-btn" data-ratio="r195">9:19.5</button>
+              <button class="toggle-btn active" data-ratio="r209">9:20</button>
+            </div>
+            <div class="toggle-row" style="margin-top:4px;">
+              <button class="toggle-btn" data-ratio="pc169">PC 16:9</button>
+              <button class="toggle-btn" data-ratio="pc1610">PC 16:10</button>
+            </div>
+          </div>
           <div class="bg-filter-tabs" id="m-bg-filter-tabs"></div>
-          <div class="bg-slider" id="m-bg-slider"></div>
+          <div class="bg-slider-wrap">
+            <div class="bg-slider" id="m-bg-slider"></div>
+            <p class="bg-scroll-hint">← 스크롤하여 더 보기 →</p>
+          </div>
           <label class="upload-btn" for="m-bg-upload">+ 내 이미지 불러오기</label>
           <input type="file" id="m-bg-upload" accept="image/*">
         </div>
 
-        <!-- 상세 패널 -->
-        <div class="m-panel" id="m-panel-detail">
-          <div class="m-detail-grid">
-            <div class="m-detail-item">
-              <p class="section-label">달력 크기</p>
-              <div class="toggle-row">
-                <button class="toggle-btn" data-calsize="small">작게</button>
-                <button class="toggle-btn active" data-calsize="medium">중간</button>
-                <button class="toggle-btn" data-calsize="large">크게</button>
-              </div>
+        <!-- 스타일 패널 -->
+        <div class="m-panel" id="m-panel-style">
+          <div class="ctrl-block">
+            <p class="section-label">달력 크기</p>
+            <div class="toggle-row">
+              <button class="toggle-btn" data-calsize="small">작게</button>
+              <button class="toggle-btn active" data-calsize="medium">중간</button>
+              <button class="toggle-btn" data-calsize="large">크게</button>
             </div>
-            <div class="m-detail-item">
-              <p class="section-label">아이콘 크기</p>
-              <div class="toggle-row">
-                <button class="toggle-btn" data-iconsize="small">작게</button>
-                <button class="toggle-btn" data-iconsize="medium">중간</button>
-                <button class="toggle-btn active" data-iconsize="large">크게</button>
-              </div>
+          </div>
+          <div class="ctrl-block">
+            <p class="section-label">달력 위치</p>
+            <div class="toggle-row">
+              <button class="toggle-btn" data-calpos="top">상단</button>
+              <button class="toggle-btn active" data-calpos="center">중앙</button>
             </div>
-            <div class="m-detail-item">
-              <p class="section-label">주 시작</p>
-              <div class="toggle-row">
-                <button class="toggle-btn active" data-week="sun">일요일</button>
-                <button class="toggle-btn" data-week="mon">월요일</button>
-              </div>
+          </div>
+          <div class="ctrl-block">
+            <p class="section-label">로고 스타일</p>
+            <div class="toggle-row">
+              <button class="toggle-btn active" data-logostyle="custom">커스텀</button>
+              <button class="toggle-btn" data-logostyle="initial">심볼</button>
+              <button class="toggle-btn" data-logostyle="emblem">엠블럼</button>
             </div>
-            <div class="m-detail-item">
-              <p class="section-label">상대팀 표시</p>
-              <div class="toggle-row">
-                <button class="toggle-btn active" data-useicon="true">아이콘</button>
-                <button class="toggle-btn" data-useicon="false">텍스트</button>
-              </div>
+          </div>
+          <div class="ctrl-block">
+            <p class="section-label">아이콘 배경</p>
+            <div class="toggle-row">
+              <button class="toggle-btn" data-iconstyle="none">없음</button>
+              <button class="toggle-btn" data-iconstyle="bg">배경</button>
+              <button class="toggle-btn active" data-iconstyle="badge">뱃지</button>
             </div>
-            <div class="m-detail-item">
-              <p class="section-label">아이콘 배경</p>
-              <div class="toggle-row">
-                <button class="toggle-btn" data-iconstyle="none">없음</button>
-                <button class="toggle-btn" data-iconstyle="bg">배경</button>
-                <button class="toggle-btn active" data-iconstyle="badge">뱃지</button>
-              </div>
+          </div>
+          <div class="ctrl-block">
+            <p class="section-label">아이콘 크기</p>
+            <div class="toggle-row">
+              <button class="toggle-btn" data-iconsize="small">작게</button>
+              <button class="toggle-btn" data-iconsize="medium">중간</button>
+              <button class="toggle-btn active" data-iconsize="large">크게</button>
             </div>
-            <div class="m-detail-item">
-              <p class="section-label">텍스트 그림자</p>
-              <div class="toggle-row">
-                <button class="toggle-btn active" data-textshadow="off">없음</button>
-                <button class="toggle-btn" data-textshadow="soft">부드럽게</button>
-                <button class="toggle-btn" data-textshadow="strong">강하게</button>
-              </div>
+          </div>
+          <div class="ctrl-block">
+            <p class="section-label">글씨 모드</p>
+            <div class="toggle-row">
+              <button class="toggle-btn" data-textmode="dark">🌙 다크</button>
+              <button class="toggle-btn active" data-textmode="light">☀️ 라이트</button>
             </div>
-            <div class="m-detail-item">
-              <p class="section-label">달력 위치</p>
-              <div class="toggle-row">
-                <button class="toggle-btn" data-calpos="top">상단</button>
-                <button class="toggle-btn active" data-calpos="center">중앙</button>
-              </div>
+          </div>
+        </div>
+
+        <!-- 설정 패널 -->
+        <div class="m-panel" id="m-panel-setting">
+          <div class="ctrl-block">
+            <p class="section-label">일 간격</p>
+            <div class="toggle-row">
+              <button class="toggle-btn active" data-cellgap="small">소</button>
+              <button class="toggle-btn" data-cellgap="medium">중</button>
+              <button class="toggle-btn" data-cellgap="large">대</button>
             </div>
-            <div class="m-detail-item">
-              <p class="section-label">달력 배경</p>
-              <div class="toggle-row">
-                <button class="toggle-btn" data-calbgpanel="on">ON</button>
-                <button class="toggle-btn active" data-calbgpanel="off">OFF</button>
-              </div>
+          </div>
+          <div class="ctrl-block">
+            <p class="section-label">주 시작</p>
+            <div class="toggle-row">
+              <button class="toggle-btn active" data-week="sun">일요일</button>
+              <button class="toggle-btn" data-week="mon">월요일</button>
             </div>
-            <div class="m-detail-item">
-              <p class="section-label">화면 비율</p>
-              <div class="toggle-row">
-                <button class="toggle-btn" data-ratio="r169">9:16</button>
-                <button class="toggle-btn" data-ratio="r195">9:19.5</button>
-                <button class="toggle-btn active" data-ratio="r209">9:20</button>
-              </div>
-            </div>
-            <div class="m-detail-item">
-              <p class="section-label">글씨 모드</p>
-              <div class="toggle-row">
-                <button class="toggle-btn" data-textmode="dark">🌙 다크</button>
-                <button class="toggle-btn active" data-textmode="light">☀️ 라이트</button>
-              </div>
+          </div>
+          <div class="ctrl-block">
+            <p class="section-label">달력 배경</p>
+            <div class="toggle-row">
+              <button class="toggle-btn" data-calbgpanel="on">ON</button>
+              <button class="toggle-btn active" data-calbgpanel="off">OFF</button>
             </div>
           </div>
         </div>
@@ -341,7 +363,8 @@
 
       <!-- 다운로드 (항상 노출) -->
       <div class="m-download-bar">
-        <button class="download-btn" id="mobile-download-btn">↓ PNG 다운로드</button>
+        <button class="download-btn" id="mobile-download-btn">↓ 달력 포함</button>
+        <button class="download-btn download-btn--secondary" id="mobile-download-bg-btn">↓ 배경만</button>
       </div>
 
     </div><!-- /.mobile-controls -->
