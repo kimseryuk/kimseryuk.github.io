@@ -80,12 +80,34 @@ body .parents main .wrap .section--title::before {
 body .parents main .wrap .section--title::after {
   background: linear-gradient(to left, transparent, #EA0029);
 }
+body .parents main .wrap .section--title--ks {
+  background: linear-gradient(135deg, #F5A623 0%, #FFD700 40%, #fff 55%, #FFD700 70%, #F5A623 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  filter: drop-shadow(0 0 32px rgba(245, 166, 35, 0.5));
+  animation: ks-shimmer 4s ease-in-out infinite alternate;
+}
+body .parents main .wrap .section--title--ks::before {
+  background: linear-gradient(to right, transparent, #FFD700);
+}
+body .parents main .wrap .section--title--ks::after {
+  background: linear-gradient(to left, transparent, #FFD700);
+}
+@keyframes ks-shimmer {
+  0%   { filter: drop-shadow(0 0 20px rgba(245,166,35,0.4)); }
+  100% { filter: drop-shadow(0 0 48px rgba(245,166,35,0.8)); }
+}
 body .parents main .autumn {
-  background: var(--black);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #05141F 10%, #05141F 80%, rgba(255, 255, 255, 0) 100%);
   position: relative;
   padding: 180px 0;
   z-index: 1;
+}
+/* 3번째 autumn(2024A): 아래 그라데이션 없이 solid */
+body .parents main .autumn:has(#list2024A) {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #05141F 10%, #05141F 100%);
 }
 body .parents main .autumn .d_title {
   color: var(--white);
@@ -226,6 +248,255 @@ body .parents main .autumn .inner .group--wrap .d_body {
   height: 8px;
   background: url(icon-right.svg) center center;
   width: 8px;
+}
+
+.scoreboard {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 24px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  font-family: 'Pretendard', sans-serif;
+}
+.scoreboard--win {
+  background: rgba(234, 0, 41, 0.08);
+  border: 1px solid rgba(234, 0, 41, 0.3);
+}
+.scoreboard--lose {
+  background: rgba(80, 80, 100, 0.1);
+  border: 1px solid rgba(150, 150, 170, 0.2);
+}
+.scoreboard__score {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  color: #fff;
+}
+.scoreboard__result {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+.scoreboard--win .scoreboard__result {
+  background: #EA0029;
+  color: #fff;
+}
+.scoreboard--lose .scoreboard__result {
+  background: rgba(150, 150, 170, 0.25);
+  color: rgba(255,255,255,0.5);
+}
+
+/* ── KS 이닝 스코어보드 ── */
+.ks-scoreboard {
+  margin-top: 32px;
+  margin-bottom: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.10);
+  border-top: 5px solid #EA0029;
+}
+.ks-scoreboard--samsung-win {
+  border-top-color: #074ca1;
+}
+
+/* 헤더 */
+.ks-scoreboard__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px 0;
+}
+.ks-gamenum {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #EA0029;
+}
+.ks-scoreboard--samsung-win .ks-gamenum { color: #074ca1; }
+.ks-date {
+  font-size: 11px;
+  color: #777;
+}
+
+/* 히어로 스코어 영역 */
+.ks-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px 8px;
+  gap: 0;
+}
+.ks-hero__team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 80px;
+}
+.ks-hero__team-name {
+  font-size: 15px;
+  font-weight: 800;
+  color: #888;
+  letter-spacing: 0.05em;
+}
+.ks-hero__team--winner .ks-hero__team-name { color: #EA0029; }
+.ks-scoreboard--samsung-win .ks-hero__team--winner .ks-hero__team-name { color: #074ca1; }
+.ks-hero__starter {
+  font-size: 12px;
+  color: #888;
+}
+.ks-hero__scores {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  justify-content: center;
+}
+.ks-hero__r {
+  font-size: 64px;
+  font-weight: 900;
+  line-height: 1;
+  color: #bbb;
+  min-width: 64px;
+  text-align: center;
+  font-family: 'Pretendard', sans-serif;
+}
+.ks-hero__r--winner { color: #EA0029; }
+.ks-scoreboard--samsung-win .ks-hero__r--winner { color: #074ca1; }
+.ks-hero__colon {
+  font-size: 44px;
+  font-weight: 300;
+  color: #bbb;
+  line-height: 1;
+  padding: 0 4px;
+}
+
+/* 결과 배지 */
+.ks-result-row {
+  text-align: center;
+  padding: 8px 20px 16px;
+}
+.ks-result-badge {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  padding: 5px 18px;
+  border-radius: 99px;
+  background: #EA0029;
+  color: #fff;
+}
+.ks-scoreboard--samsung-win .ks-result-badge { background: #074ca1; }
+
+/* 승리투수 */
+.ks-pitchers {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  padding: 10px 20px 14px;
+  border-top: 1px solid #f0f0f0;
+  background: #fafafa;
+}
+.ks-pitcher-item {
+  font-size: 13px;
+  color: #666;
+}
+.ks-pitcher-item strong {
+  color: #111;
+  font-weight: 700;
+  margin-left: 3px;
+}
+.ks-pitcher-sep {
+  color: #bbb;
+  font-size: 13px;
+}
+
+/* 이닝 테이블 */
+.ks-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-top: 1px solid #f0f0f0;
+}
+.ks-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.ks-table th {
+  padding: 7px 10px;
+  text-align: center;
+  color: #666;
+  font-weight: 600;
+  font-size: 11px;
+  background: #fafafa;
+  border-bottom: 1px solid #efefef;
+}
+.ks-table td {
+  padding: 9px 10px;
+  text-align: center;
+  color: #333;
+}
+.ks-table tbody tr + tr td { border-top: 1px solid #f5f5f5; }
+.ks-table .ks-team {
+  font-weight: 700;
+  color: #222;
+  text-align: left;
+  padding-left: 16px;
+}
+.ks-table .ks-starter {
+  color: #777;
+  font-size: 12px;
+  text-align: left;
+}
+.ks-table .ks-r {
+  font-weight: 800;
+  color: #222;
+  border-left: 1px solid #efefef;
+  border-right: 1px solid #efefef;
+}
+.ks-table .ks-x { color: #ccc; }
+.ks-table tr.ks-win .ks-team { color: #EA0029; }
+.ks-table tr.ks-win .ks-r   { color: #EA0029; font-size: 15px; }
+.ks-scoreboard--samsung-win .ks-table tr.ks-win .ks-team { color: #074ca1; }
+.ks-scoreboard--samsung-win .ks-table tr.ks-win .ks-r   { color: #074ca1; }
+
+/* 메타 (MVP, 결승타) */
+.ks-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+  padding: 10px 20px 14px;
+  border-top: 1px solid #f0f0f0;
+  background: #fafafa;
+}
+.ks-meta__item {
+  font-size: 13px;
+  color: #666;
+}
+.ks-meta__item strong {
+  color: #111;
+  font-weight: 700;
+  margin-left: 4px;
+}
+
+.anim-item {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.anim-item--delay {
+  transition-delay: 0.18s;
+}
+.anim-item.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .inner {
@@ -378,6 +649,12 @@ body .parents main .autumn .inner .group--wrap .d_body {
   z-index: 2;
   top: 37px;
 }
+.inner .group--content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
 .inner .group--wrap {
   display: flex;
   gap: 32px;
@@ -517,7 +794,7 @@ iframe .Footer {
 .ending {
   position: relative;
   min-height: 100vh;
-  background: #05080c;
+  background: #05141F;
   display: flex;
   flex-direction: column;
   justify-content: center;
