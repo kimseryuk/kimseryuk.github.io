@@ -1,15 +1,138 @@
 [
   {
-    "name": "어린이날",
-    "path": "../img/wallpapers/KIA_2026-03_opening_mo.jpg",
+    "name": "개막",
+    "path": "../img/wallpapers/KIA_march_illust.png",
+    "illustPath": "../img/wallpapers/KIA_march_illust.png",
+    "bgColor": "#F6FFE4",
     "team": "KIA",
-    "platform": "mo"
+    "platform": "all",
+    "type": "illust"
   },
   {
     "name": "봄꽃",
-    "path": "../img/wallpapers/KIA_2026-04_tulip_mo.jpg",
+    "path": "../img/wallpapers/KIA_flower_illust.png",
+    "illustPath": "../img/wallpapers/KIA_flower_illust.png",
+    "bgColor": "#FFFAF3",
     "team": "KIA",
-    "platform": "mo"
+    "platform": "all",
+    "type": "illust"
+  },
+  {
+    "name": "단풍",
+    "path": "../img/wallpapers/KIA_autumn_illust.png",
+    "illustPath": "../img/wallpapers/KIA_autumn_illust.png",
+    "bgColor": "#FFE892",
+    "team": "KIA",
+    "platform": "all",
+    "type": "illust"
+  },
+  {
+    "name": "단풍2",
+    "path": "../img/wallpapers/KIA_autumn2_illust.png",
+    "illustPath": "../img/wallpapers/KIA_autumn2_illust.png",
+    "bgColor": "#FCD091",
+    "team": "KIA",
+    "platform": "all",
+    "type": "illust"
+  },
+  {
+    "name": "수박",
+    "path": "../img/wallpapers/KIA_summer_illust.png",
+    "illustPath": "../img/wallpapers/KIA_summer_illust.png",
+    "bgColor": "#A7D9CE",
+    "team": "KIA",
+    "platform": "all",
+    "type": "illust"
+  },
+  {
+    "name": "행운",
+    "path": "../img/wallpapers/tigers.png",
+    "illustPath": "../img/wallpapers/tigers.png",
+    "bgColor": "#FFF0F2",
+    "team": "KIA",
+    "platform": "all",
+    "type": "illust"
+  },
+  {
+    "name": "행운",
+    "path": "../img/wallpapers/lg.png",
+    "illustPath": "../img/wallpapers/lg.png",
+    "bgColor": "#FFF0F5",
+    "team": "LG",
+    "platform": "all",
+    "type": "illust"
+  },
+  {
+    "name": "행운",
+    "path": "../img/wallpapers/samsung.png",
+    "illustPath": "../img/wallpapers/samsung.png",
+    "bgColor": "#EFF4FF",
+    "team": "삼성",
+    "platform": "all",
+    "type": "illust"
+  },
+  {
+    "name": "행운",
+    "path": "../img/wallpapers/doosan.png",
+    "illustPath": "../img/wallpapers/doosan.png",
+    "bgColor": "#F0F0F8",
+    "team": "두산",
+    "platform": "all",
+    "type": "illust"
+  },
+  {
+    "name": "행운",
+    "path": "../img/wallpapers/kt.png",
+    "illustPath": "../img/wallpapers/kt.png",
+    "bgColor": "#F5F5F5",
+    "team": "KT",
+    "platform": "all",
+    "type": "illust"
+  },
+  {
+    "name": "행운",
+    "path": "../img/wallpapers/ssg.png",
+    "illustPath": "../img/wallpapers/ssg.png",
+    "bgColor": "#FFF0F2",
+    "team": "SSG",
+    "platform": "all",
+    "type": "illust"
+  },
+  {
+    "name": "행운",
+    "path": "../img/wallpapers/lotte.png",
+    "illustPath": "../img/wallpapers/lotte.png",
+    "bgColor": "#EFF2FF",
+    "team": "롯데",
+    "platform": "all",
+    "type": "illust"
+  },
+  {
+    "name": "행운",
+    "path": "../img/wallpapers/nc.png",
+    "illustPath": "../img/wallpapers/nc.png",
+    "bgColor": "#EFF5FF",
+    "team": "NC",
+    "platform": "all",
+    "type": "illust"
+  },
+  {
+    "name": "행운",
+    "path": "../img/wallpapers/hanhwa.png",
+    "illustPath": "../img/wallpapers/hanhwa.png",
+    "bgColor": "#FFF4EE",
+    "team": "한화",
+    "platform": "all",
+    "type": "illust"
+  },
+  {
+    "name": "행운",
+    "path": "../img/wallpapers/kiwoom.png",
+    "illustPath": "../img/wallpapers/kiwoom.png",
+    "bgColor": "#FFF0F3",
+    "team": "키움",
+    "platform": "all",
+    "type": "illust"
   },
   {
     "name": "소풍",
@@ -24,14 +147,14 @@
     "platform": "mo"
   },
   {
-    "name": "수박",
-    "path": "../img/wallpapers/KIA_2022-08_watermelon_mo.jpg",
+    "name": "바다",
+    "path": "../img/wallpapers/KIA_2022-07_thegreatocean.jpg",
     "team": "KIA",
     "platform": "mo"
   },
   {
-    "name": "단풍",
-    "path": "../img/wallpapers/KIA_2022-09_autumn_mo.jpg",
+    "name": "야구단풍",
+    "path": "../img/wallpapers/KIA_autumnBaseball_mo.jpg",
     "team": "KIA",
     "platform": "mo"
   },
@@ -54,21 +177,17 @@
     "platform": "mo"
   },
   {
-    "name": "단풍",
-    "path": "../img/wallpapers/KIA_2022-09_autumn_pc.jpg",
+    "name": "바다",
+    "path": "../img/wallpapers/KIA_2022-07_pc-thegreatocean.jpg",
     "team": "KIA",
-    "platform": "pc"
+    "platform": "pc",
+    "type": "full"
   },
   {
     "name": "눈사람",
     "path": "../img/wallpapers/KIA_2022-12_pc-uw.jpg",
     "team": "KIA",
-    "platform": "pc"
-  },
-  {
-    "name": "WBC",
-    "path": "../img/wallpapers/common_2026-03_wbc_pc-uw.jpg",
-    "team": "KBO",
-    "platform": "pc"
+    "platform": "pc",
+    "type": "full"
   }
 ]

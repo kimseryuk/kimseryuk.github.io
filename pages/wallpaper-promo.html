@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>카드 메이커 | dugout.</title>
+  <link rel="stylesheet" href="../font/pretendard-subset.css">
+  <style>
+    @font-face {
+      font-family: 'NPSfont';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/NPSfont_Regular.woff2') format('woff2');
+      font-weight: 400;
+    }
+    @font-face {
+      font-family: 'NPSfont';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/NPSfont_Bold.woff2') format('woff2');
+      font-weight: 700;
+    }
+    .app {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      padding: 76px 20px 48px;
+      max-width: 1120px;
+      margin: 0 auto;
+      align-items: flex-start;
+    }
+    .preview-col { flex: none; }
+    .canvas-frame {
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 16px 60px rgba(0,0,0,0.6);
+    }
+    #c {
+      display: block;
+      width: 405px;
+      height: 506px;
+    }
+    .edit-col {
+      flex: 1;
+      min-width: 260px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .page-tabs {
+      display: flex;
+      gap: 6px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 8px;
+    }
+    .page-tab {
+      flex: 1;
+      padding: 7px 4px;
+      background: transparent;
+      border: none;
+      color: var(--color-text-secondary);
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .page-tab.active {
+      background: var(--color-overlay);
+      color: var(--color-text-primary);
+    }
+    .ctrl-group {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .ctrl-group h3 {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      margin: 0;
+    }
+    .ctrl-row { display: flex; flex-direction: column; gap: 4px; }
+    .ctrl-row label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      color: var(--color-text-secondary);
+    }
+    .ctrl-row input,
+    .ctrl-row select,
+    .ctrl-row textarea {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      background: var(--color-overlay);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      color: var(--color-text-primary);
+      padding: 7px 10px;
+      outline: none;
+      width: 100%;
+      box-sizing: border-box;
+      transition: border-color var(--transition);
+    }
+    .ctrl-row textarea { resize: vertical; min-height: 56px; }
+    .ctrl-row input:focus,
+    .ctrl-row select:focus,
+    .ctrl-row textarea:focus { border-color: var(--color-border-hover); }
+    .hidden { display: none !important; }
+    .dl-btn {
+      width: 100%;
+      padding: 13px;
+      background: var(--color-accent);
+      color: #fff;
+      font-family: var(--font-sans);
+      font-size: 15px;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+    .dl-btn:hover { background: var(--color-accent-hover); }
+  </style>
+</head>
+<body>
+  <header class="page-nav">
+    <a class="back-link" href="../index.html">
+      <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+      dugout.
+    </a>
+    <span class="page-nav__title">카드 메이커</span>
+  </header>
+
+  <div class="app">
+    <div class="preview-col">
+      <div class="canvas-frame">
+        <canvas id="c" width="1080" height="1350"></canvas>
+      </div>
+    </div>
+
+    <div class="edit-col">
+      <!-- 카드 페이지 탭 -->
+      <div class="page-tabs">
+        <button class="page-tab active" data-page="1">카드 1<br><span style="font-weight:400;font-size:10px">홍보</span></button>
+        <button class="page-tab" data-page="2">카드 2<br><span style="font-weight:400;font-size:10px">팀·월</span></button>
+        <button class="page-tab" data-page="3">카드 3<br><span style="font-weight:400;font-size:10px">배경</span></button>
+        <button class="page-tab" data-page="4">카드 4<br><span style="font-weight:400;font-size:10px">스타일</span></button>
+        <button class="page-tab" data-page="5">카드 5<br><span style="font-weight:400;font-size:10px">저장</span></button>
+      </div>
+
+      <!-- 카드 1 텍스트 -->
+      <div class="ctrl-group" id="fields-1">
+        <h3>텍스트</h3>
+        <div class="ctrl-row"><label>제목 줄 1</label><input id="p1-t1" type="text"></div>
+        <div class="ctrl-row"><label>제목 줄 2</label><input id="p1-t2" type="text"></div>
+        <div class="ctrl-row"><label>부제목</label><input id="p1-sub" type="text"></div>
+        <div class="ctrl-row"><label>하단 태그</label><input id="p1-tag" type="text"></div>
+      </div>
+
+      <!-- 카드 2-5 텍스트 -->
+      <div class="ctrl-group hidden" id="fields-25">
+        <h3>텍스트</h3>
+        <div class="ctrl-row"><label>스텝 표시 (예: 사용방법 01 / 04)</label><input id="px-step" type="text"></div>
+        <div class="ctrl-row"><label>제목 줄 1</label><input id="px-t1" type="text"></div>
+        <div class="ctrl-row"><label>제목 줄 2</label><input id="px-t2" type="text"></div>
+        <div class="ctrl-row">
+          <label>항목 1 제목</label><input id="b1t" type="text">
+          <label>항목 1 설명 (줄바꿈 포함)</label><textarea id="b1d" rows="2"></textarea>
+        </div>
+        <div class="ctrl-row">
+          <label>항목 2 제목</label><input id="b2t" type="text">
+          <label>항목 2 설명</label><textarea id="b2d" rows="2"></textarea>
+        </div>
+        <div class="ctrl-row">
+          <label>항목 3 제목</label><input id="b3t" type="text">
+          <label>항목 3 설명</label><textarea id="b3d" rows="2"></textarea>
+        </div>
+        <div class="ctrl-row">
+          <label>항목 4 제목</label><input id="b4t" type="text">
+          <label>항목 4 설명</label><textarea id="b4d" rows="2"></textarea>
+        </div>
+      </div>
+
+      <button class="dl-btn" id="dl-btn">PNG 다운로드 (1080 × 1350)</button>
+    </div>
+  </div>
+
+  <script>
+  const canvas = document.getElementById('c');
+  const ctx    = canvas.getContext('2d');
+  const W = 1080, H = 1350;
+  let   currentPage = 1;
+
+  const RED = '#EA0029';
+
+  const TEAM_COLORS = {
+    'KIA': '#EA0029', 'LG': '#C30452', '삼성': '#074CA1', '두산': '#131230',
+    'KT': '#000000', 'SSG': '#CE0E2D', '롯데': '#041E42', 'NC': '#1D467C',
+    '한화': '#FF6600', '키움': '#570514',
+  };
+
+  const DEFAULTS = {
+    1: {
+      t1: 'KBO 전구단', t2: '배경화면 배포',
+      sub: '응원하는 팀의 배경화면을 직접 만들어보세요',
+      tag: '10개 팀 지원 · 모바일 / PC · 무료',
+    },
+    2: {
+      step: '사용방법  01 / 04', t1: '팀과 원하는 달을', t2: '선택하세요',
+      bullets: [
+        { t: '팀 선택',   d: 'KBO 10개 팀 중 응원하는 팀을 선택하세요\n팀 컬러와 아이콘이 자동으로 적용됩니다' },
+        { t: '월 선택',   d: '배경화면으로 만들 달을 선택하세요\n해당 월 실제 경기 일정이 달력에 표시됩니다' },
+        { t: '경기 구분', d: '홈경기는 팀 컬러 배경, 어웨이는 흰 배경으로\n자동으로 구분되어 표시됩니다' },
+        { t: '연속 경기', d: '2-3일 연속 같은 팀과의 경기는 묶음 표시 옵션을\n켜면 하나의 바로 깔끔하게 표시됩니다' },
+      ],
+    },
+    3: {
+      step: '사용방법  02 / 04', t1: '배경과 모드를', t2: '설정하세요',
+      bullets: [
+        { t: '모드 선택',    d: '상단에서 모바일 / PC 모드를 선택하세요\n각 모드에 맞는 배경과 화면 비율이 제공됩니다' },
+        { t: '배경 테마',    d: '계절별·이벤트별 다양한 배경 테마 중\n마음에 드는 것을 선택하세요' },
+        { t: '일러스트 배경', d: 'PNG 일러스트 배경은 모바일과 PC 모두\n사용할 수 있습니다' },
+        { t: '화면 비율',    d: '모바일 9:16 / 9:19.5 / 9:20\nPC 16:9 / 21:9 QHD 중 선택 가능합니다' },
+      ],
+    },
+    4: {
+      step: '사용방법  03 / 04', t1: '달력 스타일을', t2: '조정하세요',
+      bullets: [
+        { t: '달력 크기',    d: '작게·중간·크게 중 원하는 크기를 선택하세요\n배경이나 일러스트와 어울리게 조절하면 됩니다' },
+        { t: '아이콘 스타일', d: '없음·배경·뱃지 중 선택할 수 있어요\n뱃지는 로고 위에 H(홈)/A(어웨이) 마크가 추가됩니다' },
+        { t: '글씨 색상',    d: '배경에 맞게 라이트(흰색) 또는\n다크(검정) 모드를 선택하세요' },
+        { t: '주 시작일',    d: '일요일 또는 월요일 우선으로\n달력의 시작 요일을 자유롭게 설정할 수 있어요' },
+      ],
+    },
+    5: {
+      step: '사용방법  04 / 04', t1: '배경화면을', t2: '저장하세요',
+      bullets: [
+        { t: '저장 버튼',   d: '하단의 저장 버튼을 누르면\n배경화면 이미지가 바로 다운로드됩니다' },
+        { t: '모바일 저장', d: '다운로드된 이미지를 갤러리 앱에서 찾아\n배경화면으로 설정하세요' },
+        { t: 'PC 저장',     d: '다운로드된 이미지 파일을 선택 후\n바탕화면으로 설정하세요' },
+        { t: '저장 팁',     d: '일부 모바일 브라우저에서는 이미지를\n길게 눌러 저장해야 할 수 있어요' },
+      ],
+    },
+  };
+
+  const pageData = JSON.parse(JSON.stringify(DEFAULTS));
+
+  /* ── 팀 태그 행 ── */
+  function drawTeamRow(teams, cy) {
+    ctx.font = "600 36px 'Pretendard', sans-serif";
+    ctx.textBaseline = 'middle';
+    const cellW = (W - 160) / teams.length;
+    teams.forEach((team, i) => {
+      const cx = 80 + cellW * i + cellW / 2;
+      const color = TEAM_COLORS[team] || '#333';
+      const tw = ctx.measureText(team).width;
+      const boxW = tw + 44, boxH = 54;
+      const bx = cx - boxW / 2, by = cy - boxH / 2;
+
+      ctx.fillStyle = color + '18';
+      ctx.beginPath(); ctx.roundRect(bx, by, boxW, boxH, 10); ctx.fill();
+
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.roundRect(bx, by, boxW, boxH, 10); ctx.stroke();
+
+      ctx.fillStyle = color;
+      ctx.textAlign = 'center';
+      ctx.fillText(team, cx, cy);
+    });
+    ctx.textBaseline = 'alphabetic';
+  }
+
+  /* ── 카드 1: 전구단 홍보 ── */
+  function renderPage1() {
+    const d = pageData[1];
+    ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, W, H);
+
+    // 상단 빨간 바
+    ctx.fillStyle = RED; ctx.fillRect(0, 0, W, 14);
+
+    ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+
+    // 제목 줄1
+    ctx.font = "700 148px 'NPSfont', sans-serif";
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fillText(d.t1, W / 2, 212);
+
+    // 제목 줄2
+    ctx.fillStyle = RED;
+    ctx.fillText(d.t2, W / 2, 388);
+
+    // 구분선
+    ctx.strokeStyle = '#E8E8E8'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(80, 452); ctx.lineTo(W - 80, 452); ctx.stroke();
+
+    // 부제목
+    ctx.font = "400 42px 'Pretendard', sans-serif";
+    ctx.fillStyle = '#888';
+    ctx.fillText(d.sub, W / 2, 528);
+
+    // 팀 태그 2행
+    drawTeamRow(['KIA', 'LG', '삼성', '두산', 'KT'], 642);
+    drawTeamRow(['SSG', '롯데', 'NC', '한화', '키움'], 742);
+
+    // 구분선
+    ctx.strokeStyle = '#E8E8E8'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(80, 828); ctx.lineTo(W - 80, 828); ctx.stroke();
+
+    // 통계 3개 수평
+    const cols = [W * 0.2, W * 0.5, W * 0.8];
+    const bigs  = ['10', '모바일·PC', '무료'];
+    const smalls = ['개 구단 지원', '모든 기기 지원', '완전 무료 이용'];
+    const bColors = ['#0a0a0a', '#0a0a0a', RED];
+
+    cols.forEach((cx, i) => {
+      ctx.font = "700 80px 'NPSfont', sans-serif";
+      ctx.fillStyle = bColors[i];
+      ctx.textAlign = 'center';
+      ctx.fillText(bigs[i], cx, 980);
+
+      ctx.font = "400 34px 'Pretendard', sans-serif";
+      ctx.fillStyle = '#999';
+      ctx.fillText(smalls[i], cx, 1044);
+    });
+
+    // 하단 구분선
+    ctx.strokeStyle = '#F0F0F0'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(80, 1120); ctx.lineTo(W - 80, 1120); ctx.stroke();
+
+    // 태그라인
+    ctx.font = "400 30px 'Pretendard', sans-serif";
+    ctx.fillStyle = '#bbb';
+    ctx.textAlign = 'center';
+    ctx.fillText(d.tag, W / 2, 1196);
+  }
+
+  /* ── 카드 2-5: 사용방법 ── */
+  function renderInstrPage(pageNum) {
+    const d = pageData[pageNum];
+    ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, W, H);
+
+    // 상단 빨간 바
+    ctx.fillStyle = RED; ctx.fillRect(0, 0, W, 14);
+
+    // ghost 스텝 번호 (우측 상단)
+    const ghostNum = String(pageNum - 1).padStart(2, '0');
+    ctx.font = "700 340px 'NPSfont', sans-serif";
+    ctx.fillStyle = '#F3F3F3';
+    ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
+    ctx.fillText(ghostNum, W - 60, 500);
+
+    // 스텝 알약
+    ctx.font = "600 28px 'Pretendard', sans-serif";
+    ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+    const stepTxt = d.step || '';
+    const sw = ctx.measureText(stepTxt).width + 36;
+    ctx.fillStyle = '#F0F0F0';
+    ctx.beginPath(); ctx.roundRect(80, 68, sw, 44, 22); ctx.fill();
+    ctx.fillStyle = '#555';
+    ctx.fillText(stepTxt, 80 + 18, 68 + 29);
+
+    // 제목
+    ctx.font = "700 108px 'NPSfont', sans-serif";
+    ctx.fillStyle = '#0a0a0a';
+    ctx.textAlign = 'left';
+    ctx.fillText(d.t1, 80, 236);
+    ctx.fillText(d.t2, 80, 368);
+
+    // 구분선
+    ctx.strokeStyle = '#E8E8E8'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(80, 428); ctx.lineTo(W - 80, 428); ctx.stroke();
+
+    // 항목 리스트
+    const bullets  = d.bullets || [];
+    const startY   = 520;
+    const spacing  = 200;
+
+    bullets.forEach((b, i) => {
+      const by = startY + i * spacing;
+
+      // 번호 원형
+      ctx.fillStyle = RED;
+      ctx.beginPath(); ctx.arc(108, by + 16, 28, 0, Math.PI * 2); ctx.fill();
+      ctx.font = "700 28px 'NPSfont', sans-serif";
+      ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(i + 1, 108, by + 16);
+
+      // 항목 제목
+      ctx.font = "700 46px 'NPSfont', sans-serif";
+      ctx.fillStyle = '#111'; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+      ctx.fillText(b.t, 154, by + 24);
+
+      // 항목 설명
+      const lines = (b.d || '').split('\n');
+      ctx.font = "400 34px 'Pretendard', sans-serif";
+      ctx.fillStyle = '#666';
+      lines.forEach((line, j) => {
+        ctx.fillText(line, 154, by + 24 + 50 + j * 44);
+      });
+    });
+  }
+
+  /* ── 렌더 ── */
+  function render() {
+    if (currentPage === 1) renderPage1();
+    else                   renderInstrPage(currentPage);
+  }
+
+  /* ── 폼 동기화 ── */
+  function readForm() {
+    const d = pageData[currentPage];
+    if (currentPage === 1) {
+      d.t1  = document.getElementById('p1-t1').value;
+      d.t2  = document.getElementById('p1-t2').value;
+      d.sub = document.getElementById('p1-sub').value;
+      d.tag = document.getElementById('p1-tag').value;
+    } else {
+      d.step = document.getElementById('px-step').value;
+      d.t1   = document.getElementById('px-t1').value;
+      d.t2   = document.getElementById('px-t2').value;
+      d.bullets = [
+        { t: document.getElementById('b1t').value, d: document.getElementById('b1d').value },
+        { t: document.getElementById('b2t').value, d: document.getElementById('b2d').value },
+        { t: document.getElementById('b3t').value, d: document.getElementById('b3d').value },
+        { t: document.getElementById('b4t').value, d: document.getElementById('b4d').value },
+      ];
+    }
+  }
+
+  function writeForm() {
+    const d = pageData[currentPage];
+    if (currentPage === 1) {
+      document.getElementById('p1-t1').value  = d.t1;
+      document.getElementById('p1-t2').value  = d.t2;
+      document.getElementById('p1-sub').value = d.sub;
+      document.getElementById('p1-tag').value = d.tag;
+    } else {
+      document.getElementById('px-step').value = d.step;
+      document.getElementById('px-t1').value   = d.t1;
+      document.getElementById('px-t2').value   = d.t2;
+      const bs = d.bullets || [];
+      [1, 2, 3, 4].forEach(n => {
+        document.getElementById(`b${n}t`).value = bs[n - 1]?.t || '';
+        document.getElementById(`b${n}d`).value = bs[n - 1]?.d || '';
+      });
+    }
+    const is1 = currentPage === 1;
+    document.getElementById('fields-1').classList.toggle('hidden', !is1);
+    document.getElementById('fields-25').classList.toggle('hidden', is1);
+  }
+
+  /* ── 이벤트 ── */
+  document.querySelectorAll('.page-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      readForm();
+      currentPage = +btn.dataset.page;
+      document.querySelectorAll('.page-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      writeForm();
+      render();
+    });
+  });
+
+  document.querySelectorAll('input, textarea').forEach(el => {
+    el.addEventListener('input',  () => { readForm(); render(); });
+    el.addEventListener('change', () => { readForm(); render(); });
+  });
+
+  document.getElementById('dl-btn').addEventListener('click', () => {
+    const a = document.createElement('a');
+    a.download = `kbo-promo-card-${currentPage}.png`;
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  });
+
+  /* ── 초기화 ── */
+  writeForm();
+  document.fonts.ready.then(render);
+  </script>
+</body>
+</html>

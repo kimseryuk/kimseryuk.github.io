@@ -76,15 +76,21 @@ const CANVAS_RATIOS = {
   r209:   { w: 1080, h: 2400, label: '9:20' },
   pc169:  { w: 1920, h: 1080, label: '16:9 PC' },
   pc1610: { w: 2560, h: 1600, label: '16:10' },
+  pc219:  { w: 2560, h: 1080, label: '21:9' },
+  pc3440: { w: 3440, h: 1440, label: '21:9 QHD' },
 };
 
 /* 세이프 존: 상단(상태바) / 하단(홈 인디케이터) */
-const SAFE_ZONE = { top: 0.08, bottom: 0.10 };
+const SAFE_ZONE = { top: 0.08, bottom: 0.08 };
+/* 달력 좌우 최소 여백 (모바일) */
+const CAL_SIDE = 0.05;
+/* 일러스트 좌우 여백: 화면 비율별 */
+const ILLUST_SIDE = { r169: 0.10, r195: 0.055, r209: 0.04 };
 
 const CAL_SIZE_SCALE = {
-  small:  { cellScale: 0.082, lsCellScale: 0.060 },
-  medium: { cellScale: 0.112, lsCellScale: 0.075 },
-  large:  { cellScale: 0.148, lsCellScale: 0.095 },
+  small:  { cellScale: 0.082, lsCellScale: 0.046 },
+  medium: { cellScale: 0.112, lsCellScale: 0.057 },
+  large:  { cellScale: 0.148, lsCellScale: 0.072 },
 };
 // 5주 기준 1:1 정사각형 비율 상수
 // calH = cellH × (헤더 0.612 + 라벨 0.38 + 5행) = cellH × 5.992
@@ -108,8 +114,8 @@ const THEMES = {
     dateNormal: '#e6edf3',
     dateSun:    '#e05555',
     dateSat:    '#5599e0',
-    awayCircle: 'rgba(140,140,140,0.20)',
-    awayText:   'rgba(200,200,200,0.85)',
+    awayCircle: '#ffffff',
+    awayText:   '#1a1a1a',
   },
   light: {
     title:      '#1a1a1a',
@@ -117,13 +123,14 @@ const THEMES = {
     dateNormal: '#1a1a1a',
     dateSun:    '#cc2222',
     dateSat:    '#1a55bb',
-    awayCircle: 'rgba(100,100,100,0.14)',
-    awayText:   'rgba(70,70,70,0.8)',
+    awayCircle: '#ffffff',
+    awayText:   '#1a1a1a',
   },
 };
 
 /* ─── 상태 ───────────────────────────────────────────── */
 const state = {
+  mode:        'mo',
   team:        'KIA',
   month:       3,
   calSize:     'medium',
@@ -135,9 +142,13 @@ const state = {
   cellGap:     'small',   // 'small' | 'medium' | 'large'
   calPos:      'center',  // 'top' | 'center'
   calBgPanel:  'off',     // 'on' | 'off'
+  mergeStreak: 'off',     // 'on' | 'off'
   ratio:       'r209',    // 'r169' | 'r195' | 'r209'
-  bgFilter:    'all',
-  bgImage:     null,
+  bgFilter:        'all',
+  bgImage:         null,
+  illustImage:     null,
+  currentWallpaper: null,
+  pcBgColor:       '#05141F',
 };
 
 let scheduleData  = null;
@@ -153,6 +164,14 @@ function hexToRgba(hex, alpha) {
   const g = parseInt(hex.slice(3, 5), 16);
   const b = parseInt(hex.slice(5, 7), 16);
   return `rgba(${r},${g},${b},${alpha})`;
+}
+
+// 헥사 컬러를 흰색과 혼합해 밝게 만들기 (t: 0=원색, 1=흰색)
+function blendWithWhite(hex, t) {
+  const r = Math.round(parseInt(hex.slice(1, 3), 16) + (255 - parseInt(hex.slice(1, 3), 16)) * t);
+  const g = Math.round(parseInt(hex.slice(3, 5), 16) + (255 - parseInt(hex.slice(3, 5), 16)) * t);
+  const b = Math.round(parseInt(hex.slice(5, 7), 16) + (255 - parseInt(hex.slice(5, 7), 16)) * t);
+  return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;
 }
 
 /* ─── 아이콘 프리로드 (전 스타일) ───────────────────── */
@@ -188,7 +207,7 @@ async function loadWallpapers() {
 function getFilteredWallpapers() {
   const isLandscape = CANVAS_RATIOS[state.ratio].w > CANVAS_RATIOS[state.ratio].h;
   const platform = isLandscape ? 'pc' : 'mo';
-  let list = wallpaperList.filter(w => !w.platform || w.platform === platform);
+  let list = wallpaperList.filter(w => !w.platform || w.platform === 'all' || w.platform === platform);
   if (state.bgFilter === 'all')    return list;
   if (state.bgFilter === 'common') return list.filter(w => !w.team);
   return list.filter(w => w.team === state.bgFilter);
@@ -242,6 +261,9 @@ function renderBgSlider(list) {
     list.forEach((item, i) => {
       const btn   = document.createElement('div');
       btn.className = 'bg-thumb';
+      if (item.type === 'illust' && item.bgColor) {
+        btn.style.backgroundColor = item.bgColor;
+      }
       const img   = document.createElement('img');
       img.src = item.path; img.alt = item.name || '';
       const label = document.createElement('span');
@@ -250,19 +272,41 @@ function renderBgSlider(list) {
       btn.append(img, label);
       btn.dataset.path = item.path;
       btn.addEventListener('click', () => {
-        // mark active in all sliders
         document.querySelectorAll('.bg-thumb').forEach(b =>
           b.classList.toggle('active', b.dataset.path === item.path)
         );
-        loadBgImage(item.path);
+        loadBgImage(item);
       });
       slider.appendChild(btn);
-      if (i === 0) btn.click();
+      const currentPath = state.currentWallpaper?.path;
+      const matchIdx = currentPath ? list.findIndex(w => w.path === currentPath) : -1;
+      if (i === (matchIdx >= 0 ? matchIdx : 0)) btn.click();
     });
   });
 }
 
-function loadBgImage(src) {
+function loadBgImage(item) {
+  const src = typeof item === 'string' ? item : item.path;
+  state.currentWallpaper = typeof item === 'object' ? item : null;
+
+  // 일러스트 타입이면 bgColor 반영 및 illustImage 로드
+  if (state.currentWallpaper?.type === 'illust') {
+    const col = state.currentWallpaper.bgColor || '#05141F';
+    state.pcBgColor = col;
+    document.querySelectorAll('.pc-bg-color-input').forEach(el => { el.value = col; });
+    document.querySelectorAll('.pc-color-label').forEach(el => { el.textContent = col; });
+    if (state.currentWallpaper.illustPath) {
+      const ill = new Image();
+      ill.onload  = () => { state.illustImage = ill; render(); };
+      ill.onerror = () => { state.illustImage = null; render(); };
+      ill.src = state.currentWallpaper.illustPath;
+    } else {
+      state.illustImage = null;
+    }
+  } else {
+    state.illustImage = null;
+  }
+
   const img = new Image();
   img.onload  = () => { state.bgImage = img; render(); };
   img.onerror = () => { state.bgImage = null; render(); };
@@ -289,18 +333,83 @@ function render() {
   canvas.width  = w;
   canvas.height = h;
 
-  if (state.bgImage) {
+  const isLs = w > h;
+  const isIllust = state.currentWallpaper?.type === 'illust';
+  if (isIllust) {
+    ctx.fillStyle = state.pcBgColor;
+    ctx.fillRect(0, 0, w, h);
+  } else if (state.bgImage) {
     const scale = Math.max(w / state.bgImage.width, h / state.bgImage.height);
     const sw = state.bgImage.width  * scale;
     const sh = state.bgImage.height * scale;
-    ctx.drawImage(state.bgImage, (w - sw) / 2, (h - sh) / 2, sw, sh);
+    const bx = isLs ? w - sw : (w - sw) / 2;
+    ctx.drawImage(state.bgImage, bx, (h - sh) / 2, sw, sh);
   } else {
     ctx.fillStyle = '#0d1117';
     ctx.fillRect(0, 0, w, h);
   }
 
-  drawCalendar(w, h);
+  const layout = drawCalendar(w, h);
+  if (isIllust && state.illustImage && layout) {
+    if (isLs) drawIllustrationPC(ctx, layout, h);
+    else       drawIllustration(ctx, w, h);
+  }
   scaleCanvas();
+}
+
+/* ─── 일러스트 그리기 (PC illust 모드) ──────────────── */
+// 모바일 세로형: 달력 아래 남은 공간, 좌우 세이프존 적용
+function drawIllustration(c, W, H) {
+  const img      = state.illustImage;
+  const side     = ILLUST_SIDE[state.ratio] ?? 0.02;
+  const safeSide = W * side;
+  const availW   = W - safeSide * 2;
+  const maxH     = H * 0.30;
+  const scale    = Math.min(availW / img.width, maxH / img.height);
+  const iw = img.width  * scale;
+  const ih = img.height * scale;
+  const ix = safeSide + (availW - iw) / 2;
+  const iy = H * 0.62 + (H * 0.30 - ih) / 2;
+  c.drawImage(img, ix, iy, iw, ih);
+}
+
+// 모바일 illust 레이아웃 계산 (doDownloadBg 전용)
+
+// PC illust 레이아웃 계산 (drawCalendar 없이 독립적으로)
+function calcPCIllustLayout(W, H) {
+  const { lsCellScale } = CAL_SIZE_SCALE[state.calSize];
+  const cellH  = H * lsCellScale;
+  const calW   = cellH * CAL_SQUARE;
+  const calX   = W - calW - W * 0.12;
+  const headerH = cellH * 0.36 * 1.7;
+  const labelH  = cellH * 0.19 * 2.0;
+  const rawFirst  = new Date(MONTHLY_DEFAULTS.year, state.month - 1, 1).getDay();
+  const firstCell = state.weekStart === 'mon' ? (rawFirst === 0 ? 6 : rawFirst - 1) : rawFirst;
+  const rows  = Math.ceil((firstCell + new Date(MONTHLY_DEFAULTS.year, state.month, 0).getDate()) / 7);
+  const calH       = headerH + labelH + rows * cellH;
+  const safeTop    = H * 0.05;
+  const safeAreaH  = H * 0.90;
+  const gap        = H * 0.04;
+  const img        = state.illustImage;
+  const illustAspect = img ? img.height / img.width : 1;
+  const illustH    = Math.min(calW * illustAspect, safeAreaH * 0.45);
+  const totalH     = calH + gap + illustH;
+  const calY       = safeTop + (safeAreaH - totalH) / 2;
+  return { calX, calY, calW, calH };
+}
+
+// PC 가로형: 달력 동일 컬럼 하단에 배치
+function drawIllustrationPC(c, layout, H) {
+  const img = state.illustImage;
+  const { calX, calY, calW, calH } = layout;
+  const gap    = H * 0.01;
+  const availH = H * 0.95 - (calY + calH + gap);
+  const scale  = Math.min(calW / img.width, availH / img.height) * 1.2;
+  const iw = img.width  * scale;
+  const ih = img.height * scale;
+  const ix = calX + (calW - iw) / 2;
+  const iy = calY + calH + gap;
+  c.drawImage(img, ix, iy, iw, ih);
 }
 
 /* ─── 달력 그리기 ────────────────────────────────────── */
@@ -311,7 +420,7 @@ function drawCalendar(W, H) {
   const C     = THEMES[state.textMode];
 
   const teamColor  = TEAM_COLORS[state.team] || '#e05555';
-  const homeCircle = hexToRgba(teamColor, 0.25);
+  const homeCircle = blendWithWhite(teamColor, 0.75);
   const homeText   = teamColor;
 
   const daysInMonth = new Date(year, month, 0).getDate();
@@ -327,10 +436,12 @@ function drawCalendar(W, H) {
   const { cellScale, lsCellScale } = CAL_SIZE_SCALE[state.calSize];
   const cellH = BASE * (isLandscape ? lsCellScale : cellScale);
   const calW  = cellH * CAL_SQUARE;  // 5주 기준 1:1 정사각형
-  // 모바일: 항상 가로 중앙 / PC: 좌측 or 중앙 (일러스트는 오른쪽)
+  // 모바일: 세이프존 내 가로 중앙 / PC: 우측 고정
+  const sideMargin = W * CAL_SIDE;
+  const availW     = W - sideMargin * 2;
   const calX = isLandscape
-    ? (state.calPos === 'center' ? (W - calW) / 2 : W * 0.05)
-    : (W - calW) / 2;
+    ? W - calW - W * 0.12
+    : sideMargin + (availW - calW) / 2;
   const cellW = calW / 7;
 
   const fs = {
@@ -348,12 +459,14 @@ function drawCalendar(W, H) {
   const safeTop    = isLandscape ? H * 0.05 : H * SAFE_ZONE.top;
   const safeBottom = isLandscape ? H * 0.05 : H * SAFE_ZONE.bottom;
   const safeAreaH  = H - safeTop - safeBottom;
-  // PC: 세로는 항상 중앙 / 모바일: top=상단, center=중앙
-  const calY = isLandscape
-    ? safeTop + (safeAreaH - calH) / 2
-    : (state.calPos === 'top'
-        ? safeTop + cellH * 0.3
-        : safeTop + (safeAreaH - calH) / 2);
+  let calY;
+  if (!isLandscape) {
+    calY = state.calPos === 'top'
+      ? safeTop + cellH * 0.3
+      : safeTop + (safeAreaH - calH) / 2;
+  } else {
+    calY = safeTop + (safeAreaH - calH) / 2 - H * 0.14;
+  }
 
   // 라이트 모드(어두운 글씨) ↔ 다크 모드(밝은 글씨)
   const isLightText = state.textMode === 'light';
@@ -387,6 +500,24 @@ function drawCalendar(W, H) {
   // ── 날짜 셀
   const gridY = calY + headerH + labelH;
 
+  // ── 연속 경기 묶음 감지
+  const streakMap = {}; // day → { start, end, mid }
+  if (state.mergeStreak === 'on') {
+    let d = 1;
+    while (d <= daysInMonth) {
+      if (games[d]) {
+        let e = d;
+        while (e + 1 <= daysInMonth && games[e + 1] &&
+               games[e + 1].opponent === games[d].opponent &&
+               games[e + 1].isHome   === games[d].isHome) e++;
+        if (e > d) {
+          for (let x = d; x <= e; x++) streakMap[x] = { start: d, end: e };
+        }
+        d = e + 1;
+      } else d++;
+    }
+  }
+
   for (let day = 1; day <= daysInMonth; day++) {
     const idx = firstCell + day - 1;
     const col = idx % 7;
@@ -414,12 +545,30 @@ function drawCalendar(W, H) {
     const circleX  = cx + cellW / 2;
     const circleY  = dateBaseY + circleR + cellH * 0.05;
 
+    // ── 연속 경기 묶음 처리
+    const streak = streakMap[day];
+    if (streak) {
+      const { start, end } = streak;
+      // 각 셀마다 개별로 바 그리기: 행 경계에서도 확실하게 표시
+      const rL = (day === start || col === 0) ? circleR : 0;
+      const rR = (day === end   || col === 6) ? circleR : 0;
+      ctx.beginPath();
+      ctx.roundRect(cx, circleY - circleR, cellW, circleR * 2, [rL, rR, rR, rL]);
+      ctx.fillStyle = game.isHome ? homeCircle : C.awayCircle;
+      ctx.fill();
+      // 이 행 세그먼트의 중앙 날짜에만 아이콘 표시
+      const rowStart = Math.max(start, row * 7 - firstCell + 1);
+      const rowEnd   = Math.min(end,   (row + 1) * 7 - firstCell);
+      const rowMid   = rowStart + Math.floor((rowEnd - rowStart) / 2);
+      if (day !== rowMid) continue;
+    }
+
     const isInitial = state.logoStyle === 'initial';
 
-    // 원형 배경
+    // 원형 배경 (streak 아닌 경우)
     // · 심볼(initial): 항상 표시 — 홈=팀 색 진하게, 어웨이=검정
     // · 그 외: iconStyle !== 'none' 일 때만
-    if (isInitial || state.iconStyle !== 'none') {
+    if (!streak && (isInitial || state.iconStyle !== 'none')) {
       ctx.beginPath();
       ctx.arc(circleX, circleY, circleR, 0, Math.PI * 2);
       ctx.fillStyle = game.isHome ? homeCircle : C.awayCircle;
@@ -466,6 +615,7 @@ function drawCalendar(W, H) {
     }
   }
 
+  return { calX, calY, calW, calH };
 }
 
 /* ─── 캔버스 미리보기 스케일 ─────────────────────────── */
@@ -480,6 +630,30 @@ function scaleCanvas() {
 }
 
 /* ─── 상태 변경 헬퍼 ─────────────────────────────────── */
+const PC_RATIOS = ['pc169', 'pc1610', 'pc219', 'pc3440'];
+
+function setMode(m) {
+  state.mode = m;
+  document.querySelector('.app').classList.toggle('mode-pc', m === 'pc');
+  document.querySelector('.app').classList.toggle('mode-mo', m === 'mo');
+  document.querySelectorAll('[data-mode]').forEach(b =>
+    b.classList.toggle('active', b.dataset.mode === m)
+  );
+  const isPcRatio = PC_RATIOS.includes(state.ratio);
+  if (m === 'pc' && !isPcRatio) {
+    document.querySelectorAll('[data-ratio]').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('[data-ratio="pc3440"]').forEach(b => b.classList.add('active'));
+    state.ratio = 'pc3440';
+  } else if (m === 'mo' && isPcRatio) {
+    document.querySelectorAll('[data-ratio]').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('[data-ratio="r209"]').forEach(b => b.classList.add('active'));
+    state.ratio = 'r209';
+  }
+  updateCalPosLabels();
+  renderBgSlider(getFilteredWallpapers());
+  render();
+}
+
 function setTeam(teamKey) {
   state.team = teamKey;
   document.querySelectorAll('.team-btn').forEach(b =>
@@ -538,6 +712,8 @@ function handleBgUpload(e) {
   img.onload = () => {
     document.querySelectorAll('.bg-thumb').forEach(b => b.classList.remove('active'));
     state.bgImage = img;
+    state.currentWallpaper = null;
+    state.illustImage = null;
     render();
   };
   img.src = URL.createObjectURL(file);
@@ -560,11 +736,24 @@ function doDownloadBg() {
   const offCanvas = document.createElement('canvas');
   offCanvas.width = w; offCanvas.height = h;
   const offCtx = offCanvas.getContext('2d');
-  if (state.bgImage) {
+  const isLs = w > h;
+  const isIllust = state.currentWallpaper?.type === 'illust';
+  if (isIllust) {
+    offCtx.fillStyle = state.pcBgColor;
+    offCtx.fillRect(0, 0, w, h);
+    if (state.illustImage) {
+      if (isLs) {
+        drawIllustrationPC(offCtx, calcPCIllustLayout(w, h), h);
+      } else {
+        drawIllustration(offCtx, w, h);
+      }
+    }
+  } else if (state.bgImage) {
     const scale = Math.max(w / state.bgImage.width, h / state.bgImage.height);
     const sw = state.bgImage.width  * scale;
     const sh = state.bgImage.height * scale;
-    offCtx.drawImage(state.bgImage, (w - sw) / 2, (h - sh) / 2, sw, sh);
+    const bx = isLs ? w - sw : (w - sw) / 2;
+    offCtx.drawImage(state.bgImage, bx, (h - sh) / 2, sw, sh);
   } else {
     offCtx.fillStyle = '#0d1117';
     offCtx.fillRect(0, 0, w, h);
@@ -658,6 +847,28 @@ bindToggle('[data-calbgpanel]', btn => {
   render();
 });
 
+bindToggle('[data-mergestreak]', btn => {
+  document.querySelectorAll('[data-mergestreak]').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll(`[data-mergestreak="${btn.dataset.mergestreak}"]`).forEach(b => b.classList.add('active'));
+  state.mergeStreak = btn.dataset.mergestreak;
+  render();
+});
+
+
+// PC 배경색
+document.querySelectorAll('.pc-bg-color-input').forEach(el => {
+  el.addEventListener('input', e => {
+    state.pcBgColor = e.target.value;
+    document.querySelectorAll('.pc-bg-color-input').forEach(o => { o.value = e.target.value; });
+    document.querySelectorAll('.pc-color-label').forEach(o => { o.textContent = e.target.value; });
+    render();
+  });
+});
+
+// 모드 (모바일 / PC)
+document.querySelectorAll('[data-mode]').forEach(btn =>
+  btn.addEventListener('click', () => setMode(btn.dataset.mode))
+);
 
 // 캔버스 비율
 bindToggle('[data-ratio]', btn => {
@@ -665,7 +876,6 @@ bindToggle('[data-ratio]', btn => {
   document.querySelectorAll(`[data-ratio="${btn.dataset.ratio}"]`).forEach(b => b.classList.add('active'));
   state.ratio = btn.dataset.ratio;
   updateCalPosLabels();
-  renderBgSlider(getFilteredWallpapers());
   render();
 });
 

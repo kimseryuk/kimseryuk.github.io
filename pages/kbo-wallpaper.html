@@ -18,7 +18,7 @@
     <span class="page-nav__title">KBO 일정 배경화면</span>
   </header>
 
-  <div class="app">
+  <div class="app mode-mo">
 
     <!-- ── 미리보기 ─────────────────────────────────── -->
     <main class="preview-area">
@@ -32,6 +32,11 @@
 
     <!-- ── 데스크탑 컨트롤 패널 (모바일 숨김) ─────── -->
     <aside class="controls" id="controls">
+
+      <div class="mode-tabs">
+        <button class="mode-tab active" data-mode="mo">모바일</button>
+        <button class="mode-tab" data-mode="pc">PC</button>
+      </div>
 
       <div class="basic-section">
 
@@ -86,14 +91,16 @@
         <!-- 화면 비율 -->
         <div class="ctrl-block">
           <p class="section-label">화면 비율</p>
-          <div class="toggle-row">
+          <div class="ratio-group ratio-group--mo toggle-row">
             <button class="toggle-btn" data-ratio="r169">9:16</button>
             <button class="toggle-btn" data-ratio="r195">9:19.5</button>
             <button class="toggle-btn active" data-ratio="r209">9:20</button>
           </div>
-          <div class="toggle-row" style="margin-top:4px;">
+          <div class="ratio-group ratio-group--pc toggle-row">
             <button class="toggle-btn" data-ratio="pc169">PC 16:9</button>
             <button class="toggle-btn" data-ratio="pc1610">PC 16:10</button>
+            <button class="toggle-btn" data-ratio="pc219">21:9</button>
+            <button class="toggle-btn" data-ratio="pc3440">21:9 QHD</button>
           </div>
         </div>
 
@@ -108,6 +115,7 @@
           <label class="upload-btn" for="bg-upload">+ 내 이미지 불러오기</label>
           <input type="file" id="bg-upload" accept="image/*">
         </div>
+
 
       </div>
 
@@ -132,7 +140,7 @@
               <button class="toggle-btn" data-calsize="large">크게</button>
             </div>
           </div>
-          <div class="ctrl-block">
+          <div class="ctrl-block calpos-ctrl">
             <p class="section-label">달력 위치</p>
             <div class="toggle-row">
               <button class="toggle-btn" data-calpos="top">상단</button>
@@ -194,6 +202,13 @@
               <button class="toggle-btn active" data-calbgpanel="off">OFF</button>
             </div>
           </div>
+          <div class="ctrl-block">
+            <p class="section-label">연속 경기 묶음</p>
+            <div class="toggle-row">
+              <button class="toggle-btn" data-mergestreak="on">ON</button>
+              <button class="toggle-btn active" data-mergestreak="off">OFF</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -205,6 +220,12 @@
 
     <!-- ── 모바일 컨트롤 (피크루 스타일) ─────────── -->
     <div class="mobile-controls" id="mobile-controls">
+
+      <!-- 모바일/PC 모드 선택 -->
+      <div class="m-mode-bar">
+        <button class="m-mode-btn active" data-mode="mo">모바일</button>
+        <button class="m-mode-btn" data-mode="pc">PC</button>
+      </div>
 
       <!-- 탭 네비게이션 -->
       <nav class="m-tab-nav">
@@ -264,14 +285,16 @@
         <div class="m-panel" id="m-panel-bg">
           <div class="ctrl-block">
             <p class="section-label">화면 비율</p>
-            <div class="toggle-row">
+            <div class="ratio-group ratio-group--mo toggle-row">
               <button class="toggle-btn" data-ratio="r169">9:16</button>
               <button class="toggle-btn" data-ratio="r195">9:19.5</button>
               <button class="toggle-btn active" data-ratio="r209">9:20</button>
             </div>
-            <div class="toggle-row" style="margin-top:4px;">
+            <div class="ratio-group ratio-group--pc toggle-row">
               <button class="toggle-btn" data-ratio="pc169">PC 16:9</button>
               <button class="toggle-btn" data-ratio="pc1610">PC 16:10</button>
+              <button class="toggle-btn" data-ratio="pc219">21:9</button>
+              <button class="toggle-btn" data-ratio="pc3440">21:9 QHD</button>
             </div>
           </div>
           <div class="bg-filter-tabs" id="m-bg-filter-tabs"></div>
@@ -281,6 +304,14 @@
           </div>
           <label class="upload-btn" for="m-bg-upload">+ 내 이미지 불러오기</label>
           <input type="file" id="m-bg-upload" accept="image/*">
+          <!-- PC 배경색 -->
+          <div class="ctrl-block pc-only" style="margin-top:10px;">
+            <p class="section-label">배경색</p>
+            <div class="pc-color-wrap">
+              <input type="color" class="pc-bg-color-input" value="#05141F">
+              <span class="pc-color-label">#05141F</span>
+            </div>
+          </div>
         </div>
 
         <!-- 스타일 패널 -->
@@ -293,7 +324,7 @@
               <button class="toggle-btn" data-calsize="large">크게</button>
             </div>
           </div>
-          <div class="ctrl-block">
+          <div class="ctrl-block calpos-ctrl">
             <p class="section-label">달력 위치</p>
             <div class="toggle-row">
               <button class="toggle-btn" data-calpos="top">상단</button>
@@ -355,6 +386,13 @@
             <div class="toggle-row">
               <button class="toggle-btn" data-calbgpanel="on">ON</button>
               <button class="toggle-btn active" data-calbgpanel="off">OFF</button>
+            </div>
+          </div>
+          <div class="ctrl-block">
+            <p class="section-label">연속 경기 묶음</p>
+            <div class="toggle-row">
+              <button class="toggle-btn" data-mergestreak="on">ON</button>
+              <button class="toggle-btn active" data-mergestreak="off">OFF</button>
             </div>
           </div>
         </div>
