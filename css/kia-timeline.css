@@ -1,5 +1,7 @@
-body {
+html, body {
   margin: 0 auto;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 body .parents header {
   display: flex;
@@ -469,7 +471,7 @@ body .parents main .autumn .inner .group--wrap .d_body {
   padding-left: unset;
 }
 .inner iframe {
-  min-width: 100% !important;
+  max-width: 100%;
 }
 .inner iframe .Caption,
 .inner iframe .HoverCard,
@@ -478,7 +480,7 @@ body .parents main .autumn .inner .group--wrap .d_body {
 }
 
 iframe {
-  min-width: 100% !important;
+  max-width: 100%;
 }
 iframe .Caption,
 iframe .HoverCard,
@@ -497,7 +499,7 @@ iframe .Footer {
   z-index: -1;
   right: 0;
   bottom: 48px;
-  width: 500px;
+  width: min(500px, 100vw);
   word-break: break-word;
   text-align: right;
   line-height: 0.9;
@@ -787,6 +789,10 @@ iframe .Footer {
   }
   .inner .group--media {
     width: 100%;
+  }
+  .inner .group--media.has-instagram {
+    width: 280px;
+    margin: 0 auto;
   }
   .history--list {
     padding: 20px;

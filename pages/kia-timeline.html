@@ -230,12 +230,11 @@
         .map(function(t) {
           let returnObj = {}
           for (let i = 0; i < parsed.table.cols.length; i++) {
-            const label = parsed.table.cols[i].label;
+            const label = parsed.table.cols[i].label.trim();
             if (label !== '') returnObj[label] = t[i]
           }
           return returnObj
         })
-      // console.log(cols, items);
       setView(items, i)
 
       var innerHeight = $(".inner")
@@ -251,15 +250,13 @@
     // row = [null,{v:'123'},null,{v:'hello'}]
     function replaceNull(item) {
       if (item == null) {
-        return {
-          v: ''
-        }
+        return { v: '' }
       }
       return item
     }
     data = row
       .map((item) => replaceNull(item))
-      .map((item) => item.v)
+      .map((item) => (item.p && item.p.uri) ? item.p.uri : item.v)
     return data
   }
 
@@ -298,7 +295,8 @@
 
         const getYouTubeId = (url) => {
           if (!url) return '';
-          const m = String(url).trim().match(/(?:youtube\.com\/(?:watch\?.*v=|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+          const s = String(url).trim();
+          const m = s.match(/(?:youtube\.com\/(?:watch\?.*v=|shorts\/|live\/|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
           return m ? m[1] : '';
         };
         const ytId = getYouTubeId(e.YouTube);
@@ -459,6 +457,12 @@
     const prog = totalH > 0 ? Math.min(scrollPosition / totalH, 1) : 0;
     const $track = $('#tiger-track');
     const $tiger = $('#tiger-img');
+
+    // tiger-track: hero 지나면 표시, ending 시작되면 숨김
+    const heroH = $('.hero').outerHeight() || 0;
+    const endingTop = $('.ending').length ? $('.ending').offset().top : Infinity;
+    const trackVisible = scrollPosition > heroH * 0.8 && scrollPosition + $(window).height() < endingTop + 100;
+    $track.toggleClass('is-visible', trackVisible);
     if ($track.length) {
       const trackW = $track.width();
       const tigerW = $tiger.outerWidth() || 32;
