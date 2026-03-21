@@ -56,6 +56,7 @@
     <a class="snb-link" href="#scrollspyHeading2">2022</a>
     <a class="snb-link" href="#scrollspyHeading3">2023</a>
     <a class="snb-link" href="#scrollspyHeading4">2024</a>
+    <a class="snb-link" href="#scrollspyHeading5">한국시리즈</a>
   </nav>
 
   <div class="parents">
@@ -112,6 +113,7 @@
         <div id="list2024" class="list" data-sheetName="2024"></div>
       </div>
       <div class="wrap autumn">
+        <h2 id="scrollspyHeading5" class="section--title section--title--ks">한국시리즈</h2>
         <div id="list2024A" class="list" data-sheetName="2024A"></div>
       </div>
     </main>
@@ -201,9 +203,21 @@
 
 
 
+  let ksData = null;
+
   const getSheetData = async () => {
     //깨끗하게 첨부터 시작해용
     $(".list").empty();
+
+    // KS 스코어 JSON 로드
+    try {
+      const ksRes = await fetch('/data/ks2024.json');
+      const ksJson = await ksRes.json();
+      ksData = {};
+      for (const game of ksJson['2024_KBO_Korean_Series'].games) {
+        ksData[game.game_number] = game;
+      }
+    } catch(e) { ksData = {}; }
     //반복문 돌면서 연도별로 시트에 있는 값을 가져올것임
     for (let i = 0; i < $(".list").length; i++) {
       // const sheetId = '1yYM8BMK_WYqZwmSRCZ-K7WX776d9UcGpzZIOAVioGWk';
@@ -242,7 +256,6 @@
     };
 
     if (window.instgrm) window.instgrm.Embeds.process();
-    setTimeout(() => AOS.refreshHard(), 500);
   }
 
 
@@ -265,7 +278,7 @@
   // setView(users)
   function setView(users, index) {
     //let colSort = ($("#colSort").val()).split("	")
-    let colSort = ("Important	no	Lank	Date	News	Writer	Title	Body	MainImage	SubImage	Link	Instagram	Kim	YouTube").split("	")
+    let colSort = ("Important	no	Lank	Date	News	Writer	Title	Body	MainImage	SubImage	Link	Instagram	Kim	YouTube	score	win	game").split("	")
     const filteredUsers = users.filter(user => user.Important === 1); // "Important"이 1인 사용자만 필터링
 
     for (let ii = 0; ii < filteredUsers.length; ii++) {
@@ -290,6 +303,96 @@
 
         const badgeNo = e.no ? `<div class="memopill badge">${e.no}</div>` : ''; //메모
 
+        const buildKsScoreboard = (gameNum) => {
+          const g = ksData && ksData[gameNum];
+          if (!g) return '';
+          const teams = Object.keys(g.scoreboard);
+          const kiaR = g.scoreboard['KIA'] ? g.scoreboard['KIA'].R : 0;
+          const oppTeam = teams.find(t => t !== 'KIA') || teams[0];
+          const oppR = g.scoreboard[oppTeam] ? g.scoreboard[oppTeam].R : 0;
+          const kiaWin = kiaR > oppR;
+          const themeClass = kiaWin ? '' : 'ks-scoreboard--samsung-win';
+          const resultLabel = kiaWin ? '승리' : '패배';
+          const r = g.results || {};
+          const saveStr = r.save ? `<span class="ks-pitcher-sep">·</span><span class="ks-pitcher-item">세이브 <strong>${r.save}</strong></span>` : '';
+
+          const innings = Array.from({length: 9}, (_, i) => i);
+          const teamRow = (team) => {
+            const d = g.scoreboard[team];
+            const isWin = d.R > g.scoreboard[teams.find(t => t !== team)].R;
+            const cells = innings.map(i => {
+              const v = d.score[i];
+              return `<td class="${v === 'X' ? 'ks-x' : ''}">${v === null || v === undefined ? '-' : v}</td>`;
+            }).join('');
+            return `<tr class="${isWin ? 'ks-win' : ''}">
+              <td class="ks-team">${team}</td>
+              <td class="ks-starter">${d.starter}</td>
+              ${cells}
+              <td class="ks-r">${d.R}</td>
+              <td>${d.H}</td><td>${d.E}</td><td>${d.B}</td>
+            </tr>`;
+          };
+
+          const heroTeam = (team) => {
+            const d = g.scoreboard[team];
+            const isWinner = d.R > g.scoreboard[teams.find(t => t !== team)].R;
+            return `<div class="ks-hero__team${isWinner ? ' ks-hero__team--winner' : ''}">
+              <span class="ks-hero__team-name">${team}</span>
+              <span class="ks-hero__starter">${d.starter}</span>
+            </div>`;
+          };
+
+          const kiaData = g.scoreboard['KIA'];
+          const oppData = g.scoreboard[oppTeam];
+
+          return `<div class="ks-scoreboard ${themeClass}">
+            <div class="ks-scoreboard__header">
+              <span class="ks-gamenum">${gameNum}차전</span>
+              <span class="ks-date">${g.date} · ${g.stadium}</span>
+            </div>
+            <div class="ks-hero">
+              ${heroTeam('KIA')}
+              <div class="ks-hero__scores">
+                <span class="ks-hero__r${kiaWin ? ' ks-hero__r--winner' : ''}">${kiaData ? kiaData.R : '-'}</span>
+                <span class="ks-hero__colon">:</span>
+                <span class="ks-hero__r${!kiaWin ? ' ks-hero__r--winner' : ''}">${oppData ? oppData.R : '-'}</span>
+              </div>
+              ${heroTeam(oppTeam)}
+            </div>
+            <div class="ks-result-row">
+              <span class="ks-result-badge">${resultLabel}</span>
+            </div>
+            <div class="ks-pitchers">
+              <span class="ks-pitcher-item">승리 <strong>${r.winning_pitcher || '-'}</strong></span>
+              <span class="ks-pitcher-sep">·</span>
+              <span class="ks-pitcher-item">패배 <strong>${r.losing_pitcher || '-'}</strong></span>
+              ${saveStr}
+            </div>
+            <div class="ks-table-wrap">
+              <table class="ks-table">
+                <thead><tr>
+                  <th>팀</th><th>선발</th>
+                  ${innings.map(i => `<th>${i+1}</th>`).join('')}
+                  <th class="ks-r">R</th><th>H</th><th>E</th><th>B</th>
+                </tr></thead>
+                <tbody>${teams.map(t => teamRow(t)).join('')}</tbody>
+              </table>
+            </div>
+            <div class="ks-meta">
+              <span class="ks-meta__item">MVP <strong>${g.daily_mvp}</strong></span>
+              <span class="ks-meta__item">결승타 <strong>${g.winning_hit}</strong></span>
+            </div>
+          </div>`;
+        };
+
+        const scoreHtml = e.game
+          ? buildKsScoreboard(Number(e.game))
+          : e.score ? `
+          <div class="scoreboard ${e.win === '승리' ? 'scoreboard--win' : 'scoreboard--lose'}">
+            <span class="scoreboard__score">${e.score}</span>
+            <span class="scoreboard__result">${e.win}</span>
+          </div>` : '';
+
         const igUrl = e.Instagram ? e.Instagram.split('?')[0].replace(/\/$/, '') + '/' : '';
         const instagramHtml = igUrl ? `<blockquote class="instagram-media" data-instgrm-permalink="${igUrl}" data-instgrm-version="14" style="width:100%;min-width:unset;max-width:540px;margin:0;"></blockquote>` : '';
 
@@ -309,8 +412,10 @@
           ${badgeNo}
         </div>
 
+        <div class="group--content">
+        ${scoreHtml}
         <div class="group--wrap">
-          <div class="group group--main" data-aos="fade-up" data-aos-duration="1000">
+          <div class="group group--main anim-item">
             <div class="title box">
               <p class="d_date">
                 ${e.Date}
@@ -323,16 +428,18 @@
             <p class="d_body">${e.Body ? String(e.Body).replace(/\n/g, '<br>') : ''}</p>
             ${imageHtml2}
           </div>
-          <div class="group group--media${!e.MainImage && igUrl ? ' has-instagram' : ''}${ytId ? ' has-youtube' : ''}" data-aos="fade-up" data-aos-delay="500" data-aos-duration="1000">
+          <div class="group group--media${!e.MainImage && igUrl ? ' has-instagram' : ''}${ytId ? ' has-youtube' : ''} anim-item anim-item--delay">
             ${youtubeHtml}
             ${!ytId ? imageHtml : ''}
             ${!e.MainImage && !ytId ? instagramHtml : ''}
           </div>
         </div>
+        </div>
       </div>`;
       };
 
-      $($('.list')[index]).append($(itemTemp(e))); // Pass data (e) to the function
+      const $item = $(itemTemp(e));
+      $($('.list')[index]).append($item);
       $('.memopill').each(function() {
       const text = $(this).text();
       // console.log(text)
@@ -349,6 +456,18 @@
       }
     });
     }
+
+    // IntersectionObserver로 새로 추가된 아이템 애니메이션
+    const animObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          animObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -60px 0px' });
+
+    document.querySelectorAll('.anim-item:not(.is-visible)').forEach(el => animObserver.observe(el));
   }
 
 
@@ -458,10 +577,10 @@
     const $track = $('#tiger-track');
     const $tiger = $('#tiger-img');
 
-    // tiger-track: hero 지나면 표시, ending 시작되면 숨김
+    // tiger-track: hero 지나면 표시, 3번째 autumn(2024A) 시작되면 숨김
     const heroH = $('.hero').outerHeight() || 0;
-    const endingTop = $('.ending').length ? $('.ending').offset().top : Infinity;
-    const trackVisible = scrollPosition > heroH * 0.8 && scrollPosition + $(window).height() < endingTop + 100;
+    const ks2024Top = $('#list2024A').closest('.autumn').length ? $('#list2024A').closest('.autumn').offset().top : Infinity;
+    const trackVisible = scrollPosition > heroH * 0.8 && scrollPosition < ks2024Top;
     $track.toggleClass('is-visible', trackVisible);
     if ($track.length) {
       const trackW = $track.width();
