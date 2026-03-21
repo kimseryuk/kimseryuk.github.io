@@ -1,1 +1,8 @@
 node_modules/
+
+# 비공개 페이지
+pages/emoji_highlight_gen.html
+pages/card-news.html
+pages/story-maker.html
+pages/baseball-card.html
+pages/kimseryuk_qna/
