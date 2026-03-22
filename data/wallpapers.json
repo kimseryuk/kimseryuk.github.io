@@ -106,35 +106,10 @@
     "platform": "all",
     "type": "illust"
   },
+  
+  
   {
-    "name": "개막",
-    "path": "../img/wallpapers/KIA_march_illust.png",
-    "illustPath": "../img/wallpapers/KIA_march_illust.png",
-    "bgColor": "#F6FFE4",
-    "team": "KIA",
-    "platform": "all",
-    "type": "illust"
-  },
-  {
-    "name": "봄꽃",
-    "path": "../img/wallpapers/KIA_flower_illust.png",
-    "illustPath": "../img/wallpapers/KIA_flower_illust.png",
-    "bgColor": "#FFFAF3",
-    "team": "KIA",
-    "platform": "all",
-    "type": "illust"
-  },
-  {
-    "name": "단풍",
-    "path": "../img/wallpapers/KIA_autumn_illust.png",
-    "illustPath": "../img/wallpapers/KIA_autumn_illust.png",
-    "bgColor": "#FFE892",
-    "team": "KIA",
-    "platform": "all",
-    "type": "illust"
-  },
-  {
-    "name": "단풍2",
+    "name": "가을야구",
     "path": "../img/wallpapers/KIA_autumn2_illust.png",
     "illustPath": "../img/wallpapers/KIA_autumn2_illust.png",
     "bgColor": "#FCD091",
@@ -171,10 +146,35 @@
     "platform": "mo"
   },
   {
-    "name": "야구단풍",
+    "name": "가을야구진출",
     "path": "../img/wallpapers/KIA_autumnBaseball_mo.jpg",
     "team": "KIA",
     "platform": "mo"
+  },{
+    "name": "봄꽃",
+    "path": "../img/wallpapers/KIA_flower_illust.png",
+    "illustPath": "../img/wallpapers/KIA_flower_illust.png",
+    "bgColor": "#FFFAF3",
+    "team": "KIA",
+    "platform": "all",
+    "type": "illust"
+  },{
+    "name": "어린이날",
+    "path": "../img/wallpapers/KIA_march_illust.png",
+    "illustPath": "../img/wallpapers/KIA_march_illust.png",
+    "bgColor": "#F6FFE4",
+    "team": "KIA",
+    "platform": "all",
+    "type": "illust"
+  },
+  {
+    "name": "붕어빵",
+    "path": "../img/wallpapers/KIA_autumn_illust.png",
+    "illustPath": "../img/wallpapers/KIA_autumn_illust.png",
+    "bgColor": "#FFE892",
+    "team": "KIA",
+    "platform": "all",
+    "type": "illust"
   },
   {
     "name": "눈사람",
