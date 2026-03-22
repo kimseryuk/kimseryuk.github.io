@@ -269,6 +269,7 @@ function renderBgSlider(list) {
     if (list.length === 0) return;
 
     const isSolidActive = state.currentWallpaper?.type === 'solid';
+    const isUploadActive = state.bgImage && !state.currentWallpaper; // 사용자 업로드 이미지 상태
     const currentPath = state.currentWallpaper?.path;
     const matchIdx = currentPath ? list.findIndex(w => w.path === currentPath) : -1;
 
@@ -293,7 +294,7 @@ function renderBgSlider(list) {
         loadBgImage(item);
       });
       slider.appendChild(btn);
-      if (!isSolidActive && i === (matchIdx >= 0 ? matchIdx : 0)) btn.click();
+      if (!isSolidActive && !isUploadActive && i === (matchIdx >= 0 ? matchIdx : 0)) btn.click();
     });
 
     // ── 단색 썸네일 (전체/KBO 카테고리에만, 항상 마지막)
