@@ -604,14 +604,20 @@
     const $track = $('#tiger-track');
     const $tiger = $('#tiger-img');
 
-    // tiger-track: hero 지나면 표시, autumn 구간이면 숨김
+    // tiger-track: hero 지나면 표시, autumn/ending 구간이면 숨김
     const heroH = $('.hero').outerHeight() || 0;
     const isInAutumn = $('.wrap.autumn').toArray().some(function(el) {
       const top = $(el).offset().top;
       const bottom = top + $(el).outerHeight();
       return scrollPosition + $(window).height() * 0.4 >= top && scrollPosition < bottom;
     });
-    const trackVisible = scrollPosition > heroH * 0.8 && !isInAutumn;
+    const $endingEl = $('.ending');
+    const isInEnding = $endingEl.length && (function() {
+      const top = $endingEl.offset().top;
+      const bottom = top + $endingEl.outerHeight();
+      return scrollPosition + $(window).height() * 0.4 >= top && scrollPosition < bottom;
+    })();
+    const trackVisible = scrollPosition > heroH * 0.8 && !isInAutumn && !isInEnding;
     $track.toggleClass('is-visible', trackVisible);
     if ($track.length) {
       const trackW = $track.width();
