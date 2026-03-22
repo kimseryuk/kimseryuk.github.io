@@ -1,0 +1,87 @@
+﻿{
+  "2024_KBO_Korean_Series": {
+    "title": "2024 신한 SOL Bank KBO 한국시리즈",
+    "teams": {
+      "home": "KIA 타이거즈",
+      "away": "삼성 라이온즈"
+    },
+    "games": [
+      {
+        "game_number": 1,
+        "date": "2024-10-23",
+        "stadium": "광주-기아 챔피언스 필드",
+        "scoreboard": {
+          "삼성": {"starter": "원태인", "score": [0, 0, 0, 0, 0, 1, 0, 0, 0], "R": 1, "H": 4, "E": 0, "B": 4},
+          "KIA": {"starter": "네일", "score": [0, 0, 0, 0, 0, 0, 4, 1, "X"], "R": 5, "H": 7, "E": 3, "B": 5}
+        },
+        "results": {
+          "winning_pitcher": "곽도규",
+          "losing_pitcher": "김태훈"
+        },
+        "daily_mvp": "전상현",
+        "winning_hit": "없음"
+      },
+      {
+        "game_number": 2,
+        "date": "2024-10-23",
+        "stadium": "광주-기아 챔피언스 필드",
+        "scoreboard": {
+          "삼성": {"starter": "황동재", "score": [0, 0, 0, 1, 0, 1, 0, 0, 1], "R": 3, "H": 12, "E": 3, "B": 3},
+          "KIA": {"starter": "양현종", "score": [5, 1, 0, 0, 1, 0, 0, 1, "X"], "R": 8, "H": 10, "E": 2, "B": 1}
+        },
+        "results": {
+          "winning_pitcher": "양현종",
+          "losing_pitcher": "황동재"
+        },
+        "daily_mvp": "양현종",
+        "winning_hit": "김도영 (1회 무사 2,3루서 2루수 땅볼)"
+      },
+      {
+        "game_number": 3,
+        "date": "2024-10-25",
+        "stadium": "대구 삼성 라이온즈 파크",
+        "scoreboard": {
+          "KIA": {"starter": "라우어", "score": [0, 0, 0, 0, 0, 1, 0, 1, 0], "R": 2, "H": 8, "E": 1, "B": 3},
+          "삼성": {"starter": "레예스", "score": [0, 0, 1, 0, 0, 0, 1, 2, "X"], "R": 4, "H": 8, "E": 1, "B": 1}
+        },
+        "results": {
+          "winning_pitcher": "레예스",
+          "losing_pitcher": "라우어"
+        },
+        "daily_mvp": "레예스",
+        "winning_hit": "이성규 (3회말 1사서 좌중월 솔로 홈런)"
+      },
+      {
+        "game_number": 4,
+        "date": "2024-10-26",
+        "stadium": "대구 삼성 라이온즈 파크",
+        "scoreboard": {
+          "KIA": {"starter": "네일", "score": [1, 0, 6, 0, 0, 2, 0, 0, 0], "R": 9, "H": 13, "E": 0, "B": 4},
+          "삼성": {"starter": "원태인", "score": [0, 0, 0, 1, 1, 0, 0, 0, 0], "R": 2, "H": 7, "E": 0, "B": 3}
+        },
+        "results": {
+          "winning_pitcher": "네일",
+          "losing_pitcher": "원태인"
+        },
+        "daily_mvp": "김태군",
+        "winning_hit": "나성범 (1회초 1사 3루서 2루수 땅볼)"
+      },
+      {
+        "game_number": 5,
+        "date": "2024-10-28",
+        "stadium": "광주-기아 챔피언스 필드",
+        "scoreboard": {
+          "삼성": {"starter": "이승현(왼)", "score": [3, 0, 2, 0, 0, 0, 0, 0, 0], "R": 5, "H": 5, "E": 0, "B": 5},
+          "KIA": {"starter": "양현종", "score": [1, 0, 1, 0, 3, 1, 0, 1, "X"], "R": 7, "H": 13, "E": 0, "B": 10}
+        },
+        "results": {
+          "winning_pitcher": "곽도규",
+          "losing_pitcher": "이상민",
+          "save": "정해영"
+        },
+        "daily_mvp": "박찬호",
+        "winning_hit": "김태군 (6회말 1사 1,3루서 유격수 내야안타)"
+      }
+    ]
+  }
+}

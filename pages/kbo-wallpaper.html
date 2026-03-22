@@ -114,6 +114,14 @@
           </div>
           <label class="upload-btn" for="bg-upload">+ 내 이미지 불러오기</label>
           <input type="file" id="bg-upload" accept="image/*">
+          <!-- 단색 배경 색상 -->
+          <div class="ctrl-block solid-color-ctrl" id="solid-color-ctrl" style="display:none; margin-top:10px;">
+            <p class="section-label">배경색</p>
+            <div class="pc-color-wrap">
+              <input type="color" class="solid-bg-input" id="solid-bg-input" value="#ffffff">
+              <span class="solid-color-label" id="solid-color-label">#ffffff</span>
+            </div>
+          </div>
         </div>
 
 
@@ -150,17 +158,24 @@
           <div class="ctrl-block">
             <p class="section-label">로고 스타일</p>
             <div class="toggle-row">
-              <button class="toggle-btn active" data-logostyle="custom">커스텀</button>
+              <button class="toggle-btn active" data-logostyle="custom">아이콘</button>
               <button class="toggle-btn" data-logostyle="initial">심볼</button>
               <button class="toggle-btn" data-logostyle="emblem">엠블럼</button>
             </div>
           </div>
           <div class="ctrl-block">
-            <p class="section-label">아이콘 배경</p>
+            <p class="section-label">홈원정 표시</p>
             <div class="toggle-row">
-              <button class="toggle-btn" data-iconstyle="none">없음</button>
+              <button class="toggle-btn active" data-homeawayshow="on">ON</button>
+              <button class="toggle-btn" data-homeawayshow="off">OFF</button>
+            </div>
+          </div>
+          <div class="ctrl-block">
+            <p class="section-label">표시 방법</p>
+            <div class="toggle-row">
               <button class="toggle-btn" data-iconstyle="bg">배경</button>
-              <button class="toggle-btn active" data-iconstyle="badge">뱃지</button>
+              <button class="toggle-btn" data-iconstyle="badge">뱃지</button>
+              <button class="toggle-btn active" data-iconstyle="bgbadge">배경+뱃지</button>
             </div>
           </div>
           <div class="ctrl-block">
@@ -181,14 +196,6 @@
         </div>
         <div class="adv-pane" id="adv-pane-setting">
           <div class="ctrl-block">
-            <p class="section-label">일 간격</p>
-            <div class="toggle-row">
-              <button class="toggle-btn active" data-cellgap="small">소</button>
-              <button class="toggle-btn" data-cellgap="medium">중</button>
-              <button class="toggle-btn" data-cellgap="large">대</button>
-            </div>
-          </div>
-          <div class="ctrl-block">
             <p class="section-label">주 시작</p>
             <div class="toggle-row">
               <button class="toggle-btn active" data-week="sun">일요일 우선</button>
@@ -205,8 +212,15 @@
           <div class="ctrl-block">
             <p class="section-label">연속 경기 묶음</p>
             <div class="toggle-row">
-              <button class="toggle-btn" data-mergestreak="on">ON</button>
-              <button class="toggle-btn active" data-mergestreak="off">OFF</button>
+              <button class="toggle-btn active" data-mergestreak="on">ON</button>
+              <button class="toggle-btn" data-mergestreak="off">OFF</button>
+            </div>
+          </div>
+          <div class="ctrl-block">
+            <p class="section-label">월 표시</p>
+            <div class="toggle-row">
+              <button class="toggle-btn active" data-showmonthlabel="on">ON</button>
+              <button class="toggle-btn" data-showmonthlabel="off">OFF</button>
             </div>
           </div>
         </div>
@@ -304,6 +318,14 @@
           </div>
           <label class="upload-btn" for="m-bg-upload">+ 내 이미지 불러오기</label>
           <input type="file" id="m-bg-upload" accept="image/*">
+          <!-- 단색 배경 색상 -->
+          <div class="ctrl-block solid-color-ctrl" id="m-solid-color-ctrl" style="display:none; margin-top:10px;">
+            <p class="section-label">배경색</p>
+            <div class="pc-color-wrap">
+              <input type="color" class="solid-bg-input" id="m-solid-bg-input" value="#ffffff">
+              <span class="solid-color-label" id="m-solid-color-label">#ffffff</span>
+            </div>
+          </div>
           <!-- PC 배경색 -->
           <div class="ctrl-block pc-only" style="margin-top:10px;">
             <p class="section-label">배경색</p>
@@ -334,17 +356,24 @@
           <div class="ctrl-block">
             <p class="section-label">로고 스타일</p>
             <div class="toggle-row">
-              <button class="toggle-btn active" data-logostyle="custom">커스텀</button>
+              <button class="toggle-btn active" data-logostyle="custom">아이콘</button>
               <button class="toggle-btn" data-logostyle="initial">심볼</button>
               <button class="toggle-btn" data-logostyle="emblem">엠블럼</button>
             </div>
           </div>
           <div class="ctrl-block">
-            <p class="section-label">아이콘 배경</p>
+            <p class="section-label">홈원정 표시</p>
             <div class="toggle-row">
-              <button class="toggle-btn" data-iconstyle="none">없음</button>
+              <button class="toggle-btn active" data-homeawayshow="on">ON</button>
+              <button class="toggle-btn" data-homeawayshow="off">OFF</button>
+            </div>
+          </div>
+          <div class="ctrl-block">
+            <p class="section-label">표시 방법</p>
+            <div class="toggle-row">
               <button class="toggle-btn" data-iconstyle="bg">배경</button>
-              <button class="toggle-btn active" data-iconstyle="badge">뱃지</button>
+              <button class="toggle-btn" data-iconstyle="badge">뱃지</button>
+              <button class="toggle-btn active" data-iconstyle="bgbadge">배경+뱃지</button>
             </div>
           </div>
           <div class="ctrl-block">
@@ -367,14 +396,6 @@
         <!-- 설정 패널 -->
         <div class="m-panel" id="m-panel-setting">
           <div class="ctrl-block">
-            <p class="section-label">일 간격</p>
-            <div class="toggle-row">
-              <button class="toggle-btn active" data-cellgap="small">소</button>
-              <button class="toggle-btn" data-cellgap="medium">중</button>
-              <button class="toggle-btn" data-cellgap="large">대</button>
-            </div>
-          </div>
-          <div class="ctrl-block">
             <p class="section-label">주 시작</p>
             <div class="toggle-row">
               <button class="toggle-btn active" data-week="sun">일요일</button>
@@ -391,8 +412,15 @@
           <div class="ctrl-block">
             <p class="section-label">연속 경기 묶음</p>
             <div class="toggle-row">
-              <button class="toggle-btn" data-mergestreak="on">ON</button>
-              <button class="toggle-btn active" data-mergestreak="off">OFF</button>
+              <button class="toggle-btn active" data-mergestreak="on">ON</button>
+              <button class="toggle-btn" data-mergestreak="off">OFF</button>
+            </div>
+          </div>
+          <div class="ctrl-block">
+            <p class="section-label">월 표시</p>
+            <div class="toggle-row">
+              <button class="toggle-btn active" data-showmonthlabel="on">ON</button>
+              <button class="toggle-btn" data-showmonthlabel="off">OFF</button>
             </div>
           </div>
         </div>

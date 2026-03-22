@@ -497,6 +497,24 @@
   
 
 
+  // 헤더 스크롤 hide / show
+  (function() {
+    var lastY = 0;
+    $(window).on('scroll.header', function() {
+      var currentY = $(this).scrollTop();
+      var $header = $('header.page-nav');
+      var $snb = $('nav.page-snb');
+      if (currentY > lastY && currentY > 80) {
+        $header.addClass('up');
+        $snb.addClass('up');
+      } else {
+        $header.removeClass('up');
+        $snb.removeClass('up');
+      }
+      lastY = currentY;
+    });
+  })();
+
   AOS.init({ once: true, offset: 60 });
 
   let bgmPlayer = null;
@@ -577,10 +595,14 @@
     const $track = $('#tiger-track');
     const $tiger = $('#tiger-img');
 
-    // tiger-track: hero 지나면 표시, 3번째 autumn(2024A) 시작되면 숨김
+    // tiger-track: hero 지나면 표시, autumn 구간이면 숨김
     const heroH = $('.hero').outerHeight() || 0;
-    const ks2024Top = $('#list2024A').closest('.autumn').length ? $('#list2024A').closest('.autumn').offset().top : Infinity;
-    const trackVisible = scrollPosition > heroH * 0.8 && scrollPosition < ks2024Top;
+    const isInAutumn = $('.wrap.autumn').toArray().some(function(el) {
+      const top = $(el).offset().top;
+      const bottom = top + $(el).outerHeight();
+      return scrollPosition + $(window).height() * 0.4 >= top && scrollPosition < bottom;
+    });
+    const trackVisible = scrollPosition > heroH * 0.8 && !isInAutumn;
     $track.toggleClass('is-visible', trackVisible);
     if ($track.length) {
       const trackW = $track.width();
@@ -599,38 +621,6 @@
         .toggleClass('phase-climax',    p >= 0.48 && p < 0.75)
         .toggleClass('phase-credits',   p >= 0.75);
     }
-
-    const list2024Top = $('#list2024').offset().top;
-    const scrollTop = $(window).scrollTop();
-    var lastScrollTop = 0;
-    var scrollTimeout;
-
-    $(window).on('scroll', function() {
-        var currentScroll = $(this).scrollTop();
-        var windowHeight = $(window).height();
-        var documentHeight = $(document).height();
-
-        clearTimeout(scrollTimeout);
-
-        // 스크롤을 내릴 때
-        if (currentScroll > lastScrollTop) {
-            $('nav').addClass('up');
-        }
-
-        // 일정 시간 후에 스크롤 방향 체크
-        scrollTimeout = setTimeout(function() {
-            if (currentScroll < lastScrollTop) {
-                $('nav').removeClass('up');
-            }
-
-            // 스크롤이 맨 아래에 도달했을 때
-            if (currentScroll + windowHeight >= documentHeight) {
-                $('nav').removeClass('up');
-            }
-            
-            lastScrollTop = currentScroll;  // 방향 체크 후 lastScrollTop 업데이트
-        }, 100);  // 100ms 후에 방향 체크
-    });
 
   });
 

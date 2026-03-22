@@ -1,10 +1,12 @@
 /* ─── Reset & Base ─────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; overflow: hidden; }
 body {
   background: #0d1117;
   color: #e6edf3;
   font-family: 'Pretendard', sans-serif;
-  min-height: 100vh;
+  height: 100%;
+  overflow: hidden;
   font-size: 14px;
 }
 a { text-decoration: none; color: inherit; }
@@ -17,6 +19,7 @@ a { text-decoration: none; color: inherit; }
   gap: 0;
   margin-top: 46px;
   height: calc(100vh - 46px);
+  height: calc(100dvh - 46px);
   overflow: hidden;
 }
 
@@ -222,6 +225,7 @@ a { text-decoration: none; color: inherit; }
   font-size: 10px;
   color: #4a5568;
   margin-top: 2px;
+  margin-bottom: 8px;
   letter-spacing: 0.05em;
   user-select: none;
 }
@@ -238,6 +242,13 @@ a { text-decoration: none; color: inherit; }
   scroll-snap-align: start;
 }
 .bg-thumb img { width: 100%; aspect-ratio: 9/16; object-fit: cover; display: block; }
+.bg-thumb__solid-preview {
+  width: 100%;
+  aspect-ratio: 9/16;
+  background: linear-gradient(135deg, #fff 0%, #e8e8e8 50%, #ccc 100%);
+  display: block;
+}
+.bg-slider--landscape .bg-thumb__solid-preview { aspect-ratio: 16/9; }
 /* PC 비율일 때 썸네일 가로형으로 전환 */
 .bg-slider--landscape .bg-thumb { flex: 0 0 96px; }
 .bg-slider--landscape .bg-thumb img { aspect-ratio: 16/9; }
@@ -387,7 +398,6 @@ a { text-decoration: none; color: inherit; }
   cursor: pointer;
   letter-spacing: 0.04em;
   transition: background 0.2s, transform 0.1s;
-  margin-top: auto;
 }
 .download-btn:hover { background: #c94444; }
 .download-btn:active { transform: scale(0.98); }
@@ -407,6 +417,7 @@ a { text-decoration: none; color: inherit; }
     flex-direction: column;
     margin-top: 46px;
     height: calc(100vh - 46px);
+    height: calc(100dvh - 46px);
     overflow: hidden;
   }
 
