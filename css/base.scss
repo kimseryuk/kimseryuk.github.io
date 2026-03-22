@@ -1,0 +1,230 @@
+// ─── base.scss — 모든 내부 페이지 공통 ───────────────────
+// Compiled to: base.css
+//
+// Sections:
+//   디자인 토큰 · page-nav · back-link · tiger
+//   progress-bar · page-snb · Mobile
+
+// ─── 디자인 토큰 ──────────────────────────────────────────
+:root {
+  --font-sans: 'Pretendard', sans-serif;
+
+  --color-bg:           #0d1117;
+  --color-surface:      #161b22;
+  --color-surface-2:    #1c2129;
+  --color-overlay:      #21262d;
+
+  --color-border:       #30363d;
+  --color-border-hover: #8b949e;
+
+  --color-accent:       #e05555;
+  --color-accent-hover: #c94444;
+  --color-accent-dim:   rgba(224, 85, 85, 0.15);
+
+  --color-text-primary:   #e6edf3;
+  --color-text-secondary: #8b949e;
+  --color-text-muted:     #444d56;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  --transition: 0.2s ease;
+
+  --page-nav-h: 46px;
+  --page-snb-h: 40px;
+}
+
+// ─── 페이지 헤더 내비게이션 ───────────────────────────────
+.page-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--page-nav-h);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  transition: top var(--transition);
+
+  // 스크롤 다운 시 숨기기
+  &.up { top: calc(var(--page-nav-h) * -1); }
+
+  // 호랑이 트랙 컨테이너
+  .level {
+    flex: 1;
+    min-width: 0;
+    margin: 0 16px;
+  }
+
+  // 스크롤 프로그레스바
+  .progress-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--color-border);
+
+    .progress-bar {
+      height: 2px;
+      background: var(--color-accent);
+      width: 0%;
+    }
+  }
+}
+
+// ─── ← dugout. 링크 ───────────────────────────────────────
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  font-family: var(--font-sans);
+  transition: color var(--transition);
+  flex-shrink: 0;
+
+  svg { width: 14px; height: 14px; fill: currentColor; }
+
+  &:hover { color: var(--color-text-primary); }
+
+  a { color: inherit; text-decoration: none; }
+}
+
+// 페이지 타이틀 (우측)
+.page-nav__title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-family: var(--font-sans);
+}
+
+// ─── 호랑이 ───────────────────────────────────────────────
+.tiger-track {
+  position: relative;
+  width: 100%;
+  height: 36px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s;
+
+  &.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.tiger {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 36px;
+  height: 36px;
+  transition: left 0.25s linear, opacity 0.4s;
+  user-select: none;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('../img/timeline/tiger-normal.png');
+
+  &.is-happy { background-image: url('../img/timeline/tiger-happy.png'); }
+  &.is-sad   { background-image: url('../img/timeline/tiger-sad.png');   }
+  &::after   { content: ''; }
+
+  &.is-running { animation: tiger-run 0.6s ease-in-out infinite; }
+  &.is-happy   { animation: tiger-run-fast 0.45s ease-in-out infinite; }
+  &.is-sad     { animation: tiger-wobble 1.2s ease-in-out infinite; }
+  &.is-hidden  { opacity: 0; }
+}
+
+// ─── Tiger 애니메이션 ──────────────────────────────────────
+@keyframes tiger-run {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-3px); }
+}
+
+@keyframes tiger-run-fast {
+  0%, 100% { transform: translateY(0) scaleX(1);    }
+  30%       { transform: translateY(-5px) scaleX(1.05); }
+  60%       { transform: translateY(-2px) scaleX(0.97); }
+}
+
+@keyframes tiger-wobble {
+  0%, 100% { transform: rotate(0deg);  }
+  25%       { transform: rotate(-8deg); }
+  75%       { transform: rotate(8deg);  }
+}
+
+// ─── 서브 내비게이션 (SNB) ────────────────────────────────
+.page-snb {
+  position: fixed;
+  top: var(--page-nav-h);
+  left: 0;
+  right: 0;
+  height: var(--page-snb-h);
+  z-index: 998;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 12px;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  transition: top var(--transition);
+
+  &.up { top: calc(-1 * var(--page-snb-h)); }
+}
+
+.snb-link {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  font-family: var(--font-sans);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--transition), border-color var(--transition);
+  text-decoration: none;
+
+  &:hover { color: var(--color-text-primary); }
+
+  &.active {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+  }
+}
+
+// ─── Mobile ───────────────────────────────────────────────
+@media (max-width: 768px) {
+  .page-nav {
+    padding: 0 16px;
+
+    .level {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 4px 16px;
+      z-index: 997;
+      margin: 0;
+    }
+  }
+
+  .tiger-track { height: 64px; }
+  .tiger       { width: 64px; height: 64px; }
+}

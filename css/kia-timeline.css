@@ -1065,10 +1065,12 @@ iframe .Footer {
     flex-direction: column;
   }
   .inner .group--media {
-    width: 100%;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
   }
   .inner .group--media.has-instagram {
-    width: 280px;
+    width: 100%;
     margin: 0 auto;
   }
   .history--list {
@@ -1079,5 +1081,9 @@ iframe .Footer {
   }
   .hero__desc {
     font-size: 12px;
+  }
+  /* 스토브리그: 긴 텍스트라 모바일에서 폰트 축소 */
+  .mypic .fixed.winter-class {
+    font-size: 54px;
   }
 }
