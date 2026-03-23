@@ -509,10 +509,10 @@ function drawCalendar(W, H) {
 
   // ── 달력 반투명 배경 패널
   if (state.calBgPanel === 'on') {
-    const pp = cellH * 0.35;
+    const pp = cellH * 0.18;
     ctx.beginPath();
-    ctx.roundRect(calX - pp, calY - pp, calW + pp * 2, calH + pp * 2, cellH * 0.28);
-    ctx.fillStyle = isLightText ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.38)';
+    ctx.roundRect(calX - pp, calY - pp, calW + pp * 2, calH + pp * 2, cellH * 0.14);
+    ctx.fillStyle = isLightText ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.30)';
     ctx.fill();
   }
 
