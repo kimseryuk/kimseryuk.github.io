@@ -14,8 +14,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KBO 일정 배경화면 | dugout.</title>
   <link rel="stylesheet" href="../font/pretendard-subset.css">
-  <link rel="stylesheet" href="../css/base.css">
-  <link rel="stylesheet" href="../css/kbo-wallpaper.css">
+  <link rel="stylesheet" href="../css/base.css?v=20260323">
+  <link rel="stylesheet" href="../css/kbo-wallpaper.css?v=20260323">
 </head>
 <body>
 
@@ -158,10 +158,12 @@
             </div>
           </div>
           <div class="ctrl-block calpos-ctrl">
-            <p class="section-label">달력 위치</p>
-            <div class="toggle-row">
-              <button class="toggle-btn" data-calpos="top">상단</button>
-              <button class="toggle-btn active" data-calpos="center">중앙</button>
+            <p class="section-label">달력 세로 위치</p>
+            <div class="cal-offset-row">
+              <span class="cal-offset-label">위</span>
+              <input type="range" class="cal-offset-slider" min="-30" max="30" step="1" value="0">
+              <span class="cal-offset-label">아래</span>
+              <button class="cal-offset-reset" title="중앙으로">↺</button>
             </div>
           </div>
           <div class="ctrl-block">
@@ -357,10 +359,12 @@
             </div>
           </div>
           <div class="ctrl-block calpos-ctrl">
-            <p class="section-label">달력 위치</p>
-            <div class="toggle-row">
-              <button class="toggle-btn" data-calpos="top">상단</button>
-              <button class="toggle-btn active" data-calpos="center">중앙</button>
+            <p class="section-label">달력 세로 위치</p>
+            <div class="cal-offset-row">
+              <span class="cal-offset-label">위</span>
+              <input type="range" class="cal-offset-slider" min="-30" max="30" step="1" value="0">
+              <span class="cal-offset-label">아래</span>
+              <button class="cal-offset-reset" title="중앙으로">↺</button>
             </div>
           </div>
           <div class="ctrl-block">
@@ -448,7 +452,7 @@
 
   </div><!-- /.app -->
 
-  <script src="../js/kbo-wallpaper.js"></script>
+  <script src="../js/kbo-wallpaper.js?v=20260323"></script>
 
 <!-- 다운로드 도움말 모달 -->
 <div class="dl-help-overlay" id="dl-help-overlay">
@@ -464,6 +468,47 @@
 </div>
 
 <style>
+  .cal-offset-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 2px 0;
+  }
+  .cal-offset-label {
+    font-size: 11px;
+    color: #888;
+    white-space: nowrap;
+  }
+  .cal-offset-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: #444;
+    outline: none;
+    cursor: pointer;
+  }
+  .cal-offset-reset {
+    background: none;
+    border: 1px solid #555;
+    border-radius: 4px;
+    color: #aaa;
+    font-size: 13px;
+    padding: 2px 6px;
+    cursor: pointer;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .cal-offset-reset:hover { border-color: #e05555; color: #e05555; }
+  .cal-offset-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: #e05555;
+    cursor: pointer;
+  }
   .download-help-link {
     display: block;
     text-align: center;
