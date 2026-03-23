@@ -439,11 +439,9 @@
 
       <!-- 다운로드 (항상 노출) -->
       <div class="m-download-bar">
+        <button class="download-btn" id="mobile-download-btn">↓ 달력 포함</button>
+        <button class="download-btn download-btn--secondary" id="mobile-download-bg-btn">↓ 배경만</button>
         <a class="download-help-link" id="mobile-download-help-btn" href="#">다운로드가 되지 않는다면?</a>
-        <div class="m-download-btns">
-          <button class="download-btn" id="mobile-download-btn">↓ 달력 포함</button>
-          <button class="download-btn download-btn--secondary" id="mobile-download-bg-btn">↓ 배경만</button>
-        </div>
       </div>
 
     </div><!-- /.mobile-controls -->
@@ -476,7 +474,8 @@
     cursor: pointer;
   }
   .download-help-link:hover { color: #fff; }
-  .m-download-btns { display: flex; gap: 8px; }
+  .m-download-bar { flex-wrap: wrap; }
+  .m-download-bar .download-help-link { width: 100%; margin-top: 4px; margin-bottom: 0; }
   .dl-help-overlay {
     display: none;
     position: fixed;
