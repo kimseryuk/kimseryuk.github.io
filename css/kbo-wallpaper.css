@@ -336,7 +336,7 @@ a { text-decoration: none; color: inherit; }
 /* ─── Mode Show/Hide ─────────────────────────────────────── */
 .app.mode-pc .ratio-group--mo { display: none; }
 .app.mode-mo .ratio-group--pc { display: none; }
-.app.mode-pc .calpos-ctrl { display: none; }
+/* .app.mode-pc .calpos-ctrl — 슬라이더 자유배치로 변경, PC에서도 표시 */
 .app.mode-mo .pc-only { display: none; }
 
 /* ─── PC 배경색 피커 ─────────────────────────────────────── */
