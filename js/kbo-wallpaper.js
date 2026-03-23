@@ -141,7 +141,7 @@ const state = {
   homeAwayShow:   'on',      // 'on' | 'off'
   iconStyle:      'bgbadge', // 'bg' | 'badge' | 'bgbadge'
   cellGap:        'small',   // 'small' | 'medium' | 'large'
-  calPos:         'center',  // 'top' | 'center'
+  calOffsetY:     0,         // -30 ~ 30 (H의 % 오프셋)
   calBgPanel:     'off',     // 'on' | 'off'
   mergeStreak:    'on',      // 'on' | 'off'
   showMonthLabel: 'on',      // 'on' | 'off'
@@ -496,16 +496,12 @@ function drawCalendar(W, H) {
   const safeTop    = isLandscape ? H * 0.05 : H * SAFE_ZONE.top;
   const safeBottom = isLandscape ? H * 0.05 : H * SAFE_ZONE.bottom;
   const safeAreaH  = H - safeTop - safeBottom;
+  const offsetY = H * (state.calOffsetY / 100);
   let calY;
   if (!isLandscape) {
-    calY = state.calPos === 'top'
-      ? safeTop + cellH * 0.3
-      : safeTop + (safeAreaH - calH) / 2 + H * 0.02;
-    calY += H * 0.01;
-    // 일러스트와 달력 겹침 방지
-    
+    calY = safeTop + (safeAreaH - calH) / 2 + offsetY;
   } else {
-    calY = safeTop + (safeAreaH - calH) / 2 - H * 0.14;
+    calY = safeTop + (safeAreaH - calH) / 2 - H * 0.14 + offsetY;
   }
 
   // 라이트 모드(어두운 글씨) ↔ 다크 모드(밝은 글씨)
@@ -741,12 +737,9 @@ function setMonth(month) {
   render();
 }
 
-/* ─── calPos 라벨 & 슬라이더 레이아웃 갱신 ─────────── */
+/* ─── 비율 전환 시 슬라이더 레이아웃 갱신 ─────────── */
 function updateCalPosLabels() {
   const isLandscape = CANVAS_RATIOS[state.ratio].w > CANVAS_RATIOS[state.ratio].h;
-  document.querySelectorAll('[data-calpos="top"]').forEach(btn => {
-    btn.textContent = isLandscape ? '좌측' : '상단';
-  });
   // 배경 슬라이더 썸네일 비율 전환
   document.querySelectorAll('.bg-slider').forEach(el => {
     el.classList.toggle('bg-slider--landscape', isLandscape);
@@ -887,12 +880,20 @@ bindToggle('[data-iconstyle]', btn => {
   render();
 });
 
-// 달력 위치
-bindToggle('[data-calpos]', btn => {
-  document.querySelectorAll('[data-calpos]').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll(`[data-calpos="${btn.dataset.calpos}"]`).forEach(b => b.classList.add('active'));
-  state.calPos = btn.dataset.calpos;
-  render();
+// 달력 세로 위치 슬라이더
+document.querySelectorAll('.cal-offset-slider').forEach(slider => {
+  slider.addEventListener('input', () => {
+    state.calOffsetY = Number(slider.value);
+    document.querySelectorAll('.cal-offset-slider').forEach(s => { s.value = state.calOffsetY; });
+    render();
+  });
+});
+document.querySelectorAll('.cal-offset-reset').forEach(btn => {
+  btn.addEventListener('click', () => {
+    state.calOffsetY = 0;
+    document.querySelectorAll('.cal-offset-slider').forEach(s => { s.value = 0; });
+    render();
+  });
 });
 
 // 달력 배경 패널
@@ -903,9 +904,15 @@ bindToggle('[data-calbgpanel]', btn => {
   render();
 });
 
+function updateBadgeBtnVisibility() {
+  const isStreakOn = state.mergeStreak === 'on';
+  document.querySelectorAll('[data-iconstyle="badge"]').forEach(b => {
+    b.style.display = isStreakOn ? 'none' : '';
+  });
+}
+
 bindToggle('[data-mergestreak]', btn => {
   const val = btn.dataset.mergestreak;
-  // streak ON으로 전환 시 배경 없는 'badge' 모드면 자동으로 'bgbadge'로
   if (val === 'on' && state.iconStyle === 'badge') {
     state.iconStyle = 'bgbadge';
     document.querySelectorAll('[data-iconstyle]').forEach(b => b.classList.remove('active'));
@@ -914,8 +921,11 @@ bindToggle('[data-mergestreak]', btn => {
   document.querySelectorAll('[data-mergestreak]').forEach(b => b.classList.remove('active'));
   document.querySelectorAll(`[data-mergestreak="${val}"]`).forEach(b => b.classList.add('active'));
   state.mergeStreak = val;
+  updateBadgeBtnVisibility();
   render();
 });
+
+updateBadgeBtnVisibility();
 
 bindToggle('[data-homeawayshow]', btn => {
   document.querySelectorAll('[data-homeawayshow]').forEach(b => b.classList.remove('active'));
