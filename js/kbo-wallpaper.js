@@ -773,12 +773,19 @@ document.getElementById('m-bg-upload')?.addEventListener('change', handleBgUploa
 
 /* ─── 다운로드 ───────────────────────────────────────── */
 function doDownload() {
-  const team  = TEAM_SHORT[state.team] || state.team;
-  const month = String(state.month).padStart(2, '0');
-  const link  = document.createElement('a');
-  link.download = `kbo-2026-${month}-${team}.png`;
-  link.href = canvas.toDataURL('image/png');
-  link.click();
+  const team     = TEAM_SHORT[state.team] || state.team;
+  const month    = String(state.month).padStart(2, '0');
+  const filename = `kbo-2026-${month}-${team}.png`;
+  canvas.toBlob(blob => {
+    const url  = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = url;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }, 'image/png');
 }
 
 function doDownloadBg() {
@@ -814,10 +821,17 @@ function doDownloadBg() {
   }
   const team  = TEAM_SHORT[state.team] || state.team;
   const month = String(state.month).padStart(2, '0');
-  const link  = document.createElement('a');
-  link.download = `kbo-2026-${month}-${team}-bg.png`;
-  link.href = offCanvas.toDataURL('image/png');
-  link.click();
+  const filename = `kbo-2026-${month}-${team}-bg.png`;
+  offCanvas.toBlob(blob => {
+    const url  = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = url;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }, 'image/png');
 }
 
 document.getElementById('download-btn')?.addEventListener('click', doDownload);
