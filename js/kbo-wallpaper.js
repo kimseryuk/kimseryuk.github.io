@@ -599,14 +599,14 @@ function drawCalendar(W, H) {
     const circleY  = dateBaseY + circleR + cellH * 0.05;
 
     const isInitial    = state.logoStyle === 'initial';
-    const showCircleBg = state.homeAwayShow !== 'off' && (state.iconStyle === 'bg' || state.iconStyle === 'bgbadge');
+    const showCircleBg = state.homeAwayShow !== 'off' && (isInitial || state.iconStyle === 'bg' || state.iconStyle === 'bgbadge');
 
     // ── 연속 경기 묶음 처리
     const streak = streakMap[day];
     if (streak) {
       const { start, end } = streak;
       // 배경 표시 모드일 때만 바 그리기
-      if (showCircleBg || isInitial) {
+      if (showCircleBg) {
         const rL = (day === start || col === 0) ? circleR : 0;
         const rR = (day === end   || col === 6) ? circleR : 0;
         ctx.beginPath();
@@ -624,9 +624,7 @@ function drawCalendar(W, H) {
     const showBadge    = state.homeAwayShow !== 'off' && (state.iconStyle === 'badge' || state.iconStyle === 'bgbadge');
 
     // 원형 배경 (streak 아닌 경우)
-    // · 심볼(initial): 항상 표시 — 홈=팀 색 진하게, 어웨이=검정
-    // · 그 외: showCircleBg 일 때만
-    if (!streak && (isInitial || showCircleBg)) {
+    if (!streak && showCircleBg) {
       ctx.beginPath();
       ctx.arc(circleX, circleY, circleR, 0, Math.PI * 2);
       ctx.fillStyle = game.isHome ? homeCircle : C.awayCircle;
