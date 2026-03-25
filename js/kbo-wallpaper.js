@@ -219,7 +219,7 @@ function getFilteredWallpapers() {
 }
 
 function buildBgFilterTabs() {
-  const TEAM_ORDER = ['KIA','LG','Hanwha','SSG','Samsung','NC','KT','Lotte','Doosan','Kiwoom'];
+  const TEAM_ORDER = ['KIA','LG','한화','SSG','삼성','NC','KT','롯데','두산','키움'];
   const usedTeams = TEAM_ORDER.filter(t => wallpaperList.some(w => w.team === t));
   const hasCommon = wallpaperList.some(w => !w.team);
   const filters = [
