@@ -13,6 +13,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KBO 일정 배경화면 | dugout.</title>
+  <meta name="description" content="2026 KBO 리그 경기 일정이 담긴 나만의 배경화면을 만들어보세요.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="KBO 일정 배경화면 만들기 | dugout.">
+  <meta property="og:description" content="2026 KBO 리그 경기 일정이 담긴 나만의 배경화면을 만들어보세요.">
+  <meta property="og:image" content="https://kimseryuk.github.io/img/배경화면안내＿메타이미지.jpg">
+  <meta property="og:url" content="https://kimseryuk.github.io/pages/kbo-wallpaper.html">
+  <meta property="og:locale" content="ko_KR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://kimseryuk.github.io/img/배경화면안내＿메타이미지.jpg">
   <link rel="stylesheet" href="../font/pretendard-subset.css">
   <link rel="stylesheet" href="../css/base.css?v=20260323">
   <link rel="stylesheet" href="../css/kbo-wallpaper.css?v=20260323">
@@ -33,6 +42,8 @@
     <main class="preview-area">
       <div class="canvas-wrap">
         <canvas id="preview-canvas"></canvas>
+        <div class="center-guide center-guide--x" id="center-guide-x"></div>
+        <div class="center-guide center-guide--y" id="center-guide-y"></div>
       </div>
       <p class="attribution">
         데이터: <a href="https://www.koreabaseball.com" target="_blank" rel="noopener">koreabaseball.com</a>
@@ -166,6 +177,18 @@
               <button class="cal-offset-reset" title="중앙으로">↺</button>
             </div>
           </div>
+          <div class="ctrl-block calpos-ctrl">
+            <p class="section-label">달력 가로 위치 <span class="pc-only-label">PC</span></p>
+            <div class="cal-offset-row">
+              <span class="cal-offset-label">좌</span>
+              <div class="cal-slider-wrap">
+                <input type="range" class="cal-offset-slider-x" min="-40" max="40" step="1" value="0">
+                <span class="cal-center-mark"></span>
+              </div>
+              <span class="cal-offset-label">우</span>
+              <button class="cal-offset-reset-x" title="기본 위치로">↺</button>
+            </div>
+          </div>
           <div class="ctrl-block">
             <p class="section-label">로고 스타일</p>
             <div class="toggle-row">
@@ -232,6 +255,13 @@
             <div class="toggle-row">
               <button class="toggle-btn active" data-showmonthlabel="on">ON</button>
               <button class="toggle-btn" data-showmonthlabel="off">OFF</button>
+            </div>
+          </div>
+          <div class="ctrl-block">
+            <p class="section-label">경기 시간 표시</p>
+            <div class="toggle-row">
+              <button class="toggle-btn" data-showgametime="on">ON</button>
+              <button class="toggle-btn active" data-showgametime="off">OFF</button>
             </div>
           </div>
         </div>
@@ -367,6 +397,18 @@
               <button class="cal-offset-reset" title="중앙으로">↺</button>
             </div>
           </div>
+          <div class="ctrl-block calpos-ctrl">
+            <p class="section-label">달력 가로 위치 <span class="pc-only-label">PC</span></p>
+            <div class="cal-offset-row">
+              <span class="cal-offset-label">좌</span>
+              <div class="cal-slider-wrap">
+                <input type="range" class="cal-offset-slider-x" min="-40" max="40" step="1" value="0">
+                <span class="cal-center-mark"></span>
+              </div>
+              <span class="cal-offset-label">우</span>
+              <button class="cal-offset-reset-x" title="기본 위치로">↺</button>
+            </div>
+          </div>
           <div class="ctrl-block">
             <p class="section-label">로고 스타일</p>
             <div class="toggle-row">
@@ -437,6 +479,13 @@
               <button class="toggle-btn" data-showmonthlabel="off">OFF</button>
             </div>
           </div>
+          <div class="ctrl-block">
+            <p class="section-label">경기 시간 표시</p>
+            <div class="toggle-row">
+              <button class="toggle-btn" data-showgametime="on">ON</button>
+              <button class="toggle-btn active" data-showgametime="off">OFF</button>
+            </div>
+          </div>
         </div>
 
       </div><!-- /.m-panels -->
@@ -452,7 +501,7 @@
 
   </div><!-- /.app -->
 
-  <script src="../js/kbo-wallpaper.js?v=20260323"></script>
+  <script src="../js/kbo-wallpaper.js?v=20260325"></script>
 
 <!-- 다운로드 도움말 모달 -->
 <div class="dl-help-overlay" id="dl-help-overlay">
@@ -479,7 +528,7 @@
     color: #888;
     white-space: nowrap;
   }
-  .cal-offset-slider {
+  .cal-offset-slider, .cal-offset-slider-x {
     flex: 1;
     -webkit-appearance: none;
     appearance: none;
@@ -489,7 +538,7 @@
     outline: none;
     cursor: pointer;
   }
-  .cal-offset-reset {
+  .cal-offset-reset, .cal-offset-reset-x {
     background: none;
     border: 1px solid #555;
     border-radius: 4px;
@@ -500,7 +549,11 @@
     line-height: 1;
     flex-shrink: 0;
   }
-  .cal-offset-reset:hover { border-color: #e05555; color: #e05555; }
+  .cal-offset-reset:hover, .cal-offset-reset-x:hover { border-color: #e05555; color: #e05555; }
+  .cal-slider-wrap { flex: 1; position: relative; display: flex; align-items: center; }
+  .cal-slider-wrap .cal-offset-slider-x { width: 100%; margin: 0; }
+  .cal-center-mark { position: absolute; left: 50%; transform: translateX(-50%); top: calc(100% + 2px); width: 2px; height: 5px; background: #e05555; border-radius: 1px; pointer-events: none; opacity: 0.7; }
+  .pc-only-label { font-size: 10px; color: #888; background: #2a2a2a; border-radius: 3px; padding: 1px 4px; margin-left: 4px; vertical-align: middle; }
   .cal-offset-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;

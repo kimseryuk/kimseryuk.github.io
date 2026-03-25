@@ -142,9 +142,11 @@ const state = {
   iconStyle:      'bgbadge', // 'bg' | 'badge' | 'bgbadge'
   cellGap:        'small',   // 'small' | 'medium' | 'large'
   calOffsetY:     0,         // -30 ~ 30 (H의 % 오프셋)
+  calOffsetX:     0,         // -40 ~ 40 (W의 % 오프셋, PC 전용)
   calBgPanel:     'off',     // 'on' | 'off'
   mergeStreak:    'on',      // 'on' | 'off'
   showMonthLabel: 'on',      // 'on' | 'off'
+  showGameTime:   'off',     // 'on' | 'off'
   ratio:       'r209',    // 'r169' | 'r195' | 'r209'
   bgFilter:        'all',
   bgImage:         null,
@@ -355,7 +357,7 @@ function getMonthGames(teamKey, month) {
     if (d.getMonth() + 1 !== month) continue;
     if (g.away !== teamKey && g.home !== teamKey) continue;
     const isHome = g.home === teamKey;
-    map[d.getDate()] = { opponent: isHome ? g.away : g.home, isHome };
+    map[d.getDate()] = { opponent: isHome ? g.away : g.home, isHome, time: g.time };
   }
   return map;
 }
@@ -417,7 +419,7 @@ function calcPCIllustLayout(W, H) {
   const { lsCellScale } = CAL_SIZE_SCALE[state.calSize];
   const cellH  = H * lsCellScale;
   const calW   = cellH * CAL_SQUARE;
-  const calX   = W - calW - W * 0.12;
+  const calX   = Math.max(W * 0.04, Math.min(W - calW - W * 0.04, (W - calW) / 2 + W * (state.calOffsetX / 100)));
   const headerH = cellH * 0.36 * 1.7;
   const labelH  = cellH * 0.19 * 2.0;
   const rawFirst  = new Date(MONTHLY_DEFAULTS.year, state.month - 1, 1).getDay();
@@ -477,7 +479,7 @@ function drawCalendar(W, H) {
   const sideMargin = W * CAL_SIDE;
   const availW     = W - sideMargin * 2;
   const calX = isLandscape
-    ? W - calW - W * 0.12
+    ? Math.max(W * 0.04, Math.min(W - calW - W * 0.04, (W - calW) / 2 + W * (state.calOffsetX / 100)))
     : sideMargin + (availW - calW) / 2;
   const cellW = calW / 7;
 
@@ -493,8 +495,8 @@ function drawCalendar(W, H) {
 
   // ── 달력 수직 위치 (세이프존 반영)
   // PC 가로형은 상태바/홈 인디케이터 없으므로 여백 최소화
-  const safeTop    = isLandscape ? H * 0.05 : H * SAFE_ZONE.top;
-  const safeBottom = isLandscape ? H * 0.05 : H * SAFE_ZONE.bottom;
+  const safeTop    = isLandscape ? H * 0.03 : H * SAFE_ZONE.top;
+  const safeBottom = isLandscape ? H * 0.03 : H * SAFE_ZONE.bottom;
   const safeAreaH  = H - safeTop - safeBottom;
   const offsetY = H * (state.calOffsetY / 100);
   let calY;
@@ -503,6 +505,7 @@ function drawCalendar(W, H) {
   } else {
     calY = safeTop + (safeAreaH - calH) / 2 - H * 0.14 + offsetY;
   }
+  calY = Math.max(safeTop, Math.min(safeTop + safeAreaH - calH, calY));
 
   // 라이트 모드(어두운 글씨) ↔ 다크 모드(밝은 글씨)
   const isLightText = state.textMode === 'light';
@@ -574,6 +577,17 @@ function drawCalendar(W, H) {
     ctx.fillStyle    = dateColor;
     const dateBaseY  = cy + fs.dateNum * 1.1;
     ctx.fillText(String(day), cx + cellW * 0.1, dateBaseY);
+
+    // 경기 시간 (날짜 바로 옆)
+    if (state.showGameTime === 'on' && games[day]?.time) {
+      const dateW      = ctx.measureText(String(day)).width;
+      ctx.font         = `400 ${fs.dateNum * 0.85}px 'Pretendard', sans-serif`;
+      ctx.textAlign    = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle    = isLightText ? 'rgba(0,0,0,0.45)' : 'rgba(255,255,255,0.60)';
+      ctx.fillText(games[day].time, cx + cellW * 0.1 + dateW + 4, dateBaseY - fs.dateNum * 0.3 - 2);
+      ctx.textBaseline = 'alphabetic';
+    }
 
     const game = games[day];
     if (!game) continue;
@@ -657,6 +671,7 @@ function drawCalendar(W, H) {
       ctx.fillText(TEAM_SHORT[game.opponent] || game.opponent, circleX, circleY);
       ctx.textBaseline = 'alphabetic';
     }
+
   }
 
   return { calX, calY, calW, calH };
@@ -898,8 +913,10 @@ bindToggle('[data-iconstyle]', btn => {
 // 달력 세로 위치 슬라이더
 document.querySelectorAll('.cal-offset-slider').forEach(slider => {
   slider.addEventListener('input', () => {
-    state.calOffsetY = Number(slider.value);
-    document.querySelectorAll('.cal-offset-slider').forEach(s => { s.value = state.calOffsetY; });
+    let v = Number(slider.value);
+    if (Math.abs(v) <= 2) v = 0;  // 중앙 스냅
+    state.calOffsetY = v;
+    document.querySelectorAll('.cal-offset-slider').forEach(s => { s.value = v; });
     render();
   });
 });
@@ -946,6 +963,60 @@ bindToggle('[data-homeawayshow]', btn => {
   document.querySelectorAll('[data-homeawayshow]').forEach(b => b.classList.remove('active'));
   document.querySelectorAll(`[data-homeawayshow="${btn.dataset.homeawayshow}"]`).forEach(b => b.classList.add('active'));
   state.homeAwayShow = btn.dataset.homeawayshow;
+  render();
+});
+
+const guideX = document.getElementById('center-guide-x');
+const guideY = document.getElementById('center-guide-y');
+let guideXTimer = null, guideYTimer = null;
+
+function flashGuide(el, timerRef, isCenter) {
+  if (!el) return timerRef;
+  clearTimeout(timerRef);
+  if (isCenter) {
+    el.classList.add('visible');
+    return setTimeout(() => el.classList.remove('visible'), 1200);
+  } else {
+    el.classList.remove('visible');
+    return null;
+  }
+}
+
+document.querySelectorAll('.cal-offset-slider-x').forEach(slider => {
+  slider.addEventListener('input', () => {
+    let v = Number(slider.value);
+    if (Math.abs(v) <= 2) v = 0;
+    state.calOffsetX = v;
+    document.querySelectorAll('.cal-offset-slider-x').forEach(s => { s.value = v; });
+    guideXTimer = flashGuide(guideX, guideXTimer, v === 0);
+    render();
+  });
+});
+document.querySelectorAll('.cal-offset-reset-x').forEach(btn => {
+  btn.addEventListener('click', () => {
+    state.calOffsetX = 0;
+    document.querySelectorAll('.cal-offset-slider-x').forEach(s => { s.value = 0; });
+    guideXTimer = flashGuide(guideX, guideXTimer, true);
+    render();
+  });
+});
+
+document.querySelectorAll('.cal-offset-slider').forEach(slider => {
+  slider.addEventListener('input', () => {
+    guideYTimer = flashGuide(guideY, guideYTimer, Number(slider.value) === 0);
+  });
+});
+document.querySelectorAll('.cal-offset-reset').forEach(btn => {
+  btn.addEventListener('click', () => {
+    guideYTimer = flashGuide(guideY, guideYTimer, true);
+  });
+});
+
+
+bindToggle('[data-showgametime]', btn => {
+  document.querySelectorAll('[data-showgametime]').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll(`[data-showgametime="${btn.dataset.showgametime}"]`).forEach(b => b.classList.add('active'));
+  state.showGameTime = btn.dataset.showgametime;
   render();
 });
 
