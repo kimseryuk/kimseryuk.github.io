@@ -71,13 +71,13 @@
             <div class="team-grid">
               <button class="team-btn active" data-team="KIA">KIA</button>
               <button class="team-btn" data-team="LG">LG</button>
-              <button class="team-btn" data-team="Samsung">삼성</button>
-              <button class="team-btn" data-team="Doosan">두산</button>
-              <button class="team-btn" data-team="KT">KT</button>
-              <button class="team-btn" data-team="SSG">SSG</button>
-              <button class="team-btn" data-team="Lotte">롯데</button>
-              <button class="team-btn" data-team="NC">NC</button>
               <button class="team-btn" data-team="Hanwha">한화</button>
+              <button class="team-btn" data-team="SSG">SSG</button>
+              <button class="team-btn" data-team="Samsung">삼성</button>
+              <button class="team-btn" data-team="NC">NC</button>
+              <button class="team-btn" data-team="KT">KT</button>
+              <button class="team-btn" data-team="Lotte">롯데</button>
+              <button class="team-btn" data-team="Doosan">두산</button>
               <button class="team-btn" data-team="Kiwoom">키움</button>
             </div>
           </div>
@@ -615,7 +615,7 @@
 <script>
   (function () {
     var overlay = document.getElementById('dl-help-overlay');
-    function openModal(e) { e.preventDefault(); overlay.classList.add('is-open'); }
+    function openModal(e) { e.preventDefault(); overlay.classList.add('is-open'); if (typeof gtag === 'function') gtag('event', 'help_modal_open', { event_category: 'engagement', value: 1 }); }
     function closeModal() { overlay.classList.remove('is-open'); }
     ['download-help-btn', 'mobile-download-help-btn'].forEach(function (id) {
       var el = document.getElementById(id);

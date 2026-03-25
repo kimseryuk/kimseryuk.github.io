@@ -219,7 +219,8 @@ function getFilteredWallpapers() {
 }
 
 function buildBgFilterTabs() {
-  const usedTeams = [...new Set(wallpaperList.map(w => w.team).filter(Boolean))];
+  const TEAM_ORDER = ['KIA','LG','Hanwha','SSG','Samsung','NC','KT','Lotte','Doosan','Kiwoom'];
+  const usedTeams = TEAM_ORDER.filter(t => wallpaperList.some(w => w.team === t));
   const hasCommon = wallpaperList.some(w => !w.team);
   const filters = [
     { key: 'all', label: '전체' },
@@ -293,6 +294,7 @@ function renderBgSlider(list) {
           b.classList.toggle('active', b.dataset.path === item.path)
         );
         setSolidBgVisible(false);
+        track('bg_select', { event_label: item.name || item.path });
         loadBgImage(item);
       });
       slider.appendChild(btn);
@@ -720,7 +722,13 @@ function setMode(m) {
   render();
 }
 
+/* ─── GA4 이벤트 트래킹 헬퍼 ─────────────────────────── */
+function track(eventName, params) {
+  if (typeof gtag === 'function') gtag('event', eventName, { event_category: 'engagement', value: 1, ...params });
+}
+
 function setTeam(teamKey) {
+  track('team_select', { event_label: teamKey });
   state.team = teamKey;
   document.querySelectorAll('.team-btn').forEach(b =>
     b.classList.toggle('active', b.dataset.team === teamKey)
@@ -771,6 +779,7 @@ function bindToggle(selector, handler) {
 function handleBgUpload(e) {
   const file = e.target.files[0];
   if (!file) return;
+  track('bg_upload', { event_label: state.team });
   const img = new Image();
   img.onload = () => {
     document.querySelectorAll('.bg-thumb').forEach(b => b.classList.remove('active'));
@@ -789,6 +798,7 @@ function doDownload() {
   const team     = TEAM_SHORT[state.team] || state.team;
   const month    = String(state.month).padStart(2, '0');
   const filename = `kbo-2026-${month}-${team}.png`;
+  track('wallpaper_download', { event_label: `${team}_${month}_${state.ratio}` });
   canvas.toBlob(blob => {
     const url  = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -835,6 +845,7 @@ function doDownloadBg() {
   const team  = TEAM_SHORT[state.team] || state.team;
   const month = String(state.month).padStart(2, '0');
   const filename = `kbo-2026-${month}-${team}-bg.png`;
+  track('wallpaper_download', { event_label: `${team}_${month}_${state.ratio}_bg` });
   offCanvas.toBlob(blob => {
     const url  = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -894,6 +905,7 @@ bindToggle('[data-logostyle]', btn => {
   document.querySelectorAll('[data-logostyle]').forEach(b => b.classList.remove('active'));
   document.querySelectorAll(`[data-logostyle="${btn.dataset.logostyle}"]`).forEach(b => b.classList.add('active'));
   state.logoStyle = btn.dataset.logostyle;
+  track('logo_style_change', { event_label: btn.dataset.logostyle });
   render();
 });
 
@@ -1063,6 +1075,7 @@ bindToggle('[data-ratio]', btn => {
   document.querySelectorAll('[data-ratio]').forEach(b => b.classList.remove('active'));
   document.querySelectorAll(`[data-ratio="${btn.dataset.ratio}"]`).forEach(b => b.classList.add('active'));
   state.ratio = btn.dataset.ratio;
+  track('ratio_select', { event_label: btn.dataset.ratio });
   updateCalPosLabels();
   updateCalPosXVisibility();
   render();
@@ -1089,6 +1102,7 @@ document.getElementById('advanced-toggle')?.addEventListener('click', () => {
   const toggle = document.getElementById('advanced-toggle');
   const isOpen = panel.classList.toggle('open');
   toggle.classList.toggle('open', isOpen);
+  if (isOpen) track('advanced_panel_open', {});
 });
 
 document.querySelectorAll('.adv-tab').forEach(tab => {
