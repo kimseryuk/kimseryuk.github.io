@@ -709,6 +709,7 @@ function setMode(m) {
     state.ratio = 'r209';
   }
   updateCalPosLabels();
+  updateCalPosXVisibility();
   // 현재 선택된 배경이 새 플랫폼에서 유효하지 않으면 초기화
   const curPath = state.currentWallpaper?.path;
   const curPlatform = state.currentWallpaper?.platform;
