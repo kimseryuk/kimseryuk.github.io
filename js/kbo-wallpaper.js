@@ -975,7 +975,7 @@ function flashGuide(el, timerRef, isCenter) {
   clearTimeout(timerRef);
   if (isCenter) {
     el.classList.add('visible');
-    return setTimeout(() => el.classList.remove('visible'), 1200);
+    return setTimeout(() => el.classList.remove('visible'), 600);
   } else {
     el.classList.remove('visible');
     return null;
@@ -1054,11 +1054,19 @@ document.querySelectorAll('[data-mode]').forEach(btn =>
 );
 
 // 캔버스 비율
+function updateCalPosXVisibility() {
+  const isPC = CANVAS_RATIOS[state.ratio].w > CANVAS_RATIOS[state.ratio].h;
+  document.querySelectorAll('.calposx-ctrl').forEach(el => {
+    el.style.display = isPC ? '' : 'none';
+  });
+}
+
 bindToggle('[data-ratio]', btn => {
   document.querySelectorAll('[data-ratio]').forEach(b => b.classList.remove('active'));
   document.querySelectorAll(`[data-ratio="${btn.dataset.ratio}"]`).forEach(b => b.classList.add('active'));
   state.ratio = btn.dataset.ratio;
   updateCalPosLabels();
+  updateCalPosXVisibility();
   render();
 });
 
