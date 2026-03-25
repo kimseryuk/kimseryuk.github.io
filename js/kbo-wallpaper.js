@@ -587,7 +587,10 @@ function drawCalendar(W, H) {
       ctx.textAlign    = 'left';
       ctx.textBaseline = 'middle';
       ctx.fillStyle    = isLightText ? 'rgba(0,0,0,0.45)' : 'rgba(255,255,255,0.60)';
-      ctx.fillText(games[day].time, cx + cellW * 0.1 + dateW + 4, dateBaseY - fs.dateNum * 0.3 - 2);
+      const [hh, mm] = games[day].time.split(':').map(Number);
+      const h12 = hh % 12 || 12;
+      const timeStr = `${h12}:${String(mm).padStart(2,'0')}`;
+      ctx.fillText(timeStr, cx + cellW * 0.1 + dateW + 8, dateBaseY - fs.dateNum * 0.25 - 2);
       ctx.textBaseline = 'alphabetic';
     }
 
