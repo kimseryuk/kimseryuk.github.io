@@ -111,12 +111,12 @@ function initFirebase() {
     if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
     db = firebase.firestore();
 
-    // _stats 구독만 유지 — 총 투표수 실시간 (1 doc, 저비용)
-    db.collection(COLLECTION).doc('_stats').onSnapshot(doc => {
+    // 총 투표수: onSnapshot 대신 1회 get() — 실시간 불필요
+    db.collection(COLLECTION).doc('_stats').get().then(doc => {
       totalVotes = doc.data()?.totalVotes || 0;
       const el = document.getElementById('total-vote-count');
       if (el) el.textContent = totalVotes.toLocaleString();
-    }, err => console.error('[vote] _stats 오류:', err));
+    }).catch(err => console.error('[vote] _stats 오류:', err));
 
   } catch (err) {
     console.error('[vote] Firebase 초기화 실패:', err);
