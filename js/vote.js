@@ -1,19 +1,19 @@
 // ── vote.js — KIA 내야진 투표 ─────────────────────────────
-// 보딩 → 투표 → 결과 페이지 흐름
 
 // ─── Firebase 설정 ────────────────────────────────────────
 const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyC8095GbmPyLRr381A2ddMCQFDdg-fvlNA",
-  authDomain: "baseballvote.firebaseapp.com",
-  projectId: "baseballvote",
-  storageBucket: "baseballvote.firebasestorage.app",
+  apiKey:            "AIzaSyC8095GbmPyLRr381A2ddMCQFDdg-fvlNA",
+  authDomain:        "baseballvote.firebaseapp.com",
+  projectId:         "baseballvote",
+  storageBucket:     "baseballvote.firebasestorage.app",
   messagingSenderId: "8390526421",
-  appId: "1:8390526421:web:37f3f0fa1dca3496d3a95c",
-  measurementId: "G-8BE0GMLFLF"
+  appId:             "1:8390526421:web:37f3f0fa1dca3496d3a95c",
+  measurementId:     "G-8BE0GMLFLF"
 };
 
 const COLLECTION     = 'kia-vote-2026';
-const LOG_COLLECTION = 'kia-vote-2026-logs';  // 개인 제출 기록
+const LOG_COLLECTION = 'kia-vote-2026-logs';
+const VOTE_LIMIT     = 20;
 
 // ─── 상수 ─────────────────────────────────────────────────
 const DEADLINE = new Date('2026-03-31T23:59:59+09:00');
@@ -26,38 +26,34 @@ const POSITIONS = [
 ];
 
 // ─── 상태 ─────────────────────────────────────────────────
-let players        = [];
-let currentTier    = '1군';
-let lineup         = emptyLineup();
-let draggedPlayer  = null;
-let votes          = {};
-let db             = null;
-let totalVotes     = 0;
+let players       = [];
+let currentTier   = '1군';
+let lineup        = emptyLineup();
+let draggedPlayer = null;
+let votes         = {};
+let db            = null;
+let totalVotes    = 0;
 
 function emptyLineup() {
   return {
-    SS:  { first: null, second: null },
+    SS:   { first: null, second: null },
     '2B': { first: null, second: null },
     '3B': { first: null, second: null },
     '1B': { first: null, second: null },
   };
 }
 
-// ─── GA4 이벤트 ───────────────────────────────────────────
-function track(eventName, params = {}) {
-  if (typeof gtag === 'function') {
-    gtag('event', eventName, params);
-  }
+// ─── GA4 ──────────────────────────────────────────────────
+function track(name, params = {}) {
+  if (typeof gtag === 'function') gtag('event', name, params);
 }
 
 // ─── 초기화 ───────────────────────────────────────────────
 async function init() {
   const closed = isVotingClosed();
 
-  // 헤더 LIVE 배지
   if (closed) {
-    const badge = document.getElementById('vote-live-badge');
-    if (badge) badge.style.display = 'none';
+    document.getElementById('vote-live-badge')?.style.setProperty('display', 'none');
   }
 
   // 선수 데이터 로드
@@ -69,16 +65,9 @@ async function init() {
     return;
   }
 
-  // Firebase 초기화 (결과 페이지에서도 필요)
+  // Firebase 초기화
   initFirebase();
 
-  // 결과 미리보기 모드 (?preview)
-  if (new URLSearchParams(location.search).has('preview')) {
-    showResult(true);
-    return;
-  }
-
-  // 보딩 페이지 분기
   if (closed) {
     showPage('page-closed');
     track('vote_closed_view');
@@ -89,17 +78,36 @@ async function init() {
     return;
   }
 
-  // 오프라인 체크
+  // 결과 미리보기 모드
+  if (new URLSearchParams(location.search).has('preview')) {
+    showResult(true);
+    return;
+  }
+
   if (!navigator.onLine) showToast('인터넷 연결을 확인해주세요');
 
-  // 카운트다운
+  // 시작 버튼을 '투표 준비 중...'으로 잠시 비활성화
+  const startBtn = document.getElementById('btn-start');
+  const origHTML = startBtn.innerHTML;
+  startBtn.disabled = true;
+  startBtn.textContent = '투표 준비 중...';
+
+  // 익명 로그인 (배경에서 조용히)
+  firebase.auth().signInAnonymously().catch(err => {
+    console.warn('[vote] 익명 인증 실패:', err);
+  });
+
+  firebase.auth().onAuthStateChanged(user => {
+    if (user && startBtn.disabled) {
+      startBtn.disabled = false;
+      startBtn.innerHTML = origHTML;
+    }
+  });
+
   startCountdown();
+  startBtn.addEventListener('click', startVote);
+  document.getElementById('btn-ranking-preview')?.addEventListener('click', openRankingModal);
 
-  // 보딩 이벤트
-  document.getElementById('btn-start').addEventListener('click', startVote);
-  document.getElementById('btn-ranking-preview').addEventListener('click', openRankingModal);
-
-  // 오프라인 감지
   window.addEventListener('offline', () => showToast('인터넷 연결이 끊겼습니다'));
   window.addEventListener('online',  () => showToast('인터넷이 복원되었습니다'));
 
@@ -112,42 +120,33 @@ function isVotingClosed() {
 
 // ─── Firebase ─────────────────────────────────────────────
 function initFirebase() {
-  if (FIREBASE_CONFIG.apiKey === 'YOUR_API_KEY') {
-    console.warn('[vote] Firebase 설정값을 vote.js에 입력해주세요');
-    return;
-  }
   try {
     if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
     db = firebase.firestore();
 
-
-    firebase.auth().signInAnonymously()
-      .then(() => {
-        console.log("익명 로그인 성공! UID:", firebase.auth().currentUser.uid);
-      })
-      .catch(err => console.error('[vote] 로그인 실패:', err));
-    // ────────────────────────────────────────────────────────
-
-    // 투표 집계 구독
-    db.collection(COLLECTION).onSnapshot(
-      snapshot => {
-        votes = {};
-        snapshot.forEach(doc => {
-          if (doc.id !== '_stats') votes[doc.id] = doc.data().score || 0;
-        });
-        renderRanking();
-      },
-      err => console.error('[vote] Firestore 오류:', err)
-    );
-
-    // 총 투표수 구독
+    // _stats 구독만 유지 — 총 투표수 실시간 (1 doc, 저비용)
     db.collection(COLLECTION).doc('_stats').onSnapshot(doc => {
       totalVotes = doc.data()?.totalVotes || 0;
       const el = document.getElementById('total-vote-count');
       if (el) el.textContent = totalVotes.toLocaleString();
-    });
+    }, err => console.error('[vote] _stats 오류:', err));
+
   } catch (err) {
     console.error('[vote] Firebase 초기화 실패:', err);
+  }
+}
+
+// 랭킹 데이터를 필요할 때만 가져옴 (onSnapshot 대신 get — 비용 절감)
+async function loadVotes() {
+  if (!db) return;
+  try {
+    const snap = await db.collection(COLLECTION).get();
+    votes = {};
+    snap.forEach(doc => {
+      if (doc.id !== '_stats') votes[doc.id] = doc.data().score || 0;
+    });
+  } catch (err) {
+    console.error('[vote] 랭킹 로드 오류:', err);
   }
 }
 
@@ -163,7 +162,6 @@ function startVote() {
   track('vote_start');
   showPage('page-vote');
 
-  // 선수 풀 탭
   document.querySelectorAll('.pool-tab').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.pool-tab').forEach(b => b.classList.remove('active'));
@@ -174,10 +172,7 @@ function startVote() {
     });
   });
 
-  // 슬롯 드롭 이벤트
   initSlotDropTargets();
-
-  // 제출 버튼
   document.getElementById('btn-submit').addEventListener('click', submitVote);
 
   renderPool();
@@ -189,10 +184,8 @@ function renderPool() {
   const grid = document.getElementById('pool-grid');
   grid.innerHTML = '';
 
-  const filtered = players.filter(p => p.tier === currentTier);
-
-  filtered.forEach(player => {
-    const usage = getUsage(player.id);
+  players.filter(p => p.tier === currentTier).forEach(player => {
+    const usage  = getUsage(player.id);
     const isFull = usage >= 2;
 
     const card = document.createElement('div');
@@ -284,13 +277,7 @@ function dropToSlot(posId, rank) {
     return;
   }
 
-  track('player_placed', {
-    pos: posId,
-    rank,
-    player_name: draggedPlayer.name,
-    player_id: draggedPlayer.id,
-  });
-
+  track('player_placed', { pos: posId, rank, player_name: draggedPlayer.name });
   lineup[posId][rank] = draggedPlayer;
   draggedPlayer = null;
   renderPool();
@@ -311,114 +298,119 @@ function checkComplete() {
   const wasComplete = btn.classList.contains('is-active');
   btn.disabled = !complete;
   btn.classList.toggle('is-active', complete);
-  if (guide) guide.textContent = complete ? '완성! 버튼을 눌러 확정하세요 🎉' : `${filled} / 8 슬롯 완성`;
+  if (guide) guide.textContent = complete
+    ? '완성! 버튼을 눌러 확정하세요 🎉'
+    : `${filled} / 8 슬롯 완성`;
 
-  if (complete && !wasComplete) {
-    track('lineup_complete', buildLineupParams());
-  }
+  if (complete && !wasComplete) track('lineup_complete', buildLineupParams());
 }
 
-// GA4에 넘길 라인업 파라미터 빌더
 function buildLineupParams() {
   return {
-    ss_first:   lineup.SS?.first?.name  || null,
-    ss_second:  lineup.SS?.second?.name || null,
-    sb_first:   lineup['2B']?.first?.name  || null,
-    sb_second:  lineup['2B']?.second?.name || null,
-    tb_first:   lineup['3B']?.first?.name  || null,
-    tb_second:  lineup['3B']?.second?.name || null,
-    ob_first:   lineup['1B']?.first?.name  || null,
-    ob_second:  lineup['1B']?.second?.name || null,
+    ss_first:  lineup.SS?.first?.name    || null,
+    ss_second: lineup.SS?.second?.name   || null,
+    sb_first:  lineup['2B']?.first?.name  || null,
+    sb_second: lineup['2B']?.second?.name || null,
+    tb_first:  lineup['3B']?.first?.name  || null,
+    tb_second: lineup['3B']?.second?.name || null,
+    ob_first:  lineup['1B']?.first?.name  || null,
+    ob_second: lineup['1B']?.second?.name || null,
   };
+}
+
+// ─── 투표 횟수 제한 확인 ──────────────────────────────────
+async function checkVoteLimit() {
+  const uid = firebase.auth().currentUser?.uid;
+  if (!uid || !db) return true; // 인증 실패 시 허용
+  try {
+    const snap = await db.collection(LOG_COLLECTION)
+      .where('uid', '==', uid)
+      .limit(VOTE_LIMIT + 1)
+      .get();
+    return snap.size < VOTE_LIMIT;
+  } catch {
+    return true; // 조회 실패 시 허용
+  }
 }
 
 // ─── 투표 제출 ────────────────────────────────────────────
 async function submitVote() {
-  if (!db) { showToast('데이터베이스에 연결되지 않았습니다'); return; }
-
-
-  // ── 💡 추가: 20번 제한 체크 로직 ──
-  try {
-    const user = firebase.auth().currentUser;
-    if (!user) { showToast('인증이 필요합니다'); return; }
-
-    
-    const myVotes = await db.collection(LOG_COLLECTION)
-      .where('uid', '==', user.uid)
-      .get();
-
-    // 20번까지만 하자
-    if (myVotes.size >= 20) {
-      showToast('열정이 대단하시네요! 하지만 투표는 인당 20번만 가능합니다. ⚾️');
-      track('vote_limit_exceeded', { uid: user.uid });
-      return; // 여기서 함수 종료 (DB 저장 안 함)
-    }
-  } catch (err) {
-    console.error('제한 체크 중 오류:', err);
-  }
-
-
+  if (!db)               { showToast('데이터베이스에 연결되지 않았습니다'); return; }
   if (!navigator.onLine) { showToast('인터넷 연결을 확인해주세요'); return; }
 
   track('vote_submit_click', buildLineupParams());
 
   const btn = document.getElementById('btn-submit');
-  btn.disabled  = true;
+  btn.disabled    = true;
   btn.textContent = '집계 중...';
 
-  try {
-    const batch = db.batch();
+  // 횟수 제한 확인
+  const allowed = await checkVoteLimit();
+  if (!allowed) {
+    showToast(`투표는 최대 ${VOTE_LIMIT}회까지 가능해요`);
+    track('vote_limit_reached');
+    btn.disabled    = false;
+    btn.textContent = '나만의 내야진 확정하기';
+    btn.classList.add('is-active');
+    return;
+  }
 
-    // 포지션별 점수 증가
+  try {
+    const batch      = db.batch();
+    const FieldValue = firebase.firestore.FieldValue;
+
+    // 포지션별 점수
     POSITIONS.forEach(({ id }) => {
       const { first, second } = lineup[id];
       if (first) {
-        const ref = db.collection(COLLECTION).doc(`${id}_${first.id}`);
-        batch.set(ref, { score: firebase.firestore.FieldValue.increment(2) }, { merge: true });
+        batch.set(
+          db.collection(COLLECTION).doc(`${id}_${first.id}`),
+          { score: FieldValue.increment(2) }, { merge: true }
+        );
       }
       if (second) {
-        const ref = db.collection(COLLECTION).doc(`${id}_${second.id}`);
-        batch.set(ref, { score: firebase.firestore.FieldValue.increment(1) }, { merge: true });
+        batch.set(
+          db.collection(COLLECTION).doc(`${id}_${second.id}`),
+          { score: FieldValue.increment(1) }, { merge: true }
+        );
       }
     });
 
     // 총 투표수 +1
     batch.set(
       db.collection(COLLECTION).doc('_stats'),
-      { totalVotes: firebase.firestore.FieldValue.increment(1) },
-      { merge: true }
+      { totalVotes: FieldValue.increment(1) }, { merge: true }
     );
 
     await batch.commit();
 
-    // 개인 제출 기록 저장 (별도 — 실패해도 투표는 완료)
+    // 개인 제출 기록 (별도 — 실패해도 투표는 완료)
+    const uid = firebase.auth().currentUser?.uid || null;
     db.collection(LOG_COLLECTION).add({
-      // 👈 이 줄을 추가하세요! 현재 투표자의 고유 ID를 이름표로 붙이는 겁니다.
-      uid: firebase.auth().currentUser.uid, 
-      
-      ts: firebase.firestore.FieldValue.serverTimestamp(),
-      SS_first:         lineup.SS?.first?.id   || null,
-      SS_second:        lineup.SS?.second?.id  || null,
-      b2_first:         lineup['2B']?.first?.id  || null,
-      b2_second:        lineup['2B']?.second?.id || null,
-      b3_first:         lineup['3B']?.first?.id  || null,
-      b3_second:        lineup['3B']?.second?.id || null,
-      b1_first:         lineup['1B']?.first?.id  || null,
-      b1_second:        lineup['1B']?.second?.id || null,
-      SS_first_name:    lineup.SS?.first?.name   || null,
-      SS_second_name:   lineup.SS?.second?.name  || null,
-      b2_first_name:    lineup['2B']?.first?.name  || null,
-      b2_second_name:   lineup['2B']?.second?.name || null,
-      b3_first_name:    lineup['3B']?.first?.name  || null,
-      b3_second_name:   lineup['3B']?.second?.name || null,
-      b1_first_name:    lineup['1B']?.first?.name  || null,
-      b1_second_name:   lineup['1B']?.second?.name || null,
-    }).catch(err => console.warn('[vote] 로그 저장 실패:', err));
+      uid,
+      ts:             FieldValue.serverTimestamp(),
+      SS_first:       lineup.SS?.first?.id    || null,
+      SS_second:      lineup.SS?.second?.id   || null,
+      b2_first:       lineup['2B']?.first?.id   || null,
+      b2_second:      lineup['2B']?.second?.id  || null,
+      b3_first:       lineup['3B']?.first?.id   || null,
+      b3_second:      lineup['3B']?.second?.id  || null,
+      b1_first:       lineup['1B']?.first?.id   || null,
+      b1_second:      lineup['1B']?.second?.id  || null,
+      SS_first_name:  lineup.SS?.first?.name    || null,
+      SS_second_name: lineup.SS?.second?.name   || null,
+      b2_first_name:  lineup['2B']?.first?.name   || null,
+      b2_second_name: lineup['2B']?.second?.name  || null,
+      b3_first_name:  lineup['3B']?.first?.name   || null,
+      b3_second_name: lineup['3B']?.second?.name  || null,
+      b1_first_name:  lineup['1B']?.first?.name   || null,
+      b1_second_name: lineup['1B']?.second?.name  || null,
+    }).catch(err => console.warn('[vote] 로그 저장 실패 (투표는 완료됨):', err));
 
     track('vote_success', { ...buildLineupParams(), total_votes: totalVotes + 1 });
-
     showResult(false);
     checkEasterEgg();
+
   } catch (err) {
     console.error('[vote] 제출 오류:', err);
     track('vote_error', { error_message: err.message });
@@ -429,25 +421,22 @@ async function submitVote() {
   }
 }
 
-// ─── 순위 팝업 ────────────────────────────────────────────
-function openRankingModal() {
-  const modal = document.getElementById('modal-ranking');
-  modal.classList.add('is-open');
-  modal.setAttribute('aria-hidden', 'false');
+// ─── 결과 페이지 ──────────────────────────────────────────
+function showResult(viewOnly) {
+  showPage('page-result');
+  if (!viewOnly) renderMyLineup();
+  else document.getElementById('my-lineup-grid').closest('.my-lineup').style.display = 'none';
 
-  renderRankingInto('modal-ranking-grid');
-  animateCount('modal-total-count', totalVotes);
+  loadVotes().then(() => renderRanking());
+  animateResultTotal();
+  track('result_view', { view_only: viewOnly });
 
-  track('ranking_modal_open');
-
-  document.getElementById('btn-modal-close').onclick = closeRankingModal;
-  modal.querySelector('.modal-ranking__backdrop').onclick = closeRankingModal;
+  document.getElementById('btn-reset').addEventListener('click', resetVote);
+  document.getElementById('btn-share').addEventListener('click', shareResult);
 }
 
-function closeRankingModal() {
-  const modal = document.getElementById('modal-ranking');
-  modal.classList.remove('is-open');
-  modal.setAttribute('aria-hidden', 'true');
+function animateResultTotal() {
+  animateCount('result-total-count', totalVotes);
 }
 
 function animateCount(elId, target) {
@@ -455,10 +444,9 @@ function animateCount(elId, target) {
   if (!el) return;
   if (target === 0) { el.textContent = '0'; return; }
   const duration = Math.min(1000 + target * 8, 2000);
-  const start = performance.now();
+  const start    = performance.now();
   function step(now) {
-    const elapsed  = now - start;
-    const progress = Math.min(elapsed / duration, 1);
+    const progress = Math.min((now - start) / duration, 1);
     const eased    = 1 - Math.pow(1 - progress, 3);
     el.textContent = Math.round(target * eased).toLocaleString();
     if (progress < 1) {
@@ -473,25 +461,8 @@ function animateCount(elId, target) {
   requestAnimationFrame(step);
 }
 
-// ─── 결과 페이지 ──────────────────────────────────────────
-function showResult(viewOnly) {
-  showPage('page-result');
-  if (!viewOnly) renderMyLineup();
-  else document.getElementById('my-lineup-grid').closest('.my-lineup').style.display = 'none';
-  renderRanking();
-  animateResultTotal();
-  track('result_view', { view_only: viewOnly });
-  document.getElementById('btn-reset').addEventListener('click', resetVote);
-  document.getElementById('btn-share').addEventListener('click', shareResult);
-}
-
-function animateResultTotal() {
-  animateCount('result-total-count', totalVotes);
-}
-
 function renderMyLineup() {
-  const container = document.getElementById('my-lineup-grid');
-
+  const container  = document.getElementById('my-lineup-grid');
   const playerCard = (player, rank) => {
     if (!player) return '';
     const imgHtml = player.img
@@ -504,10 +475,8 @@ function renderMyLineup() {
           <span class="my-badge my-badge--${rank}">${rank === 'first' ? '주전' : '백업'}</span>
           <span class="my-player__name">${player.name}</span>
         </div>
-      </div>
-    `;
+      </div>`;
   };
-
   container.innerHTML = POSITIONS.map(({ id, label }) => `
     <div class="my-pos-row">
       <div class="my-pos-label">${label}</div>
@@ -524,11 +493,9 @@ function checkEasterEgg() {
   const has2BSeonbin = lineup['2B'].first?.id === 'p3' || lineup['2B'].second?.id === 'p3';
   if (!has2BSeonbin) {
     track('easter_egg_triggered', { missing_pos: '2B', player: '김선빈' });
-
     const seonbin = players.find(p => p.id === 'p3');
-    const imgEl = document.getElementById('easter-egg-img');
+    const imgEl   = document.getElementById('easter-egg-img');
     if (imgEl && seonbin?.img) imgEl.src = seonbin.img;
-
     setTimeout(() => {
       const el = document.getElementById('easter-egg');
       el?.classList.add('is-visible');
@@ -537,10 +504,27 @@ function checkEasterEgg() {
   }
 }
 
-function renderRankingInto(containerId) {
-  renderRanking(containerId);
+// ─── 순위 팝업 ────────────────────────────────────────────
+function openRankingModal() {
+  const modal = document.getElementById('modal-ranking');
+  modal.classList.add('is-open');
+  modal.setAttribute('aria-hidden', 'false');
+  track('ranking_modal_open');
+
+  loadVotes().then(() => renderRanking('modal-ranking-grid'));
+  animateCount('modal-total-count', totalVotes);
+
+  document.getElementById('btn-modal-close').onclick     = closeRankingModal;
+  modal.querySelector('.modal-ranking__backdrop').onclick = closeRankingModal;
 }
 
+function closeRankingModal() {
+  const modal = document.getElementById('modal-ranking');
+  modal.classList.remove('is-open');
+  modal.setAttribute('aria-hidden', 'true');
+}
+
+// ─── 랭킹 렌더 ────────────────────────────────────────────
 function renderRanking(containerId = 'ranking-grid') {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -554,8 +538,7 @@ function renderRanking(containerId = 'ranking-grid') {
     const top3 = Object.entries(votes)
       .filter(([key]) => key.startsWith(id + '_'))
       .map(([key, score]) => {
-        const playerId = key.slice(id.length + 1);
-        const player   = players.find(p => p.id === playerId);
+        const player = players.find(p => p.id === key.slice(id.length + 1));
         return player ? { ...player, score } : null;
       })
       .filter(Boolean)
@@ -568,14 +551,13 @@ function renderRanking(containerId = 'ranking-grid') {
         ${top3.length === 0
           ? '<div class="rank-empty">—</div>'
           : top3.map((p, i) => `
-            <div class="rank-row ${i === 0 ? 'rank-row--top' : ''}">
-              <span class="rank-num">${i + 1}</span>
-              <span class="rank-name">${p.name}</span>
-              <span class="rank-score">${p.score}점</span>
-            </div>`).join('')
+              <div class="rank-row ${i === 0 ? 'rank-row--top' : ''}">
+                <span class="rank-num">${i + 1}</span>
+                <span class="rank-name">${p.name}</span>
+                <span class="rank-score">${p.score}점</span>
+              </div>`).join('')
         }
-      </div>
-    `;
+      </div>`;
   }).join('');
 }
 
@@ -587,21 +569,16 @@ function resetVote() {
 
 function shareResult() {
   track('share_click', buildLineupParams());
-
   const lines = POSITIONS.map(({ id, label }) =>
     `${label}: ${lineup[id].first?.name || '—'} / ${lineup[id].second?.name || '—'}`
   ).join('\n');
   const text = `KIA 타이거즈 내야진 투표\n나의 픽:\n${lines}\n\n함께 투표해요!`;
-
   if (navigator.share) {
     track('share_native');
     navigator.share({ title: '내야진 투표', text, url: window.location.href }).catch(() => {});
   } else {
     navigator.clipboard?.writeText(window.location.href)
-      .then(() => {
-        track('share_clipboard');
-        showToast('링크가 복사되었습니다');
-      })
+      .then(() => { track('share_clipboard'); showToast('링크가 복사되었습니다'); })
       .catch(() => showToast('공유 기능이 지원되지 않습니다'));
   }
 }
@@ -624,7 +601,7 @@ function initMouseDrag(card, player) {
 function initSlotDropTargets() {
   document.querySelectorAll('.slot').forEach(slot => {
     slot.addEventListener('dragover',  e => { e.preventDefault(); slot.classList.add('is-dragover'); });
-    slot.addEventListener('dragleave', ()=> slot.classList.remove('is-dragover'));
+    slot.addEventListener('dragleave', ()  => slot.classList.remove('is-dragover'));
     slot.addEventListener('drop', e => {
       e.preventDefault();
       slot.classList.remove('is-dragover');
@@ -640,9 +617,9 @@ let touchStartX = 0, touchStartY = 0;
 
 function initTouchDrag(card, player) {
   card.addEventListener('touchstart', e => {
-    touchActive  = false;
-    touchStartX  = e.touches[0].clientX;
-    touchStartY  = e.touches[0].clientY;
+    touchActive = false;
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
   }, { passive: true });
 
   card.addEventListener('touchmove', e => {
@@ -663,7 +640,6 @@ function initTouchDrag(card, player) {
       e.preventDefault();
       ghost.style.left = t.clientX + 'px';
       ghost.style.top  = t.clientY + 'px';
-
       ghost.style.display = 'none';
       const under    = document.elementFromPoint(t.clientX, t.clientY);
       ghost.style.display = '';
@@ -677,13 +653,11 @@ function initTouchDrag(card, player) {
   card.addEventListener('touchend', e => {
     if (!touchActive) return;
     const t = e.changedTouches[0];
-
     ghost.classList.remove('is-active');
     document.querySelectorAll('.slot').forEach(s =>
       s.classList.remove('is-droptarget', 'is-dragover')
     );
     touchActive = false;
-
     ghost.style.display = 'none';
     const under      = document.elementFromPoint(t.clientX, t.clientY);
     ghost.style.display = '';
@@ -697,7 +671,6 @@ function initTouchDrag(card, player) {
 function startCountdown() {
   const el = document.getElementById('countdown');
   if (!el) return;
-
   function update() {
     const diff = DEADLINE - new Date();
     if (diff <= 0) { el.textContent = '마감'; return; }
