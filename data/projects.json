@@ -1,5 +1,13 @@
 [
   {
+    "title": "나만의 내야진 투표",
+    "desc": "2026 KIA 내야진 주전/백업을 직접 골라보세요. 3월 31일 마감!",
+    "thumb": "thumbs/vote.png",
+    "url": "pages/vote.html",
+    "tags": ["투표", "KIA", "2026"],
+    "updated": "2026.03"
+  },
+  {
     "title": "Road To Top",
     "desc": "2021~2024 KIA 타이거즈 시즌 타임라인",
     "thumb": "thumbs/kia-timeline.png",

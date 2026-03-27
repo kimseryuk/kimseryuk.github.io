@@ -1,0 +1,912 @@
+// ─── vote.scss — KIA 내야진 투표 ──────────────────────────
+// 흰색 배경 · 모바일 전용 · KIA 레드 테마
+// Compile: sass css/vote.scss css/vote.css
+
+// ─── 토큰 ─────────────────────────────────────────────────
+$red:          #C70125;
+$red-dark:     #A5001F;
+$red-soft:     #FFF0F2;
+$red-border:   #FCCCD3;
+$black:        #111111;
+$gray-dark:    #444444;
+$gray:         #767676;
+$gray-mid:     #AAAAAA;
+$gray-light:   #F5F5F5;
+$border:       #E8E8E8;
+$white:        #FFFFFF;
+
+$font: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+$r-s:  8px;
+$r-m:  12px;
+$r-l:  16px;
+$r-xl: 20px;
+$r-f:  9999px;
+
+// ─── 베이스 ───────────────────────────────────────────────
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-family: $font;
+  background: $white;
+  color: $black;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  background: $white;
+}
+
+a    { color: inherit; text-decoration: none; }
+button { border: none; background: none; cursor: pointer; font-family: $font; color: inherit; }
+img  { display: block; object-fit: cover; }
+
+// ─── 페이지 전환 ──────────────────────────────────────────
+.page      { display: none; }
+.page.active { display: block; }
+
+// ─── 헤더 ─────────────────────────────────────────────────
+.vote-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 48px;
+  background: $white;
+  border-bottom: 1px solid $border;
+
+  &.on-dark {
+    background: $red;
+    border-bottom-color: $red-dark;
+
+    .vote-back { color: rgba($white, 0.8); }
+    .vote-back svg { fill: rgba($white, 0.8); }
+    .vote-back:hover { color: $white; }
+    .vote-live { color: $white; }
+    .vote-live__dot { background: $white; }
+  }
+}
+
+.vote-back {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: $gray;
+  transition: color 0.15s;
+
+  svg { width: 14px; height: 14px; fill: currentColor; }
+  &:hover { color: $black; }
+}
+
+.vote-live {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: $red;
+
+  &__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: $r-f;
+    background: $red;
+    animation: blink 1.5s infinite;
+  }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.25; }
+}
+
+// ─── 보딩 페이지 ──────────────────────────────────────────
+.landing-hero {
+  background: $red;
+  padding: 40px 24px 36px;
+  color: $white;
+
+  &__eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    opacity: 0.7;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  &__title {
+    font-size: 48px;
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  &__sub {
+    font-size: 14px;
+    font-weight: 400;
+    opacity: 0.8;
+  }
+}
+
+.landing-body {
+  padding: 28px 20px 48px;
+}
+
+.landing-info {
+  border: 1.5px solid $border;
+  border-radius: $r-l;
+  overflow: hidden;
+  margin-bottom: 24px;
+
+  &__row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 13px 16px;
+    border-bottom: 1px solid $border;
+
+    &:last-child { border-bottom: none; }
+    &--deadline { background: $red-soft; }
+  }
+
+  &__label {
+    flex-shrink: 0;
+    width: 68px;
+    font-size: 11px;
+    font-weight: 600;
+    color: $gray;
+    padding-top: 2px;
+  }
+
+  &__value {
+    font-size: 13px;
+    font-weight: 500;
+    color: $gray-dark;
+    line-height: 1.5;
+
+    &--red { color: $red; font-weight: 700; }
+  }
+}
+
+.landing-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px;
+  border-radius: $r-f;
+  font-size: 10px;
+  font-weight: 700;
+
+  &--first  { background: $red; color: $white; }
+  &--second { background: $gray-light; color: $gray; border: 1px solid $border; }
+}
+
+.landing-sep { margin: 0 4px; color: $gray-mid; }
+
+.btn-start {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 17px;
+  border-radius: $r-xl;
+  background: $red;
+  color: $white;
+  font-size: 16px;
+  font-weight: 700;
+  box-shadow: 0 4px 16px rgba($red, 0.35);
+  transition: transform 0.15s, box-shadow 0.15s;
+
+  svg { fill: $white; flex-shrink: 0; }
+  &:active { transform: scale(0.98); box-shadow: 0 2px 8px rgba($red, 0.25); }
+}
+
+.landing-note {
+  margin-top: 14px;
+  text-align: center;
+  font-size: 12px;
+  color: $gray-mid;
+}
+
+// ─── 종료 페이지 ──────────────────────────────────────────
+.closed-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 40px;
+  min-height: 60vh;
+  text-align: center;
+}
+
+.closed-icon  { font-size: 64px; margin-bottom: 20px; }
+.closed-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+.closed-desc  { font-size: 13px; color: $gray; margin-bottom: 32px; }
+
+.btn-see-result {
+  padding: 13px 28px;
+  border-radius: $r-l;
+  background: $black;
+  color: $white;
+  font-size: 14px;
+  font-weight: 700;
+  transition: opacity 0.15s;
+
+  &:active { opacity: 0.8; }
+}
+
+// ─── 점수 가중치 바 ────────────────────────────────────────
+.score-weight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px;
+  background: $gray-light;
+  border-bottom: 1px solid $border;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  &__pts {
+    font-size: 12px;
+    font-weight: 600;
+    color: $gray-dark;
+  }
+
+  &__sep { font-size: 12px; color: $border; }
+  &__spacer { flex: 1; }
+
+  &__deadline {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: $gray;
+  }
+
+  &__countdown {
+    font-size: 11px;
+    font-weight: 700;
+    color: $red;
+  }
+}
+
+.score-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: $r-f;
+  font-size: 10px;
+  font-weight: 700;
+
+  &--first  { background: $red; color: $white; }
+  &--second { background: $white; color: $gray; border: 1px solid $border; }
+}
+
+// ─── 선수 풀 ──────────────────────────────────────────────
+.player-pool {
+  padding: 12px 16px 10px;
+  border-bottom: 1px solid $border;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+}
+
+.pool-tabs {
+  display: flex;
+  gap: 4px;
+  background: $gray-light;
+  border-radius: $r-m;
+  padding: 3px;
+}
+
+.pool-tab {
+  padding: 5px 14px;
+  border-radius: $r-s;
+  font-size: 12px;
+  font-weight: 600;
+  color: $gray;
+  transition: all 0.15s;
+
+  &.active {
+    background: $white;
+    color: $black;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+}
+
+.pool-hint {
+  font-size: 10px;
+  color: $gray-mid;
+  font-weight: 400;
+}
+
+.pool-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+// ─── 선수 카드 ────────────────────────────────────────────
+.player-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 4px 6px;
+  border: 1.5px solid $border;
+  border-radius: $r-m;
+  background: $white;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+
+  &:hover:not(.is-full) {
+    border-color: $red;
+    box-shadow: 0 2px 8px rgba($red, 0.15);
+  }
+
+  &:active:not(.is-full) { transform: scale(0.96); }
+
+  &.is-full {
+    opacity: 0.2;
+    filter: grayscale(1);
+    cursor: default;
+    pointer-events: none;
+  }
+
+  &.is-dragging { opacity: 0.35; transform: scale(0.94); }
+
+  &__img {
+    width: 34px;
+    height: 34px;
+    border-radius: $r-f;
+    margin-bottom: 5px;
+  }
+
+  &__num {
+    width: 34px;
+    height: 34px;
+    border-radius: $r-f;
+    background: $gray-light;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: $gray-dark;
+    margin-bottom: 5px;
+  }
+
+  &__name {
+    font-size: 11px;
+    font-weight: 600;
+    color: $black;
+    text-align: center;
+    line-height: 1.2;
+    margin-bottom: 5px;
+    word-break: keep-all;
+  }
+
+  &__dots {
+    display: flex;
+    gap: 3px;
+  }
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: $r-f;
+  background: $border;
+
+  &--on { background: $red; }
+}
+
+// ─── 다이아몬드 ───────────────────────────────────────────
+.diamond-area {
+  padding: 16px 14px;
+}
+
+.diamond {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.diamond-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+
+  &--top { justify-content: space-evenly; }
+}
+
+.pos-box {
+  flex: 1;
+  max-width: 156px;
+}
+
+.pos-label {
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: $gray;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid $border;
+}
+
+.pos-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+// ─── 슬롯 ─────────────────────────────────────────────────
+.slot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 88px;
+  padding: 8px 6px;
+  border: 1.5px dashed $border;
+  border-radius: $r-l;
+  background: $gray-light;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+
+  &.is-droptarget {
+    border-color: rgba($red, 0.3);
+    background: $red-soft;
+  }
+
+  &.is-dragover {
+    border-color: $red;
+    border-style: solid;
+    background: $red-soft;
+    box-shadow: 0 0 0 3px rgba($red, 0.12);
+  }
+
+  &.has-player {
+    border-style: solid;
+    border-color: $border;
+    background: $white;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+}
+
+.slot-rank {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px;
+  border-radius: $r-f;
+  font-size: 9px;
+  font-weight: 700;
+
+  &--first  { background: $red; color: $white; }
+  &--second { background: $white; color: $gray; border: 1px solid $border; }
+}
+
+.slot-empty-txt {
+  font-size: 10px;
+  color: $gray-mid;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.slot-player-img {
+  width: 36px;
+  height: 36px;
+  border-radius: $r-f;
+}
+
+.slot-player-num {
+  width: 36px;
+  height: 36px;
+  border-radius: $r-f;
+  background: $gray-light;
+  border: 1px solid $border;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: $gray-dark;
+}
+
+.slot-player-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: $black;
+}
+
+.slot-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: $r-f;
+  background: rgba(0,0,0,0.07);
+  color: $gray;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover { background: rgba($red, 0.12); color: $red; }
+}
+
+// ─── 투표 푸터 ────────────────────────────────────────────
+.vote-footer {
+  padding: 14px 20px 36px;
+  border-top: 1px solid $border;
+  text-align: center;
+}
+
+.vote-guide {
+  font-size: 12px;
+  font-weight: 500;
+  color: $gray-mid;
+  margin-bottom: 10px;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 16px;
+  border-radius: $r-xl;
+  font-size: 15px;
+  font-weight: 700;
+  color: $gray-mid;
+  background: $gray-light;
+  border: 1.5px solid $border;
+  transition: all 0.2s;
+
+  &.is-active {
+    background: $red;
+    color: $white;
+    border-color: $red;
+    box-shadow: 0 4px 16px rgba($red, 0.3);
+
+    &:active { transform: scale(0.98); }
+  }
+
+  &:disabled { cursor: default; }
+}
+
+.vote-deadline-note {
+  margin-top: 10px;
+  font-size: 11px;
+  color: $gray-mid;
+}
+
+// ─── 드래그 고스트 ────────────────────────────────────────
+.drag-ghost {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  width: 60px;
+  display: none;
+  transform: translate(-50%, -50%);
+  opacity: 0.9;
+  background: $white;
+  border: 1.5px solid $red;
+  border-radius: $r-m;
+  padding: 6px 4px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+  text-align: center;
+  font-family: $font;
+  font-size: 11px;
+  font-weight: 600;
+  color: $black;
+
+  &.is-active { display: block; }
+
+  img, .player-card__num {
+    width: 28px;
+    height: 28px;
+    margin: 0 auto 3px;
+    border-radius: $r-f;
+    font-size: 11px;
+  }
+
+  .player-card__dots { display: none; }
+}
+
+// ─── 결과 헤더 ────────────────────────────────────────────
+.result-header {
+  padding: 24px 20px 0;
+
+  &__eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    color: $red;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  &__title {
+    font-size: 24px;
+    font-weight: 800;
+    color: $black;
+  }
+}
+
+// ─── 나의 픽 ──────────────────────────────────────────────
+.my-lineup {
+  margin: 16px 20px 0;
+  border: 1.5px solid $border;
+  border-radius: $r-xl;
+  overflow: hidden;
+
+  &__title {
+    padding: 9px 16px;
+    background: $gray-light;
+    border-bottom: 1px solid $border;
+    font-size: 10px;
+    font-weight: 700;
+    color: $gray;
+    letter-spacing: 0.1em;
+  }
+}
+
+.my-lineup-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.my-pos {
+  padding: 13px 14px;
+  border-bottom: 1px solid $border;
+  border-right: 1px solid $border;
+
+  &:nth-child(2n)       { border-right: none; }
+  &:nth-last-child(-n+2){ border-bottom: none; }
+
+  &__label {
+    font-size: 10px;
+    font-weight: 700;
+    color: $gray;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+
+  &__rows { display: flex; flex-direction: column; gap: 5px; }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__name {
+    font-size: 13px;
+    font-weight: 600;
+    color: $black;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.my-badge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: $r-f;
+  font-size: 9px;
+  font-weight: 700;
+
+  &--first  { background: $red; color: $white; }
+  &--second { background: $gray-light; color: $gray; border: 1px solid $border; }
+}
+
+// ─── 실시간 랭킹 ──────────────────────────────────────────
+.ranking-section {
+  margin: 20px 20px 0;
+}
+
+.ranking-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+
+  &__text {
+    font-size: 13px;
+    font-weight: 700;
+    color: $black;
+  }
+
+  &__live {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    color: $red;
+  }
+
+  &__dot {
+    width: 5px;
+    height: 5px;
+    border-radius: $r-f;
+    background: $red;
+    animation: blink 1.5s infinite;
+  }
+}
+
+.ranking-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.rank-loading {
+  grid-column: 1 / -1;
+  padding: 20px;
+  text-align: center;
+  font-size: 12px;
+  color: $gray-mid;
+}
+
+.rank-pos {
+  border: 1.5px solid $border;
+  border-radius: $r-l;
+  overflow: hidden;
+
+  &__label {
+    padding: 8px 10px;
+    background: $gray-light;
+    border-bottom: 1px solid $border;
+    font-size: 10px;
+    font-weight: 700;
+    color: $gray;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+}
+
+.rank-empty {
+  padding: 14px 10px;
+  text-align: center;
+  font-size: 11px;
+  color: $gray-mid;
+}
+
+.rank-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  border-bottom: 1px solid $gray-light;
+
+  &:last-child { border-bottom: none; }
+
+  &--top {
+    background: $red-soft;
+
+    .rank-num  { background: $red; color: $white; }
+    .rank-name { font-weight: 700; color: $black; }
+    .rank-score { color: $red; }
+  }
+}
+
+.rank-num {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: $r-f;
+  background: $gray-light;
+  color: $gray;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rank-name {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 500;
+  color: $gray-dark;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rank-score {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: $gray-mid;
+}
+
+// ─── 결과 푸터 ────────────────────────────────────────────
+.result-footer {
+  padding: 20px 20px 48px;
+  display: flex;
+  gap: 10px;
+}
+
+.btn-reset {
+  flex: 1;
+  padding: 14px;
+  border-radius: $r-l;
+  border: 1.5px solid $border;
+  font-size: 14px;
+  font-weight: 600;
+  color: $gray;
+  background: $white;
+  transition: background 0.15s;
+
+  &:active { background: $gray-light; }
+}
+
+.btn-share {
+  flex: 2;
+  padding: 14px;
+  border-radius: $r-l;
+  font-size: 14px;
+  font-weight: 700;
+  color: $white;
+  background: $red;
+  box-shadow: 0 4px 12px rgba($red, 0.25);
+  transition: transform 0.15s;
+
+  &:active { transform: scale(0.98); }
+}
+
+// ─── 토스트 ───────────────────────────────────────────────
+.toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(24px);
+  z-index: 9000;
+  background: rgba($black, 0.85);
+  color: $white;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: $r-f;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  font-family: $font;
+  transition: transform 0.22s ease, opacity 0.22s ease;
+
+  &.is-visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
