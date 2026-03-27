@@ -92,7 +92,7 @@ async function init() {
   });
 
   startCountdown();
-  startBtn.addEventListener('click', startVote);
+  document.getElementById('btn-start').addEventListener('click', startVote);
   document.getElementById('btn-ranking-preview')?.addEventListener('click', openRankingModal);
 
   window.addEventListener('offline', () => showToast('인터넷 연결이 끊겼습니다'));
