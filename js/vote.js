@@ -362,24 +362,27 @@ async function submitVote() {
 
     // 개인 제출 기록 저장 (별도 — 실패해도 투표는 완료)
     db.collection(LOG_COLLECTION).add({
-      ts:              firebase.firestore.FieldValue.serverTimestamp(),
-      SS_first:        lineup.SS?.first?.id   || null,
-      SS_second:       lineup.SS?.second?.id  || null,
-      b2_first:        lineup['2B']?.first?.id  || null,
-      b2_second:       lineup['2B']?.second?.id || null,
-      b3_first:        lineup['3B']?.first?.id  || null,
-      b3_second:       lineup['3B']?.second?.id || null,
-      b1_first:        lineup['1B']?.first?.id  || null,
-      b1_second:       lineup['1B']?.second?.id || null,
-      SS_first_name:   lineup.SS?.first?.name   || null,
-      SS_second_name:  lineup.SS?.second?.name  || null,
-      b2_first_name:   lineup['2B']?.first?.name  || null,
-      b2_second_name:  lineup['2B']?.second?.name || null,
-      b3_first_name:   lineup['3B']?.first?.name  || null,
-      b3_second_name:  lineup['3B']?.second?.name || null,
-      b1_first_name:   lineup['1B']?.first?.name  || null,
-      b1_second_name:  lineup['1B']?.second?.name || null,
-    }).catch(err => console.warn('[vote] 로그 저장 실패 (투표는 완료됨):', err));
+      // 👈 이 줄을 추가하세요! 현재 투표자의 고유 ID를 이름표로 붙이는 겁니다.
+      uid: firebase.auth().currentUser.uid, 
+      
+      ts: firebase.firestore.FieldValue.serverTimestamp(),
+      SS_first:         lineup.SS?.first?.id   || null,
+      SS_second:        lineup.SS?.second?.id  || null,
+      b2_first:         lineup['2B']?.first?.id  || null,
+      b2_second:        lineup['2B']?.second?.id || null,
+      b3_first:         lineup['3B']?.first?.id  || null,
+      b3_second:        lineup['3B']?.second?.id || null,
+      b1_first:         lineup['1B']?.first?.id  || null,
+      b1_second:        lineup['1B']?.second?.id || null,
+      SS_first_name:    lineup.SS?.first?.name   || null,
+      SS_second_name:   lineup.SS?.second?.name  || null,
+      b2_first_name:    lineup['2B']?.first?.name  || null,
+      b2_second_name:   lineup['2B']?.second?.name || null,
+      b3_first_name:    lineup['3B']?.first?.name  || null,
+      b3_second_name:   lineup['3B']?.second?.name || null,
+      b1_first_name:    lineup['1B']?.first?.name  || null,
+      b1_second_name:   lineup['1B']?.second?.name || null,
+    }).catch(err => console.warn('[vote] 로그 저장 실패:', err));
 
     track('vote_success', { ...buildLineupParams(), total_votes: totalVotes + 1 });
 
