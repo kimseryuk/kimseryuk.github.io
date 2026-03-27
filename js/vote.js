@@ -401,7 +401,7 @@ async function submitVote() {
   } catch (err) {
     console.error('[vote] 제출 오류:', err);
     track('vote_error', { error_message: err.message });
-    showToast('전송에 실패했습니다. 다시 시도해주세요.');
+    showToast(err.code || err.message || '전송에 실패했습니다');
     btn.disabled    = false;
     btn.textContent = '나만의 내야진 확정하기';
     btn.classList.add('is-active');
