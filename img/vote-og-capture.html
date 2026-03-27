@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1200">
+  <title>OG Image Capture</title>
+  <link rel="stylesheet" href="../font/pretendard-subset.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 1200px; height: 630px; overflow: hidden; }
+
+    .og-card {
+      width: 1200px;
+      height: 630px;
+      background: linear-gradient(160deg, #0a0e2a 0%, #1a1040 50%, #2a0a1a 100%);
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* 배경 글로우 */
+    .og-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 75% 20%, rgba(199,1,37,0.35) 0%, transparent 55%),
+        radial-gradient(ellipse at 15% 85%, rgba(80,40,160,0.25) 0%, transparent 55%);
+    }
+
+    /* 다이아몬드 SVG */
+    .diamond-bg {
+      position: absolute;
+      right: 60px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 480px;
+      height: 480px;
+      opacity: 0.9;
+    }
+
+    /* 텍스트 영역 */
+    .og-content {
+      position: relative;
+      z-index: 1;
+      padding: 0 80px;
+      max-width: 680px;
+    }
+
+    .og-tag {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      color: rgba(255,255,255,0.45);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .og-producer {
+      font-size: 24px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 14px;
+      letter-spacing: 0.02em;
+    }
+
+    .og-title {
+      font-size: 88px;
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin-bottom: 36px;
+    }
+
+    .og-desc {
+      font-size: 20px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.6;
+      margin-bottom: 36px;
+    }
+
+    .og-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .og-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 9999px;
+      padding: 10px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      backdrop-filter: blur(8px);
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #C70125;
+    }
+
+    .og-site {
+      position: absolute;
+      bottom: 36px;
+      left: 80px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.3);
+      z-index: 1;
+    }
+
+    /* 포지션 뱃지들 */
+    .og-positions {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .pos-pill {
+      background: rgba(199,1,37,0.25);
+      border: 1px solid rgba(199,1,37,0.5);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.85);
+      letter-spacing: 0.04em;
+    }
+  </style>
+</head>
+<body>
+  <div class="og-card">
+
+    <!-- 야구 다이아몬드 배경 -->
+    <svg class="diamond-bg" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="150" cy="150" r="140" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+      <line x1="150" y1="150" x2="10"  y2="290" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+      <line x1="150" y1="150" x2="290" y2="290" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+      <polygon points="150,30 270,150 150,270 30,150"
+        fill="rgba(255,255,255,0.04)"
+        stroke="rgba(255,255,255,0.22)"
+        stroke-width="1.5"
+        stroke-linejoin="round"/>
+      <rect x="142" y="22"  width="16" height="16" rx="2" fill="rgba(255,255,255,0.55)" transform="rotate(45 150 30)"/>
+      <rect x="262" y="142" width="16" height="16" rx="2" fill="rgba(255,255,255,0.55)" transform="rotate(45 270 150)"/>
+      <rect x="142" y="262" width="16" height="16" rx="2" fill="rgba(255,255,255,0.65)"/>
+      <rect x="22"  y="142" width="16" height="16" rx="2" fill="rgba(255,255,255,0.55)" transform="rotate(45 30 150)"/>
+      <rect x="143" y="143" width="14" height="14" rx="2" fill="rgba(255,255,255,0.2)"/>
+      <text x="150" y="295" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.25)" font-family="sans-serif" letter-spacing="2">HOME</text>
+    </svg>
+
+    <div class="og-content">
+      <div class="og-tag">2026 KIA TIGERS</div>
+      <div class="og-producer">국민 프로듀서님,</div>
+      <h1 class="og-title">나만의<br>내야진을<br>확정해주세요</h1>
+      <div class="og-positions">
+        <span class="pos-pill">3루수</span>
+        <span class="pos-pill">유격수</span>
+        <span class="pos-pill">2루수</span>
+        <span class="pos-pill">1루수</span>
+      </div>
+      <div class="og-badge">
+        <span class="badge-dot"></span>
+        3월 31일까지 VOTE LIVE
+      </div>
+    </div>
+
+    <div class="og-site">dugout. by kimseryuk</div>
+
+  </div>
+</body>
+</html>
