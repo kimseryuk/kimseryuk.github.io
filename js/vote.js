@@ -97,6 +97,7 @@ async function init() {
 
   // 보딩 이벤트
   document.getElementById('btn-start').addEventListener('click', startVote);
+  document.getElementById('btn-ranking-preview').addEventListener('click', openRankingModal);
 
   // 오프라인 감지
   window.addEventListener('offline', () => showToast('인터넷 연결이 끊겼습니다'));
@@ -394,6 +395,50 @@ async function submitVote() {
   }
 }
 
+// ─── 순위 팝업 ────────────────────────────────────────────
+function openRankingModal() {
+  const modal = document.getElementById('modal-ranking');
+  modal.classList.add('is-open');
+  modal.setAttribute('aria-hidden', 'false');
+
+  renderRankingInto('modal-ranking-grid');
+  animateCount('modal-total-count', totalVotes);
+
+  track('ranking_modal_open');
+
+  document.getElementById('btn-modal-close').onclick = closeRankingModal;
+  modal.querySelector('.modal-ranking__backdrop').onclick = closeRankingModal;
+}
+
+function closeRankingModal() {
+  const modal = document.getElementById('modal-ranking');
+  modal.classList.remove('is-open');
+  modal.setAttribute('aria-hidden', 'true');
+}
+
+function animateCount(elId, target) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  if (target === 0) { el.textContent = '0'; return; }
+  const duration = Math.min(1000 + target * 8, 2000);
+  const start = performance.now();
+  function step(now) {
+    const elapsed  = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased    = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(target * eased).toLocaleString();
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    } else {
+      el.textContent = target.toLocaleString();
+      el.classList.remove('is-settled');
+      void el.offsetWidth;
+      el.classList.add('is-settled');
+    }
+  }
+  requestAnimationFrame(step);
+}
+
 // ─── 결과 페이지 ──────────────────────────────────────────
 function showResult(viewOnly) {
   showPage('page-result');
@@ -407,30 +452,7 @@ function showResult(viewOnly) {
 }
 
 function animateResultTotal() {
-  const el = document.getElementById('result-total-count');
-  if (!el) return;
-  const target = totalVotes;
-  if (target === 0) { el.textContent = '0'; return; }
-
-  const duration = Math.min(1000 + target * 8, 2000);
-  const start = performance.now();
-
-  function step(now) {
-    const elapsed  = now - start;
-    const progress = Math.min(elapsed / duration, 1);
-    const eased    = 1 - Math.pow(1 - progress, 3);
-    el.textContent = Math.round(target * eased).toLocaleString();
-
-    if (progress < 1) {
-      requestAnimationFrame(step);
-    } else {
-      el.textContent = target.toLocaleString();
-      el.classList.remove('is-settled');
-      void el.offsetWidth;
-      el.classList.add('is-settled');
-    }
-  }
-  requestAnimationFrame(step);
+  animateCount('result-total-count', totalVotes);
 }
 
 function renderMyLineup() {
@@ -481,8 +503,12 @@ function checkEasterEgg() {
   }
 }
 
-function renderRanking() {
-  const container = document.getElementById('ranking-grid');
+function renderRankingInto(containerId) {
+  renderRanking(containerId);
+}
+
+function renderRanking(containerId = 'ranking-grid') {
+  const container = document.getElementById(containerId);
   if (!container) return;
 
   if (Object.keys(votes).length === 0) {

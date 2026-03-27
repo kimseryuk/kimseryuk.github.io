@@ -869,6 +869,129 @@ img { display: block; object-fit: cover; }
 }
 .btn-share:active { transform: scale(0.98); }
 
+/* ─── 현재 순위 보기 버튼 ────────────────────────────── */
+.btn-ranking-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  padding: 13px;
+  border-radius: 16px;
+  border: 1.5px solid #e8e8e8;
+  font-size: 14px;
+  font-weight: 600;
+  color: #767676;
+  background: #fff;
+  margin-top: 10px;
+  transition: background 0.15s, color 0.15s;
+}
+.btn-ranking-preview svg { fill: currentColor; }
+.btn-ranking-preview:active { background: #F5F5F5; }
+
+/* ─── 순위 팝업 (바텀 시트) ──────────────────────────── */
+.modal-ranking {
+  position: fixed;
+  inset: 0;
+  z-index: 8500;
+  display: flex;
+  align-items: flex-end;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.modal-ranking.is-open {
+  pointer-events: auto;
+  opacity: 1;
+}
+.modal-ranking__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(2px);
+}
+.modal-ranking__sheet {
+  position: relative;
+  width: 100%;
+  max-width: 430px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 24px 24px 0 0;
+  padding: 20px 20px 48px;
+  max-height: 85dvh;
+  overflow-y: auto;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.modal-ranking.is-open .modal-ranking__sheet {
+  transform: translateY(0);
+}
+.modal-ranking__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.modal-ranking__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.modal-ranking__live {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #C70125;
+}
+.modal-ranking__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #C70125;
+  animation: blink 1.5s infinite;
+}
+.modal-ranking__close {
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  background: #F5F5F5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.modal-ranking__close svg { fill: #767676; }
+
+.modal-ranking__total {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #F0F0F0;
+}
+.modal-ranking__total-num {
+  font-size: 40px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: #111;
+  font-variant-numeric: tabular-nums;
+  transform-origin: bottom center;
+}
+.modal-ranking__total-num.is-settled {
+  animation: num-settle 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.modal-ranking__total-label {
+  font-size: 13px;
+  color: #767676;
+  padding-bottom: 4px;
+}
+
 /* ─── 뮤직 버튼 ─────────────────────────────────────── */
 .music-btn {
   position: fixed;
