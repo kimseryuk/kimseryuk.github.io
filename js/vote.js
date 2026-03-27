@@ -120,6 +120,14 @@ function initFirebase() {
     if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
     db = firebase.firestore();
 
+
+    firebase.auth().signInAnonymously()
+      .then(() => {
+        console.log("익명 로그인 성공! UID:", firebase.auth().currentUser.uid);
+      })
+      .catch(err => console.error('[vote] 로그인 실패:', err));
+    // ────────────────────────────────────────────────────────
+
     // 투표 집계 구독
     db.collection(COLLECTION).onSnapshot(
       snapshot => {
@@ -327,6 +335,29 @@ function buildLineupParams() {
 // ─── 투표 제출 ────────────────────────────────────────────
 async function submitVote() {
   if (!db) { showToast('데이터베이스에 연결되지 않았습니다'); return; }
+
+
+  // ── 💡 추가: 20번 제한 체크 로직 ──
+  try {
+    const user = firebase.auth().currentUser;
+    if (!user) { showToast('인증이 필요합니다'); return; }
+
+    
+    const myVotes = await db.collection(LOG_COLLECTION)
+      .where('uid', '==', user.uid)
+      .get();
+
+    // 20번까지만 하자
+    if (myVotes.size >= 20) {
+      showToast('열정이 대단하시네요! 하지만 투표는 인당 20번만 가능합니다. ⚾️');
+      track('vote_limit_exceeded', { uid: user.uid });
+      return; // 여기서 함수 종료 (DB 저장 안 함)
+    }
+  } catch (err) {
+    console.error('제한 체크 중 오류:', err);
+  }
+
+
   if (!navigator.onLine) { showToast('인터넷 연결을 확인해주세요'); return; }
 
   track('vote_submit_click', buildLineupParams());
