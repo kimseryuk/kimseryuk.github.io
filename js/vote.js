@@ -72,6 +72,12 @@ async function init() {
   // Firebase 초기화 (결과 페이지에서도 필요)
   initFirebase();
 
+  // 결과 미리보기 모드 (?preview)
+  if (new URLSearchParams(location.search).has('preview')) {
+    showResult(true);
+    return;
+  }
+
   // 보딩 페이지 분기
   if (closed) {
     showPage('page-closed');
