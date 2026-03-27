@@ -1,11 +1,12 @@
 [
-  { "id": "p2",  "name": "박민",   "no": 2,  "img": "https://tigers.co.kr/files/playerImg/tigersImg/2026_14_A.png", "tier": "1군" },
+  { "id": "p2",  "name": "박민",   "no": 2,  "img": "https://tigers.co.kr/files/playerImg/tigersImg/2026_2_A.png", "tier": "1군" },
   { "id": "p3",  "name": "김선빈", "no": 3,  "img": "https://tigers.co.kr/files/playerImg/tigersImg/2026_3_A.png", "tier": "1군" },
   { "id": "p5",  "name": "김도영", "no": 5,  "img": "https://tigers.co.kr/files/playerImg/tigersImg/2026_5_A.png", "tier": "1군" },
   { "id": "p12", "name": "정현창", "no": 12, "img": "https://tigers.co.kr/files/playerImg/tigersImg/2026_12_A.png", "tier": "1군" },
   { "id": "p14", "name": "김규성", "no": 14, "img": "https://tigers.co.kr/files/playerImg/tigersImg/2026_14_A.png", "tier": "1군" },
   { "id": "p16", "name": "윤도현", "no": 16, "img": "https://tigers.co.kr/files/playerImg/tigersImg/2026_16_A.png", "tier": "1군" },
   { "id": "p23", "name": "최정용", "no": 23, "img": "https://tigers.co.kr/files/playerImg/tigersImg/2026_23_A.png", "tier": "2군" },
+  { "id": "p29", "name": "변우혁", "no": 29, "img": "https://tigers.co.kr/files/playerImg/tigersImg/2026_29_A.png", "tier": "2군" },
   { "id": "p32", "name": "데일",   "no": 32, "img": "https://tigers.co.kr/files/playerImg/tigersImg/2026_32_A.png", "tier": "1군" },
   { "id": "p34", "name": "황대인", "no": 34, "img": "https://tigers.co.kr/files/playerImg/tigersImg/2026_34_A.png", "tier": "2군" },
   { "id": "p36", "name": "이호연", "no": 36, "img": "https://tigers.co.kr/files/playerImg/tigersImg/2026_36_A.png", "tier": "2군" },
