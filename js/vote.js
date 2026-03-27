@@ -86,22 +86,9 @@ async function init() {
 
   if (!navigator.onLine) showToast('인터넷 연결을 확인해주세요');
 
-  // 시작 버튼을 '투표 준비 중...'으로 잠시 비활성화
-  const startBtn = document.getElementById('btn-start');
-  const origHTML = startBtn.innerHTML;
-  startBtn.disabled = true;
-  startBtn.textContent = '투표 준비 중...';
-
-  // 익명 로그인 (배경에서 조용히)
+  // 익명 로그인 (배경에서 조용히 — 실패해도 투표는 정상 진행)
   firebase.auth().signInAnonymously().catch(err => {
-    console.warn('[vote] 익명 인증 실패:', err);
-  });
-
-  firebase.auth().onAuthStateChanged(user => {
-    if (user && startBtn.disabled) {
-      startBtn.disabled = false;
-      startBtn.innerHTML = origHTML;
-    }
+    console.warn('[vote] 익명 인증 실패 (투표는 계속 가능):', err);
   });
 
   startCountdown();
