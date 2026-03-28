@@ -2,6 +2,7 @@ node_modules/
 
 # 비공개 / 로컬 전용
 admin.html
+admin-clear-votes.html
 
 # 비공개 페이지
 pages/emoji_highlight_gen.html
