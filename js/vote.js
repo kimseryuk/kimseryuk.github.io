@@ -1,4 +1,4 @@
-// ── vote.js — KIA 내야진 투표 ─────────────────────────────
+// ── vote.js — KIA 내야수 투표 ─────────────────────────────
 
 // ─── Firebase 설정 ────────────────────────────────────────
 const FIREBASE_CONFIG = {
@@ -286,7 +286,7 @@ function checkComplete() {
   btn.disabled = !complete;
   btn.classList.toggle('is-active', complete);
   if (guide) guide.textContent = complete
-    ? '완성! 버튼을 눌러 확정하세요 🎉'
+    ? '완성! 버튼을 눌러 완성하세요 🎉'
     : `${filled} / 8 슬롯 완성`;
 
   if (complete && !wasComplete) track('lineup_complete', buildLineupParams());
@@ -337,7 +337,7 @@ async function submitVote() {
     showToast(`투표는 최대 ${VOTE_LIMIT}회까지 가능해요`);
     track('vote_limit_reached');
     btn.disabled    = false;
-    btn.textContent = '나만의 내야진 확정하기';
+    btn.textContent = '나만의 내야수 선택하기';
     btn.classList.add('is-active');
     return;
   }
@@ -403,7 +403,7 @@ async function submitVote() {
     track('vote_error', { error_message: err.message });
     showToast(err.code || err.message || '전송에 실패했습니다');
     btn.disabled    = false;
-    btn.textContent = '나만의 내야진 확정하기';
+    btn.textContent = '나만의 내야수 선택하기';
     btn.classList.add('is-active');
   }
 }
@@ -559,10 +559,10 @@ function shareResult() {
   const lines = POSITIONS.map(({ id, label }) =>
     `${label}: ${lineup[id].first?.name || '—'} / ${lineup[id].second?.name || '—'}`
   ).join('\n');
-  const text = `KIA 타이거즈 내야진 투표\n나의 픽:\n${lines}\n\n함께 투표해요!`;
+  const text = `KIA 타이거즈 내야수 투표\n나의 픽:\n${lines}\n\n함께 투표해요!`;
   if (navigator.share) {
     track('share_native');
-    navigator.share({ title: '내야진 투표', text, url: window.location.href }).catch(() => {});
+    navigator.share({ title: '내야수 투표', text, url: window.location.href }).catch(() => {});
   } else {
     navigator.clipboard?.writeText(window.location.href)
       .then(() => { track('share_clipboard'); showToast('링크가 복사되었습니다'); })
