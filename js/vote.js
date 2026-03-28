@@ -369,11 +369,10 @@ async function submitVote() {
       { totalVotes: FieldValue.increment(1) }, { merge: true }
     );
 
-    await batch.commit();
-
-    // 개인 제출 기록 (별도 — 실패해도 투표는 완료)
+    // 개인 제출 기록을 batch에 포함 (원자적 처리)
     const uid = firebase.auth().currentUser?.uid || null;
-    db.collection(LOG_COLLECTION).add({
+    const logRef = db.collection(LOG_COLLECTION).doc();
+    batch.set(logRef, {
       uid,
       ts:             FieldValue.serverTimestamp(),
       SS_first:       lineup.SS?.first?.id    || null,
@@ -392,7 +391,9 @@ async function submitVote() {
       b3_second_name: lineup['3B']?.second?.name  || null,
       b1_first_name:  lineup['1B']?.first?.name   || null,
       b1_second_name: lineup['1B']?.second?.name  || null,
-    }).catch(err => console.warn('[vote] 로그 저장 실패 (투표는 완료됨):', err));
+    });
+
+    await batch.commit();
 
     track('vote_success', { ...buildLineupParams(), total_votes: totalVotes + 1 });
     showResult(false);
