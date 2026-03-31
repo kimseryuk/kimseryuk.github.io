@@ -54,6 +54,15 @@ async function init() {
 
   if (closed) {
     document.getElementById('vote-live-badge')?.style.setProperty('display', 'none');
+    const previewBtn = document.getElementById('btn-ranking-preview');
+    if (previewBtn) previewBtn.textContent = '최종 순위 보기 →';
+    const startBtn = document.getElementById('btn-start');
+    if (startBtn) {
+      startBtn.textContent = '투표 마감됨';
+      startBtn.style.opacity = '0.4';
+      startBtn.style.cursor = 'not-allowed';
+      startBtn.style.pointerEvents = 'none';
+    }
   }
 
   // 선수 데이터 로드
@@ -146,6 +155,7 @@ function showPage(id) {
 
 // ─── 투표 시작 ────────────────────────────────────────────
 function startVote() {
+  if (isVotingClosed()) { showToast('투표가 마감되었습니다 (3월 31일 23:59)'); return; }
   track('vote_start');
   showPage('page-vote');
 
@@ -322,6 +332,7 @@ async function checkVoteLimit() {
 
 // ─── 투표 제출 ────────────────────────────────────────────
 async function submitVote() {
+  if (isVotingClosed())  { showToast('투표가 마감되었습니다 (3월 31일 23:59)'); return; }
   if (!db)               { showToast('데이터베이스에 연결되지 않았습니다'); return; }
   if (!navigator.onLine) { showToast('인터넷 연결을 확인해주세요'); return; }
 
