@@ -132,7 +132,7 @@ const THEMES = {
 const state = {
   mode:        'mo',
   team:        'KIA',
-  month:       3,
+  month:       new Date().getMonth() + 1,
   calSize:     'medium',
   iconSize:    'large',
   weekStart:   'sun',
