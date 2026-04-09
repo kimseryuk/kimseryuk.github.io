@@ -623,6 +623,12 @@
     });
     document.getElementById('dl-help-close').addEventListener('click', closeModal);
     overlay.addEventListener('click', function (e) { if (e.target === overlay) closeModal(); });
+
+    // 페이지 진입 시 자동 팝업 (세션당 1회)
+    if (!sessionStorage.getItem('dl-help-shown')) {
+      sessionStorage.setItem('dl-help-shown', '1');
+      overlay.classList.add('is-open');
+    }
   })();
 </script>
 
