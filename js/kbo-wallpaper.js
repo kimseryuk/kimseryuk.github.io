@@ -1179,7 +1179,7 @@ async function init() {
   await Promise.all([loadSchedule(), loadWallpapers(), preloadIcons()]);
 
   // 이번 달 기본값 적용 (배경은 renderBgSlider 첫 항목 자동선택으로 처리)
-  setMonth(MONTHLY_DEFAULTS.month);
+  setMonth(state.month);
 
   // 드래그 스크롤 활성화
   ['bg-slider', 'm-bg-slider'].forEach(id => {
