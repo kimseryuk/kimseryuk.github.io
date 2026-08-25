@@ -213,7 +213,7 @@
     },
     {
       "date": "2026-04-04",
-      "time": "17:00",
+      "time": "14:00",
       "away": "Hanwha",
       "home": "Doosan",
       "stadium": "잠실"
@@ -451,7 +451,7 @@
     },
     {
       "date": "2026-04-11",
-      "time": "17:00",
+      "time": "14:00",
       "away": "KIA",
       "home": "Hanwha",
       "stadium": "대전"
@@ -647,7 +647,7 @@
     },
     {
       "date": "2026-04-18",
-      "time": "17:00",
+      "time": "14:00",
       "away": "LG",
       "home": "Samsung",
       "stadium": "대구"
@@ -696,7 +696,7 @@
     },
     {
       "date": "2026-04-19",
-      "time": "14:00",
+      "time": "17:00",
       "away": "Kiwoom",
       "home": "KT",
       "stadium": "수원"
@@ -843,7 +843,7 @@
     },
     {
       "date": "2026-04-25",
-      "time": "17:00",
+      "time": "14:00",
       "away": "LG",
       "home": "Doosan",
       "stadium": "잠실"
@@ -1018,35 +1018,35 @@
     },
     {
       "date": "2026-05-01",
-      "time": "18:30",
+      "time": "17:00",
       "away": "NC",
       "home": "LG",
       "stadium": "잠실"
     },
     {
       "date": "2026-05-01",
-      "time": "18:30",
+      "time": "17:00",
       "away": "Lotte",
       "home": "SSG",
       "stadium": "문학"
     },
     {
       "date": "2026-05-01",
-      "time": "18:30",
+      "time": "17:00",
       "away": "Hanwha",
       "home": "Samsung",
       "stadium": "대구"
     },
     {
       "date": "2026-05-01",
-      "time": "18:30",
+      "time": "17:00",
       "away": "KT",
       "home": "KIA",
       "stadium": "광주"
     },
     {
       "date": "2026-05-01",
-      "time": "18:30",
+      "time": "17:00",
       "away": "Doosan",
       "home": "Kiwoom",
       "stadium": "고척"
@@ -1060,7 +1060,7 @@
     },
     {
       "date": "2026-05-02",
-      "time": "17:00",
+      "time": "14:00",
       "away": "Lotte",
       "home": "SSG",
       "stadium": "문학"
@@ -1291,7 +1291,7 @@
     },
     {
       "date": "2026-05-09",
-      "time": "17:00",
+      "time": "14:00",
       "away": "LG",
       "home": "Hanwha",
       "stadium": "대전"
@@ -1501,7 +1501,7 @@
     },
     {
       "date": "2026-05-16",
-      "time": "17:00",
+      "time": "14:00",
       "away": "Hanwha",
       "home": "KT",
       "stadium": "수원"
@@ -1553,7 +1553,7 @@
       "time": "18:30",
       "away": "KT",
       "home": "Samsung",
-      "stadium": "대구"
+      "stadium": "포항"
     },
     {
       "date": "2026-05-19",
@@ -1588,7 +1588,7 @@
       "time": "18:30",
       "away": "KT",
       "home": "Samsung",
-      "stadium": "대구"
+      "stadium": "포항"
     },
     {
       "date": "2026-05-20",
@@ -1623,7 +1623,7 @@
       "time": "18:30",
       "away": "KT",
       "home": "Samsung",
-      "stadium": "대구"
+      "stadium": "포항"
     },
     {
       "date": "2026-05-21",
@@ -1683,7 +1683,7 @@
     },
     {
       "date": "2026-05-23",
-      "time": "17:00",
+      "time": "14:00",
       "away": "Kiwoom",
       "home": "LG",
       "stadium": "잠실"
@@ -1900,7 +1900,7 @@
     },
     {
       "date": "2026-05-30",
-      "time": "17:00",
+      "time": "14:00",
       "away": "Doosan",
       "home": "Samsung",
       "stadium": "대구"
@@ -2110,7 +2110,7 @@
     },
     {
       "date": "2026-06-06",
-      "time": "17:00",
+      "time": "14:00",
       "away": "KT",
       "home": "SSG",
       "stadium": "문학"
@@ -3153,35 +3153,35 @@
     },
     {
       "date": "2026-07-17",
-      "time": "18:30",
+      "time": "18:00",
       "away": "KT",
       "home": "LG",
       "stadium": "잠실"
     },
     {
       "date": "2026-07-17",
-      "time": "18:30",
+      "time": "18:00",
       "away": "KIA",
       "home": "SSG",
       "stadium": "문학"
     },
     {
       "date": "2026-07-17",
-      "time": "18:30",
+      "time": "18:00",
       "away": "Lotte",
       "home": "Samsung",
       "stadium": "대구"
     },
     {
       "date": "2026-07-17",
-      "time": "18:30",
+      "time": "18:00",
       "away": "Doosan",
       "home": "NC",
       "stadium": "창원"
     },
     {
       "date": "2026-07-17",
-      "time": "18:30",
+      "time": "18:00",
       "away": "Kiwoom",
       "home": "Hanwha",
       "stadium": "대전"
@@ -3888,371 +3888,371 @@
     },
     {
       "date": "2026-08-11",
-      "time": "18:30",
+      "time": "19:00",
       "away": "Hanwha",
       "home": "Doosan",
       "stadium": "잠실"
     },
     {
       "date": "2026-08-11",
-      "time": "18:30",
+      "time": "19:00",
       "away": "Lotte",
       "home": "SSG",
       "stadium": "문학"
     },
     {
       "date": "2026-08-11",
-      "time": "18:30",
+      "time": "19:00",
       "away": "KT",
       "home": "NC",
       "stadium": "창원"
     },
     {
       "date": "2026-08-11",
-      "time": "18:30",
+      "time": "19:00",
       "away": "Samsung",
       "home": "KIA",
       "stadium": "광주"
     },
     {
       "date": "2026-08-11",
-      "time": "18:30",
+      "time": "19:00",
       "away": "LG",
       "home": "Kiwoom",
       "stadium": "고척"
     },
     {
       "date": "2026-08-12",
-      "time": "18:30",
+      "time": "19:00",
       "away": "Hanwha",
       "home": "Doosan",
       "stadium": "잠실"
     },
     {
       "date": "2026-08-12",
-      "time": "18:30",
+      "time": "19:00",
       "away": "Lotte",
       "home": "SSG",
       "stadium": "문학"
     },
     {
       "date": "2026-08-12",
-      "time": "18:30",
+      "time": "19:00",
       "away": "KT",
       "home": "NC",
       "stadium": "창원"
     },
     {
       "date": "2026-08-12",
-      "time": "18:30",
+      "time": "19:00",
       "away": "Samsung",
       "home": "KIA",
       "stadium": "광주"
     },
     {
       "date": "2026-08-12",
-      "time": "18:30",
+      "time": "19:00",
       "away": "LG",
       "home": "Kiwoom",
       "stadium": "고척"
     },
     {
       "date": "2026-08-13",
-      "time": "18:30",
+      "time": "19:00",
       "away": "Hanwha",
       "home": "Doosan",
       "stadium": "잠실"
     },
     {
       "date": "2026-08-13",
-      "time": "18:30",
+      "time": "19:00",
       "away": "Lotte",
       "home": "SSG",
       "stadium": "문학"
     },
     {
       "date": "2026-08-13",
-      "time": "18:30",
+      "time": "19:00",
       "away": "KT",
       "home": "NC",
       "stadium": "창원"
     },
     {
       "date": "2026-08-13",
-      "time": "18:30",
+      "time": "19:00",
       "away": "Samsung",
       "home": "KIA",
       "stadium": "광주"
     },
     {
       "date": "2026-08-13",
-      "time": "18:30",
+      "time": "19:00",
       "away": "LG",
       "home": "Kiwoom",
       "stadium": "고척"
     },
     {
       "date": "2026-08-14",
-      "time": "18:30",
+      "time": "19:00",
       "away": "SSG",
       "home": "LG",
       "stadium": "잠실"
     },
     {
       "date": "2026-08-14",
-      "time": "18:30",
+      "time": "19:00",
       "away": "NC",
       "home": "Lotte",
       "stadium": "사직"
     },
     {
       "date": "2026-08-14",
-      "time": "18:30",
+      "time": "19:00",
       "away": "Hanwha",
       "home": "Samsung",
       "stadium": "대구"
     },
     {
       "date": "2026-08-14",
-      "time": "18:30",
+      "time": "19:00",
       "away": "Kiwoom",
       "home": "KT",
       "stadium": "수원"
     },
     {
       "date": "2026-08-14",
-      "time": "18:30",
+      "time": "19:00",
       "away": "Doosan",
       "home": "KIA",
       "stadium": "광주"
     },
     {
       "date": "2026-08-15",
-      "time": "18:00",
+      "time": "19:00",
       "away": "SSG",
       "home": "LG",
       "stadium": "잠실"
     },
     {
       "date": "2026-08-15",
-      "time": "18:00",
+      "time": "19:00",
       "away": "NC",
       "home": "Lotte",
       "stadium": "사직"
     },
     {
       "date": "2026-08-15",
-      "time": "18:00",
+      "time": "19:00",
       "away": "Hanwha",
       "home": "Samsung",
       "stadium": "대구"
     },
     {
       "date": "2026-08-15",
-      "time": "18:00",
+      "time": "19:00",
       "away": "Kiwoom",
       "home": "KT",
       "stadium": "수원"
     },
     {
       "date": "2026-08-15",
-      "time": "18:00",
+      "time": "19:00",
       "away": "Doosan",
       "home": "KIA",
       "stadium": "광주"
     },
     {
       "date": "2026-08-16",
-      "time": "18:00",
+      "time": "19:00",
       "away": "SSG",
       "home": "LG",
       "stadium": "잠실"
     },
     {
       "date": "2026-08-16",
-      "time": "18:00",
+      "time": "19:00",
       "away": "NC",
       "home": "Lotte",
       "stadium": "사직"
     },
     {
       "date": "2026-08-16",
-      "time": "18:00",
+      "time": "19:00",
       "away": "Hanwha",
       "home": "Samsung",
       "stadium": "대구"
     },
     {
       "date": "2026-08-16",
-      "time": "18:00",
+      "time": "19:00",
       "away": "Kiwoom",
       "home": "KT",
       "stadium": "수원"
     },
     {
       "date": "2026-08-16",
-      "time": "18:00",
+      "time": "19:00",
       "away": "Doosan",
       "home": "KIA",
       "stadium": "광주"
     },
     {
       "date": "2026-08-18",
-      "time": "18:30",
+      "time": "19:00",
       "away": "KT",
       "home": "LG",
       "stadium": "잠실"
     },
     {
       "date": "2026-08-18",
-      "time": "18:30",
+      "time": "19:00",
       "away": "Kiwoom",
       "home": "Lotte",
       "stadium": "사직"
     },
     {
       "date": "2026-08-18",
-      "time": "18:30",
+      "time": "19:00",
       "away": "SSG",
       "home": "Samsung",
       "stadium": "대구"
     },
     {
       "date": "2026-08-18",
-      "time": "18:30",
+      "time": "19:00",
       "away": "Doosan",
       "home": "NC",
       "stadium": "창원"
     },
     {
       "date": "2026-08-18",
-      "time": "18:30",
+      "time": "19:00",
       "away": "KIA",
       "home": "Hanwha",
       "stadium": "대전"
     },
     {
       "date": "2026-08-19",
-      "time": "18:30",
+      "time": "19:00",
       "away": "KT",
       "home": "LG",
       "stadium": "잠실"
     },
     {
       "date": "2026-08-19",
-      "time": "18:30",
+      "time": "19:00",
       "away": "Kiwoom",
       "home": "Lotte",
       "stadium": "사직"
     },
     {
       "date": "2026-08-19",
-      "time": "18:30",
+      "time": "19:00",
       "away": "SSG",
       "home": "Samsung",
       "stadium": "대구"
     },
     {
       "date": "2026-08-19",
-      "time": "18:30",
+      "time": "19:00",
       "away": "Doosan",
       "home": "NC",
       "stadium": "창원"
     },
     {
       "date": "2026-08-19",
-      "time": "18:30",
+      "time": "19:00",
       "away": "KIA",
       "home": "Hanwha",
       "stadium": "대전"
     },
     {
       "date": "2026-08-20",
-      "time": "18:30",
+      "time": "19:00",
       "away": "KT",
       "home": "LG",
       "stadium": "잠실"
     },
     {
       "date": "2026-08-20",
-      "time": "18:30",
+      "time": "19:00",
       "away": "Kiwoom",
       "home": "Lotte",
       "stadium": "사직"
     },
     {
       "date": "2026-08-20",
-      "time": "18:30",
+      "time": "19:00",
       "away": "SSG",
       "home": "Samsung",
       "stadium": "대구"
     },
     {
       "date": "2026-08-20",
-      "time": "18:30",
+      "time": "19:00",
       "away": "Doosan",
       "home": "NC",
       "stadium": "창원"
     },
     {
       "date": "2026-08-20",
-      "time": "18:30",
+      "time": "19:00",
       "away": "KIA",
       "home": "Hanwha",
       "stadium": "대전"
     },
     {
       "date": "2026-08-21",
-      "time": "18:30",
+      "time": "19:00",
       "away": "Lotte",
       "home": "Doosan",
       "stadium": "잠실"
     },
     {
       "date": "2026-08-21",
-      "time": "18:30",
+      "time": "19:00",
       "away": "KT",
       "home": "SSG",
       "stadium": "문학"
     },
     {
       "date": "2026-08-21",
-      "time": "18:30",
+      "time": "19:00",
       "away": "Samsung",
       "home": "NC",
       "stadium": "창원"
     },
     {
       "date": "2026-08-21",
-      "time": "18:30",
+      "time": "19:00",
       "away": "KIA",
       "home": "Kiwoom",
       "stadium": "고척"
     },
     {
       "date": "2026-08-21",
-      "time": "18:30",
+      "time": "19:00",
       "away": "LG",
       "home": "Hanwha",
       "stadium": "대전"
     },
     {
       "date": "2026-08-22",
-      "time": "18:00",
+      "time": "19:00",
       "away": "Lotte",
       "home": "Doosan",
       "stadium": "잠실"
     },
     {
       "date": "2026-08-22",
-      "time": "18:00",
+      "time": "19:00",
       "away": "KT",
       "home": "SSG",
       "stadium": "문학"
     },
     {
       "date": "2026-08-22",
-      "time": "18:00",
+      "time": "19:00",
       "away": "Samsung",
       "home": "NC",
       "stadium": "창원"
@@ -4266,7 +4266,7 @@
     },
     {
       "date": "2026-08-22",
-      "time": "18:00",
+      "time": "19:00",
       "away": "LG",
       "home": "Hanwha",
       "stadium": "대전"
@@ -4280,28 +4280,28 @@
     },
     {
       "date": "2026-08-23",
-      "time": "18:00",
+      "time": "19:00",
       "away": "Lotte",
       "home": "Doosan",
       "stadium": "잠실"
     },
     {
       "date": "2026-08-23",
-      "time": "18:00",
+      "time": "19:00",
       "away": "KT",
       "home": "SSG",
       "stadium": "문학"
     },
     {
       "date": "2026-08-23",
-      "time": "18:00",
+      "time": "19:00",
       "away": "Samsung",
       "home": "NC",
       "stadium": "창원"
     },
     {
       "date": "2026-08-23",
-      "time": "18:00",
+      "time": "19:00",
       "away": "LG",
       "home": "Hanwha",
       "stadium": "대전"
@@ -4693,28 +4693,28 @@
     },
     {
       "date": "2026-09-06",
-      "time": "14:00",
+      "time": "17:00",
       "away": "Samsung",
       "home": "LG",
       "stadium": "잠실"
     },
     {
       "date": "2026-09-06",
-      "time": "14:00",
+      "time": "17:00",
       "away": "Doosan",
       "home": "SSG",
       "stadium": "문학"
     },
     {
       "date": "2026-09-06",
-      "time": "14:00",
+      "time": "17:00",
       "away": "Hanwha",
       "home": "Lotte",
       "stadium": "사직"
     },
     {
       "date": "2026-09-06",
-      "time": "14:00",
+      "time": "17:00",
       "away": "KT",
       "home": "KIA",
       "stadium": "광주"
